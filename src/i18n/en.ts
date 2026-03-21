@@ -28,8 +28,9 @@ export const en = {
     safetyScore: 'Recent alerts score',
     locationScore: 'City location score',
     familyScore: 'Family status score',
-    alertCount: 'Siren alerts (last 30 days)',
-    notificationCount: 'Advance warnings (last 30 days)',
+    alertCount: 'Siren alerts (last 24h)',
+    notificationCount: 'Advance warnings (last 24h)',
+    alertCountTotal: 'Total alerts (last 30 days)',
     alertCountSuffix: 'times',
     total: 'Total',
     privilegeLabels: {

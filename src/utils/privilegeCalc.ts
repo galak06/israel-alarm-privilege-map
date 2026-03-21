@@ -34,12 +34,27 @@ const LOCATION_SCORE: Record<City['region'], number> = {
 //   shelterScore  0–40   shelter quality
 //   locationScore 0–10   city region infrastructure & support
 //   familyScore   0–10   family situation (personal only)
-//   safetyScore   0–10   last-30d alert frequency — GATED by ALERTS_ENABLED flag
+//   safetyScore   0–10   last-30d alert frequency + notification burden — GATED by ALERTS_ENABLED flag
+//                         Notification burden: advance warnings (cat=14) require physically going to an
+//                         external shelter. People without a mamad must get dressed and go outside every
+//                         time — up to 4 penalty points subtracted based on notification count × shelter
+//                         vulnerability (0 penalty if you have a mamad).
 //
 //   City max (flag off):  40+40+10      = 90
 //   City max (flag on):   40+40+10+10   = 100
 //   Personal max (off):   40+40+10+10   = 100
 //   Personal max (on):    40+40+10+10+10= 110
+
+// Normalize notification count: 20 notifications/month = max burden
+const MAX_NOTIF = 20;
+
+// Shelter vulnerability to advance-warning burden (mamad = can shelter in place, no burden)
+const NOTIF_SHELTER_VULN: Record<ShelterType, number> = {
+  mamad:     0.0,  // in-unit safe room — no need to go anywhere
+  shelter:   0.5,  // building shelter — leave apartment but stay inside building
+  stairwell: 0.75, // reinforced stairwell — leave apartment, stay in building
+  public:    1.0,  // must go outside — maximum burden
+};
 
 export function calcPrivilegeScorePersonal(
   city: City,
@@ -48,7 +63,8 @@ export function calcPrivilegeScorePersonal(
 ): PrivilegeScore {
   const timeScore     = Math.round((Math.min(40, (city.alarmSeconds / MAX_TIME) * 40)) * 10) / 10;
   const shelterScore  = Math.round((SHELTER_WEIGHT[shelter] * 40) * 10) / 10;
-  const safetyScore   = Math.round(((1 - city.alertCountNormalized) * 10) * 10) / 10;
+  const notifPenalty  = Math.min(1, city.notificationCount / MAX_NOTIF) * NOTIF_SHELTER_VULN[shelter] * 4;
+  const safetyScore   = Math.max(0, Math.round(((1 - city.alertCountNormalized) * 10 - notifPenalty) * 10) / 10);
   const locationScore = LOCATION_SCORE[city.region] ?? 5;
   const familyScore   = FAMILY_SCORE[familyStatus];
   const total = Math.round(
@@ -63,7 +79,9 @@ export function calcPrivilegeScore(city: City): PrivilegeScore {
   const { mamad, stairwell } = city.shelterDistribution;
   const shelterScore = Math.round(((mamad * 1.0 + stairwell * 0.5) * 40) * 10) / 10;
 
-  const safetyScore   = Math.round(((1 - city.alertCountNormalized) * 10) * 10) / 10;
+  // Notification burden: weighted by fraction of residents without a mamad
+  const notifPenalty  = Math.min(1, city.notificationCount / MAX_NOTIF) * (1 - mamad) * 4;
+  const safetyScore   = Math.max(0, Math.round(((1 - city.alertCountNormalized) * 10 - notifPenalty) * 10) / 10);
   const locationScore = LOCATION_SCORE[city.region] ?? 5;
 
   const total = Math.round(

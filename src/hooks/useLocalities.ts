@@ -22,6 +22,14 @@ interface LocalityRecord {
   alertCountNormalized?: number;
 }
 
+function isValidRecord(r: LocalityRecord): boolean {
+  if (!r.id || !r.nameHe || typeof r.lat !== 'number' || typeof r.lng !== 'number') return false;
+  if (r.lat < 29.3 || r.lat > 33.4 || r.lng < 34.2 || r.lng > 35.9) return false;
+  if (typeof r.alarmSeconds !== 'number' || r.alarmSeconds < 0 || r.alarmSeconds > 600) return false;
+  if (!r.region || !Array.isArray(r.threatSources) || r.threatSources.length === 0) return false;
+  return true;
+}
+
 function toCity(r: LocalityRecord): City {
   return {
     id: r.id,
@@ -51,7 +59,11 @@ export function useLocalities(): { cities: City[]; loaded: boolean } {
         return r.json();
       })
       .then((data: LocalityRecord[]) => {
-        setLocalities(data.map(toCity));
+        const valid = data.filter(isValidRecord);
+        if (valid.length < data.length) {
+          console.warn(`useLocalities: filtered ${data.length - valid.length} invalid records`);
+        }
+        setLocalities(valid.map(toCity));
         setLoaded(true);
       })
       .catch(() => {

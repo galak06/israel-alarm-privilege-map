@@ -82,53 +82,82 @@ function buildGeoIndex(osmElements) {
 }
 
 // ── 3. Region → threat sources mapping ──────────────────────────────────────
+// Uses redalert cityZone (real API field) for accurate threat inference.
+// Falls back to lat-based heuristic for cities not in redalert data.
 
-function threatSources(areaname, lat) {
+// Map redalert cityZone → threat sources
+// Iran targets all of Israel with ballistic missiles (Apr 2024, Oct 2024 attacks)
+const ZONE_THREATS = {
+  // Northern border — Hezbollah + Iran
+  'קו העימות':    ['hezbollah', 'iran'],
+  'גליל עליון':   ['hezbollah', 'iran'],
+  'גליל תחתון':   ['hezbollah', 'iran'],
+  'תבור':         ['hezbollah', 'iran'],
+  'קצרין':        ['hezbollah', 'iran'],
+  'גולן':         ['hezbollah', 'iran'],
+  'קריות':        ['hezbollah', 'iran'],
+  'חיפה':         ['hezbollah', 'iran'],
+  'חוף הכרמל':    ['hezbollah', 'iran'],
+  'בקעת בית שאן': ['hezbollah', 'iran'],
+  'ואדי ערה':     ['hezbollah', 'iran'],
+  'מנשה':         ['hezbollah', 'iran'],
+  // Gaza envelope / south — Hamas + Iran
+  'עוטף עזה':     ['hamas', 'iran'],
+  'מערב הנגב':    ['hamas', 'iran'],
+  'מרכז הנגב':    ['hamas', 'iran'],
+  'דרום הנגב':    ['hamas', 'iran'],
+  'מערב לכיש':    ['hamas', 'iran'],
+  // West Bank areas — Hamas + Iran
+  'שומרון':       ['hamas', 'iran'],
+  'יהודה':        ['hamas', 'iran'],
+  'בקעה':         ['hamas', 'iran'],
+  'ים המלח':      ['hamas', 'iran'],
+  // Center — Hamas + Hezbollah + Iran
+  'ירקון':        ['hamas', 'hezbollah', 'iran'],
+  'דן':           ['hamas', 'hezbollah', 'iran'],
+  'שרון':         ['hamas', 'hezbollah', 'iran'],
+  'חפר':          ['hamas', 'hezbollah', 'iran'],
+  'לכיש':         ['hamas', 'hezbollah', 'iran'],
+  'דרום השפלה':   ['hamas', 'hezbollah', 'iran'],
+  'השפלה':        ['hamas', 'hezbollah', 'iran'],
+  'בית שמש':      ['hamas', 'hezbollah', 'iran'],
+  'ירושלים':      ['hamas', 'hezbollah', 'iran'],
+  'יערות הכרמל':  ['hezbollah', 'iran'],
+  // Deep south — Iran/Houthi
+  'אילת':         ['iran'],
+  'ערבה':         ['iran'],
+};
+
+function threatSourcesFromZone(cityZone) {
+  if (cityZone && ZONE_THREATS[cityZone]) return ZONE_THREATS[cityZone];
+  return null; // unknown zone — fall back to lat heuristic
+}
+
+function threatSourcesFallback(lat) {
+  const threats = new Set(['iran']); // Iran can hit anywhere in Israel
+  if (lat >= 32.5) threats.add('hezbollah');
+  else if (lat >= 30.5) { threats.add('hamas'); if (lat >= 31.5) threats.add('hezbollah'); }
+  return [...threats];
+}
+
+// cityZone registry — populated from redalert API during fetch
+const cityZoneMap = {}; // cityName (Hebrew) → zone string
+
+function threatSources(nameHe, lat) {
+  const zone = cityZoneMap[nameHe];
+  const fromZone = threatSourcesFromZone(zone);
+  if (fromZone) return fromZone;
+  return threatSourcesFallback(lat);
+}
+
+// Legacy wrapper kept for region assignment
+function threatSourcesLegacy(areaname, lat) {
   const a = (areaname || '').toLowerCase();
   const threats = new Set();
-
-  // Northern areas → Hezbollah
-  if (
-    a.includes('galilee') || a.includes('golan') || a.includes('haifa') ||
-    a.includes('carmel') || a.includes('acre') || a.includes('akko') ||
-    a.includes('kinneret') || a.includes('tiberias') || a.includes('tzfat') ||
-    a.includes('safed') || a.includes('nahariya') || a.includes('kiryat shmona') ||
-    a.includes('upper') || lat >= 32.5
-  ) {
-    threats.add('hezbollah');
-  }
-
-  // Southern / Gaza-adjacent → Hamas
-  if (
-    a.includes('gaza') || a.includes('sha\'ar hanegev') || a.includes('shaar hanegev') ||
-    a.includes('eshkol') || a.includes('sdot negev') || a.includes('lachish') ||
-    a.includes('ashkelon') || a.includes('ashdod') || a.includes('kiryat gat') ||
-    a.includes('beer sheva') || a.includes('be\'er sheva') || a.includes('negev') ||
-    lat < 31.8
-  ) {
-    threats.add('hamas');
-  }
-
-  // Central / Dan metro → Hamas
-  if (
-    a.includes('tel aviv') || a.includes('dan') || a.includes('sharon') ||
-    a.includes('center') || a.includes('rishon') || a.includes('rehovot') ||
-    a.includes('petah tikva') || a.includes('netanya') || a.includes('herzliya') ||
-    (lat >= 31.8 && lat <= 32.5)
-  ) {
-    threats.add('hamas');
-  }
-
-  // Iran: all major population centers
-  if (
-    a.includes('tel aviv') || a.includes('dan') || a.includes('jerusalem') ||
-    a.includes('haifa') || a.includes('beer sheva') || a.includes('negev') ||
-    a.includes('arava') || a.includes('eilat')
-  ) {
-    threats.add('iran');
-  }
-
-  // Deep south (Arava, Eilat) → Iran only
+  if (a.includes('galilee') || a.includes('golan') || a.includes('haifa') ||
+      a.includes('carmel') || a.includes('upper') || lat >= 32.5) threats.add('hezbollah');
+  if (a.includes('gaza') || a.includes('negev') || lat < 31.8) threats.add('hamas');
+  if (lat >= 31.8 && lat <= 32.5) threats.add('hamas');
   if (lat < 30.5) {
     threats.delete('hamas');
     threats.delete('hezbollah');
@@ -270,9 +299,9 @@ async function fetchOrefByDate(cityNames) {
         const city = rec.data ?? rec.NAME_HE;
         if (!city) continue;
         // cat 1 = rockets, cat 2 = hostile aircraft → real alarms
+        // cat 13 = event ended (closure message, counted by oref in their total)
         // cat 14 = advance warning → notification
-        // cat 13 = event ended → skip
-        const isRocket = cat === 1 || cat === 2;
+        const isRocket = cat === 1 || cat === 2 || cat === 13;
         const isNotif  = cat === 14;
         if (!isRocket && !isNotif) continue;
 
@@ -323,7 +352,10 @@ async function fetchRedalertTotals(apiKey) {
 
       for (const row of rows) {
         const name = row.city ?? row.name;
-        if (name) totals[name] = (totals[name] ?? 0) + (row.count ?? 1);
+        if (name) {
+          totals[name] = (totals[name] ?? 0) + (row.count ?? 1);
+          if (row.cityZone && !cityZoneMap[name]) cityZoneMap[name] = row.cityZone;
+        }
       }
 
       offset += rows.length;
@@ -460,10 +492,17 @@ async function main() {
     const { lat, lng } = coords;
     const migunTime = loc.migun_time ?? 90;
 
-    // Match alert counts: exact match first, then substring containment
+    // Match alert counts: exact match first, then substring — but only if the
+    // overlapping part is ≥5 chars AND ≥70% of the shorter string's length.
+    // This prevents short city names (e.g. "להב") from matching longer ones ("להבות הבשן").
     const findKey = (map, name) => {
       if (map[name] !== undefined) return name;
-      return Object.keys(map).find(k => name.includes(k) || k.includes(name)) ?? null;
+      return Object.keys(map).find(k => {
+        const [longer, shorter] = name.length >= k.length ? [name, k] : [k, name];
+        if (shorter.length < 5) return false;
+        if (shorter.length / longer.length < 0.7) return false;
+        return longer.includes(shorter);
+      }) ?? null;
     };
 
     const cacheKey       = findKey(alertSums, nameHe);
@@ -483,7 +522,7 @@ async function main() {
       alarmSeconds: migunTime,
       shelterDistribution: shelterDistribution(migunTime),
       region: regionFromAreaname(loc.areaname, lat),
-      threatSources: threatSources(loc.areaname, lat),
+      threatSources: threatSources(nameHe, lat),
       areaname: loc.areaname,
       orefId: loc.id,
       alertCount,                     // rockets only (tzevaadom cache)
@@ -502,6 +541,70 @@ async function main() {
   const cacheDaysCount = Object.keys(alertsCache.days).length;
   console.log(`\n📊 Cache: ${cacheDaysCount} days | redalert max: ${maxTotal}`);
   console.log(`   Herzliya: ${herzliyaCities.map(l => `${l.nameHe} r=${l.alertCount} n=${l.notificationCount}`).join(', ')}`);
+
+  // ── Data validation ───────────────────────────────────────────────────────
+  const ISRAEL_BOUNDS = { latMin: 29.3, latMax: 33.4, lngMin: 34.2, lngMax: 35.9 };
+  const issues = [];
+  let warnings = 0;
+
+  for (const loc of localities) {
+    const tag = `[${loc.nameHe}]`;
+
+    // Coordinates within Israel bounds
+    if (loc.lat < ISRAEL_BOUNDS.latMin || loc.lat > ISRAEL_BOUNDS.latMax ||
+        loc.lng < ISRAEL_BOUNDS.lngMin || loc.lng > ISRAEL_BOUNDS.lngMax) {
+      issues.push(`${tag} coords out of Israel bounds: (${loc.lat}, ${loc.lng})`);
+    }
+
+    // Alarm time reasonable range (0–600s; 0 = border contact zone, >600 suspicious)
+    if (loc.alarmSeconds < 0 || loc.alarmSeconds > 600) {
+      issues.push(`${tag} alarmSeconds out of range: ${loc.alarmSeconds}`);
+    }
+
+    // Shelter distribution sums to ~1
+    const shelterSum = Object.values(loc.shelterDistribution).reduce((a, b) => a + b, 0);
+    if (Math.abs(shelterSum - 1.0) > 0.01) {
+      issues.push(`${tag} shelterDistribution sums to ${shelterSum.toFixed(3)}, expected 1.0`);
+    }
+
+    // alertCountNormalized in [0, 1]
+    if (loc.alertCountNormalized < 0 || loc.alertCountNormalized > 1) {
+      issues.push(`${tag} alertCountNormalized out of [0,1]: ${loc.alertCountNormalized}`);
+    }
+
+    // alertCount / notificationCount non-negative
+    if (loc.alertCount < 0 || loc.notificationCount < 0 || loc.alertCountTotal < 0) {
+      issues.push(`${tag} negative alert count: r=${loc.alertCount} n=${loc.notificationCount} total=${loc.alertCountTotal}`);
+    }
+
+    // threatSources non-empty array
+    if (!Array.isArray(loc.threatSources) || loc.threatSources.length === 0) {
+      issues.push(`${tag} empty threatSources`);
+    }
+
+    // region set
+    if (!loc.region) {
+      issues.push(`${tag} missing region`);
+    }
+
+    // Warn if alertCount surprisingly high (possible double-count bug)
+    if (loc.alertCount > 500) {
+      console.warn(`   ⚠ ${tag} alertCount=${loc.alertCount} seems very high`);
+      warnings++;
+    }
+  }
+
+  if (issues.length > 0) {
+    console.error(`\n❌ Data validation failed — ${issues.length} issue(s):`);
+    for (const issue of issues) console.error(`   • ${issue}`);
+    process.exit(1);
+  }
+
+  if (warnings > 0) {
+    console.warn(`   ⚠ ${warnings} data warning(s) — check output above`);
+  }
+  console.log(`✅ Data validation passed (${localities.length} localities)`);
+  // ─────────────────────────────────────────────────────────────────────────
 
   // Save geocache
   writeFileSync(CACHE_FILE, JSON.stringify(geocache, null, 2));

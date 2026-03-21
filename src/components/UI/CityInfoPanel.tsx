@@ -71,6 +71,14 @@ export default function CityInfoPanel({ city, language }: Props) {
               {city.notificationCount > 0 && <span className="unit"> {t.cityInfo.alertCountSuffix}</span>}
             </span>
           </div>
+
+          <div className="city-stat">
+            <span className="stat-label">📊 {t.cityInfo.alertCountTotal}</span>
+            <span className="stat-value">
+              {city.alertCountTotal > 0 ? city.alertCountTotal.toLocaleString() : '—'}
+              {city.alertCountTotal > 0 && <span className="unit"> {t.cityInfo.alertCountSuffix}</span>}
+            </span>
+          </div>
         </>
       )}
 
