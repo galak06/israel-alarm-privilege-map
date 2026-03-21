@@ -17,8 +17,9 @@ interface LocalityRecord {
   region: 'north' | 'center' | 'south' | 'jerusalem';
   threatSources: Array<'hamas' | 'hezbollah' | 'iran'>;
   alertCount?: number;
-  alertCountNormalized?: number;
   notificationCount?: number;
+  alertCountTotal?: number;
+  alertCountNormalized?: number;
 }
 
 function toCity(r: LocalityRecord): City {
@@ -33,8 +34,9 @@ function toCity(r: LocalityRecord): City {
     region: r.region,
     threatSources: r.threatSources,
     alertCount: r.alertCount ?? 0,
-    alertCountNormalized: r.alertCountNormalized ?? 0,
     notificationCount: r.notificationCount ?? 0,
+    alertCountTotal: r.alertCountTotal ?? r.alertCount ?? 0,
+    alertCountNormalized: r.alertCountNormalized ?? 0,
   };
 }
 

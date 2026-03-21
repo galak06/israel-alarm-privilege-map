@@ -192,79 +192,46 @@ async function nominatimGeocode(nameHe, nameEn) {
   return { lat: parseFloat(results[0].lat), lng: parseFloat(results[0].lon) };
 }
 
-// ── 6. Last-30-day alert counts ──────────────────────────────────────────────
-// Primary:  redalert.orielhaim.com /api/stats/cities (requires REDALERT_API_KEY)
-//           Returns per-city rocket alert counts for any date range.
-//           Sign up free at https://redalert.orielhaim.com to get a key.
-// Fallback: api.tzevaadom.co.il /alerts-history (no auth, last ~24h only)
+// ── 6. Alert counts — two-source approach ────────────────────────────────────
+//
+// Source A — redalert.orielhaim.com (requires REDALERT_API_KEY)
+//   Returns 30-day combined count (all alert types) per city.
+//   Used for: alertCountNormalized (score normalization — reliable 30-day window)
+//
+// Source B — api.tzevaadom.co.il (no auth, last ~24h)
+//   Returns individual alert events with threat type:
+//     threat=0 → real rocket alarm (צבע אדום)
+//     threat=5 → advance warning notification (התרעה מוקדמת)
+//   Accumulated daily in scripts/alerts-cache.json (rolling 30-day history)
+//   Used for: alertCount (rockets) + notificationCount (advance warnings) in UI
 
-async function fetchAlertHistory() {
-  const apiKey = process.env.REDALERT_API_KEY;
-  if (apiKey) {
-    return fetchAlertHistoryRedalert(apiKey);
-  }
-  console.warn('⚠  REDALERT_API_KEY not set — falling back to tzevaadom (last ~24h only).');
-  console.warn('   Sign up free at https://redalert.orielhaim.com to get 30-day stats.');
-  return fetchAlertHistoryTzevaadom();
-}
+const ALERTS_CACHE_FILE = join(__dirname, 'alerts-cache.json');
+const RETENTION_DAYS = 30;
 
-async function fetchAlertHistoryRedalert(apiKey) {
-  const endDate   = new Date().toISOString();
-  const startDate = new Date(Date.now() - 30 * 24 * 3600 * 1000).toISOString();
-  console.log(`🚨 Fetching last-30-day alert stats from redalert.orielhaim.com…`);
-  console.log(`   📅 ${startDate.slice(0,10)} → ${endDate.slice(0,10)}`);
-
-  const sirenCounts = {};
-  const LIMIT = 500; // API max
-  let offset = 0;
-  let total = null;
-
+function loadAlertsCache() {
+  if (!existsSync(ALERTS_CACHE_FILE)) return { days: {} };
   try {
-    while (true) {
-      const url = `https://redalert.orielhaim.com/api/stats/cities?startDate=${startDate}&endDate=${endDate}&limit=${LIMIT}&offset=${offset}`;
-      const res = await fetch(url, {
-        headers: {
-          'Authorization': `Bearer ${apiKey}`,
-          'Accept': 'application/json',
-          'User-Agent': 'locality-fetcher/1.0',
-        },
-      });
-      if (!res.ok) {
-        const txt = await res.text();
-        throw new Error(`HTTP ${res.status}: ${txt.slice(0,100)}`);
-      }
-      const json = await res.json();
-      const rows = json.data ?? [];
-      if (total === null) total = json.pagination?.total ?? rows.length;
-
-      for (const row of rows) {
-        // API returns { city: "Hebrew name", count: N }
-        const name = row.city ?? row.name ?? row.cityName;
-        const count = row.count ?? row.alertCount ?? 1;
-        if (name) sirenCounts[name] = (sirenCounts[name] ?? 0) + count;
-      }
-
-      offset += rows.length;
-      process.stdout.write(`\r   Fetched ${offset} / ${total ?? '?'} cities`);
-      if (rows.length < LIMIT || offset >= (total ?? Infinity)) break;
-      await new Promise(r => setTimeout(r, 200));
-    }
-    process.stdout.write('\n');
-    const withAlerts = Object.keys(sirenCounts).length;
-    console.log(`   ✓ ${withAlerts} cities with alerts in last 30 days`);
-    const herzliya = Object.entries(sirenCounts).filter(([k]) => k.includes('הרצליה'));
-    if (herzliya.length) console.log(`   Herzliya: ${JSON.stringify(herzliya)}`);
-  } catch (e) {
-    console.warn(`   ⚠ redalert stats failed: ${e.message} — falling back to tzevaadom`);
-    return fetchAlertHistoryTzevaadom();
+    return JSON.parse(readFileSync(ALERTS_CACHE_FILE, 'utf8'));
+  } catch {
+    return { days: {} };
   }
-
-  return sirenCounts;
 }
 
-async function fetchAlertHistoryTzevaadom() {
-  console.log('🚨 Fetching recent alerts from api.tzevaadom.co.il (last ~24h)…');
-  const sirenCounts = {};
+function saveAlertsCache(cache) {
+  writeFileSync(ALERTS_CACHE_FILE, JSON.stringify(cache, null, 2));
+}
+
+function pruneAlertsCache(cache) {
+  const cutoff = new Date(Date.now() - RETENTION_DAYS * 24 * 3600 * 1000)
+    .toISOString().slice(0, 10);
+  for (const day of Object.keys(cache.days)) {
+    if (day < cutoff) delete cache.days[day];
+  }
+}
+
+// Fetch tzevaadom, group by date, return { date → { cityName → { r, n } } }
+async function fetchTzevaadomByDate() {
+  console.log('📡 Fetching recent alerts from api.tzevaadom.co.il…');
   try {
     const res = await fetch('https://api.tzevaadom.co.il/alerts-history', {
       headers: { 'User-Agent': 'Mozilla/5.0 (compatible; locality-fetcher/1.0)', 'Accept': 'application/json' },
@@ -272,19 +239,88 @@ async function fetchAlertHistoryTzevaadom() {
     if (!res.ok) throw new Error(`HTTP ${res.status}`);
     const groups = await res.json();
     const arr = Array.isArray(groups) ? groups : [];
+
+    const byDate = {}; // date → { cityName → { r: rockets, n: notifications } }
     for (const group of arr) {
       for (const alert of (group.alerts ?? [])) {
-        if (alert.isDrill || alert.threat !== 0) continue;
+        if (alert.isDrill) continue;
+        const isRocket = alert.threat === 0;
+        const isNotif  = alert.threat === 5;
+        if (!isRocket && !isNotif) continue;
+
+        const date = new Date(alert.time * 1000).toISOString().slice(0, 10);
+        if (!byDate[date]) byDate[date] = {};
+
         for (const city of (alert.cities ?? [])) {
-          sirenCounts[city] = (sirenCounts[city] ?? 0) + 1;
+          if (!byDate[date][city]) byDate[date][city] = { r: 0, n: 0 };
+          if (isRocket) byDate[date][city].r += 1;
+          if (isNotif)  byDate[date][city].n += 1;
         }
       }
     }
-    console.log(`   ✓ ${arr.length} groups → ${Object.keys(sirenCounts).length} cities`);
+
+    const dates = Object.keys(byDate);
+    const totalEvents = arr.reduce((s, g) => s + (g.alerts?.length ?? 0), 0);
+    console.log(`   ✓ ${totalEvents} events across ${dates.length} date(s): ${dates.join(', ')}`);
+    return byDate;
   } catch (e) {
     console.warn(`   ⚠ tzevaadom failed: ${e.message}`);
+    return {};
   }
-  return sirenCounts;
+}
+
+// Fetch redalert 30-day totals (all types combined) for score normalization
+async function fetchRedalertTotals(apiKey) {
+  const endDate   = new Date().toISOString();
+  const startDate = new Date(Date.now() - 30 * 24 * 3600 * 1000).toISOString();
+  console.log(`📡 Fetching 30-day totals from redalert.orielhaim.com…`);
+  console.log(`   📅 ${startDate.slice(0,10)} → ${endDate.slice(0,10)}`);
+
+  const totals = {};
+  const LIMIT = 500;
+  let offset = 0;
+  let pageTotal = null;
+
+  try {
+    while (true) {
+      const url = `https://redalert.orielhaim.com/api/stats/cities?startDate=${startDate}&endDate=${endDate}&limit=${LIMIT}&offset=${offset}`;
+      const res = await fetch(url, {
+        headers: { 'Authorization': `Bearer ${apiKey}`, 'Accept': 'application/json', 'User-Agent': 'locality-fetcher/1.0' },
+      });
+      if (!res.ok) throw new Error(`HTTP ${res.status}`);
+      const json = await res.json();
+      const rows = json.data ?? [];
+      if (pageTotal === null) pageTotal = json.pagination?.total ?? rows.length;
+
+      for (const row of rows) {
+        const name = row.city ?? row.name;
+        if (name) totals[name] = (totals[name] ?? 0) + (row.count ?? 1);
+      }
+
+      offset += rows.length;
+      process.stdout.write(`\r   Fetched ${offset} / ${pageTotal ?? '?'} cities`);
+      if (rows.length < LIMIT || offset >= (pageTotal ?? Infinity)) break;
+      await new Promise(r => setTimeout(r, 200));
+    }
+    process.stdout.write('\n');
+    console.log(`   ✓ ${Object.keys(totals).length} cities have alerts`);
+  } catch (e) {
+    console.warn(`   ⚠ redalert failed: ${e.message}`);
+  }
+  return totals;
+}
+
+// Build rolling 30-day sums from cache: { cityName → { rockets, notifications } }
+function sumAlertsCache(cache) {
+  const sums = {};
+  for (const dayCities of Object.values(cache.days)) {
+    for (const [city, counts] of Object.entries(dayCities)) {
+      if (!sums[city]) sums[city] = { rockets: 0, notifications: 0 };
+      sums[city].rockets       += counts.r ?? 0;
+      sums[city].notifications += counts.n ?? 0;
+    }
+  }
+  return sums;
 }
 
 // ── Main ─────────────────────────────────────────────────────────────────────
@@ -296,11 +332,36 @@ async function main() {
     : {};
   console.log(`💾 Geocache has ${Object.keys(geocache).length} entries`);
 
+  // ── Alert data (two sources) ─────────────────────────────────────────────
+  // Load accumulated daily cache
+  const alertsCache = loadAlertsCache();
+  const cachedDays = Object.keys(alertsCache.days).length;
+  console.log(`📦 Alerts cache has ${cachedDays} day(s) of history`);
+
+  // Fetch tzevaadom → group by date → update cache (replace each date, never double-count)
+  const tzevaadomByDate = await fetchTzevaadomByDate();
+  for (const [date, cities] of Object.entries(tzevaadomByDate)) {
+    alertsCache.days[date] = cities; // overwrite that day — idempotent
+  }
+  pruneAlertsCache(alertsCache);
+  alertsCache.lastUpdated = new Date().toISOString();
+  saveAlertsCache(alertsCache);
+  console.log(`💾 Alerts cache saved (${Object.keys(alertsCache.days).length} days, ${RETENTION_DAYS}-day window)`);
+
+  // Sum rolling 30-day rockets + notifications from cache
+  const alertSums = sumAlertsCache(alertsCache); // { cityName → { rockets, notifications } }
+
+  // Fetch redalert 30-day totals (all types) for score normalization
+  let redalertTotals = {};
+  const apiKey = process.env.REDALERT_API_KEY;
+  if (apiKey) {
+    redalertTotals = await fetchRedalertTotals(apiKey);
+  } else {
+    console.warn('⚠  REDALERT_API_KEY not set — score normalization will use cache rockets count.');
+  }
+
   // Fetch Oref data
   const orefLocalities = await fetchOrefLocalities();
-
-  // Fetch recent alert counts (last ~24h from tzevaadom)
-  const sirenCounts = await fetchAlertHistory();
 
   // Fetch OSM data for bulk geocoding
   let osmIndex;
@@ -369,12 +430,19 @@ async function main() {
     const { lat, lng } = coords;
     const migunTime = loc.migun_time ?? 90;
 
-    // Match alert counts: exact name match, then check if alert name contains/is contained by city name
-    const findSirenKey = (name) => Object.keys(sirenCounts).find(
-      k => k === name || name.includes(k) || k.includes(name)
-    );
-    const alertCount        = sirenCounts[nameHe] ?? (findSirenKey(nameHe) ? sirenCounts[findSirenKey(nameHe)] : 0);
-    const notificationCount = 0; // tzevaadom doesn't distinguish notification types
+    // Match alert counts: exact match first, then substring containment
+    const findKey = (map, name) => {
+      if (map[name] !== undefined) return name;
+      return Object.keys(map).find(k => name.includes(k) || k.includes(name)) ?? null;
+    };
+
+    const cacheKey       = findKey(alertSums, nameHe);
+    const alertCount     = cacheKey ? (alertSums[cacheKey].rockets       ?? 0) : 0;
+    const notifCount     = cacheKey ? (alertSums[cacheKey].notifications  ?? 0) : 0;
+
+    // redalert total (all types) for score normalization — falls back to alertCount
+    const redalertKey    = findKey(redalertTotals, nameHe);
+    const alertCountTotal = redalertKey ? (redalertTotals[redalertKey] ?? alertCount) : alertCount;
 
     localities.push({
       id: `oref-${loc.id}`,
@@ -388,21 +456,22 @@ async function main() {
       threatSources: threatSources(loc.areaname, lat),
       areaname: loc.areaname,
       orefId: loc.id,
-      alertCount,
-      notificationCount,
+      alertCount,                     // rockets only (tzevaadom cache)
+      notificationCount: notifCount,  // advance warnings (tzevaadom cache)
+      alertCountTotal,                // all types 30d (redalert, for score)
     });
   }
 
-  // Normalize alertCount → alertCountNormalized (0–1)
-  const maxAlerts = Math.max(1, ...localities.map(l => l.alertCount));
+  // Normalize using redalert total (reliable 30-day all-type count)
+  const maxTotal = Math.max(1, ...localities.map(l => l.alertCountTotal));
   for (const loc of localities) {
-    loc.alertCountNormalized = Math.round((loc.alertCount / maxAlerts) * 1000) / 1000;
+    loc.alertCountNormalized = Math.round((loc.alertCountTotal / maxTotal) * 1000) / 1000;
   }
+
   const herzliyaCities = localities.filter(l => l.nameHe?.includes('הרצליה'));
-  const herzliyaTotal = herzliyaCities.reduce((s, l) => s + l.alertCount, 0);
-  const source = process.env.REDALERT_API_KEY ? 'redalert.orielhaim.com (last 30 days)' : 'tzevaadom (last ~24h)';
-  console.log(`\n📊 Alert range: 0–${maxAlerts} via ${source}`);
-  if (herzliyaCities.length) console.log(`   Herzliya districts: ${herzliyaCities.map(l => l.nameHe + '=' + l.alertCount).join(', ')} (total: ${herzliyaTotal})`);
+  const cacheDaysCount = Object.keys(alertsCache.days).length;
+  console.log(`\n📊 Cache: ${cacheDaysCount} days | redalert max: ${maxTotal}`);
+  console.log(`   Herzliya: ${herzliyaCities.map(l => `${l.nameHe} r=${l.alertCount} n=${l.notificationCount}`).join(', ')}`);
 
   // Save geocache
   writeFileSync(CACHE_FILE, JSON.stringify(geocache, null, 2));

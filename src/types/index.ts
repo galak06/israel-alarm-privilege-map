@@ -21,9 +21,10 @@ export interface City {
   population?: number;
   region: 'north' | 'center' | 'south' | 'jerusalem';
   threatSources: ThreatSource[];
-  alertCount: number;            // Siren alerts - category 1 (ירי רקטות וטילים)
-  alertCountNormalized: number;  // 0–1, 0 = never alerted, 1 = most alerted city
-  notificationCount: number;     // Advance warning notifications - category 14
+  alertCount: number;            // Rocket alarms only — tzevaadom threat=0, 30-day rolling cache
+  notificationCount: number;     // Advance warnings — tzevaadom threat=5, 30-day rolling cache
+  alertCountTotal: number;       // All alert types — redalert 30-day total (for score normalization)
+  alertCountNormalized: number;  // 0–1 normalized from alertCountTotal
 }
 
 export interface PrivilegeScore {

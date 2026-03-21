@@ -14,7 +14,8 @@ export const cities: City[] = [
     shelterDistribution: { mamad: 0.25, stairwell: 0.35, public: 0.40 },
     population: 70000,
     region: 'south',
-    alertCount: 0, alertCountNormalized: 0, notificationCount: 0, threatSources: ['hamas'],
+    alertCount: 0, alertCountNormalized: 0,
+      alertCountTotal: 0, notificationCount: 0, threatSources: ['hamas'],
   },
   {
     id: 'sderot',
@@ -26,7 +27,8 @@ export const cities: City[] = [
     shelterDistribution: { mamad: 0.30, stairwell: 0.35, public: 0.35 },
     population: 35000,
     region: 'south',
-    alertCount: 0, alertCountNormalized: 0, notificationCount: 0, threatSources: ['hamas'],
+    alertCount: 0, alertCountNormalized: 0,
+      alertCountTotal: 0, notificationCount: 0, threatSources: ['hamas'],
   },
   {
     id: 'kiryat-shmona',
@@ -38,7 +40,8 @@ export const cities: City[] = [
     shelterDistribution: { mamad: 0.20, stairwell: 0.40, public: 0.40 },
     population: 22000,
     region: 'north',
-    alertCount: 0, alertCountNormalized: 0, notificationCount: 0, threatSources: ['hezbollah'],
+    alertCount: 0, alertCountNormalized: 0,
+      alertCountTotal: 0, notificationCount: 0, threatSources: ['hezbollah'],
   },
   {
     id: 'nahariya',
@@ -50,7 +53,8 @@ export const cities: City[] = [
     shelterDistribution: { mamad: 0.35, stairwell: 0.40, public: 0.25 },
     population: 60000,
     region: 'north',
-    alertCount: 0, alertCountNormalized: 0, notificationCount: 0, threatSources: ['hezbollah'],
+    alertCount: 0, alertCountNormalized: 0,
+      alertCountTotal: 0, notificationCount: 0, threatSources: ['hezbollah'],
   },
   {
     id: 'metula',
@@ -62,7 +66,8 @@ export const cities: City[] = [
     shelterDistribution: { mamad: 0.15, stairwell: 0.35, public: 0.50 },
     population: 1500,
     region: 'north',
-    alertCount: 0, alertCountNormalized: 0, notificationCount: 0, threatSources: ['hezbollah'],
+    alertCount: 0, alertCountNormalized: 0,
+      alertCountTotal: 0, notificationCount: 0, threatSources: ['hezbollah'],
   },
   {
     id: 'ashkelon',
@@ -74,7 +79,8 @@ export const cities: City[] = [
     shelterDistribution: { mamad: 0.40, stairwell: 0.35, public: 0.25 },
     population: 150000,
     region: 'south',
-    alertCount: 0, alertCountNormalized: 0, notificationCount: 0, threatSources: ['hamas'],
+    alertCount: 0, alertCountNormalized: 0,
+      alertCountTotal: 0, notificationCount: 0, threatSources: ['hamas'],
   },
   {
     id: 'haifa',
@@ -86,7 +92,8 @@ export const cities: City[] = [
     shelterDistribution: { mamad: 0.38, stairwell: 0.42, public: 0.20 },
     population: 285000,
     region: 'north',
-    alertCount: 0, alertCountNormalized: 0, notificationCount: 0, threatSources: ['hezbollah', 'iran'],
+    alertCount: 0, alertCountNormalized: 0,
+      alertCountTotal: 0, notificationCount: 0, threatSources: ['hezbollah', 'iran'],
   },
   {
     id: 'acre',
@@ -98,7 +105,8 @@ export const cities: City[] = [
     shelterDistribution: { mamad: 0.30, stairwell: 0.40, public: 0.30 },
     population: 50000,
     region: 'north',
-    alertCount: 0, alertCountNormalized: 0, notificationCount: 0, threatSources: ['hezbollah'],
+    alertCount: 0, alertCountNormalized: 0,
+      alertCountTotal: 0, notificationCount: 0, threatSources: ['hezbollah'],
   },
   {
     id: 'ashdod',
@@ -110,7 +118,8 @@ export const cities: City[] = [
     shelterDistribution: { mamad: 0.45, stairwell: 0.35, public: 0.20 },
     population: 240000,
     region: 'south',
-    alertCount: 0, alertCountNormalized: 0, notificationCount: 0, threatSources: ['hamas', 'iran'],
+    alertCount: 0, alertCountNormalized: 0,
+      alertCountTotal: 0, notificationCount: 0, threatSources: ['hamas', 'iran'],
   },
   {
     id: 'beer-sheva',
@@ -122,7 +131,8 @@ export const cities: City[] = [
     shelterDistribution: { mamad: 0.42, stairwell: 0.35, public: 0.23 },
     population: 210000,
     region: 'south',
-    alertCount: 0, alertCountNormalized: 0, notificationCount: 0, threatSources: ['hamas', 'iran'],
+    alertCount: 0, alertCountNormalized: 0,
+      alertCountTotal: 0, notificationCount: 0, threatSources: ['hamas', 'iran'],
   },
   {
     id: 'kiryat-gat',
@@ -134,7 +144,8 @@ export const cities: City[] = [
     shelterDistribution: { mamad: 0.38, stairwell: 0.37, public: 0.25 },
     population: 60000,
     region: 'south',
-    alertCount: 0, alertCountNormalized: 0, notificationCount: 0, threatSources: ['hamas', 'iran'],
+    alertCount: 0, alertCountNormalized: 0,
+      alertCountTotal: 0, notificationCount: 0, threatSources: ['hamas', 'iran'],
   },
   {
     id: 'tel-aviv',
@@ -146,7 +157,8 @@ export const cities: City[] = [
     shelterDistribution: { mamad: 0.55, stairwell: 0.35, public: 0.10 },
     population: 460000,
     region: 'center',
-    alertCount: 0, alertCountNormalized: 0, notificationCount: 0, threatSources: ['hamas', 'hezbollah', 'iran'],
+    alertCount: 0, alertCountNormalized: 0,
+      alertCountTotal: 0, notificationCount: 0, threatSources: ['hamas', 'hezbollah', 'iran'],
   },
   {
     id: 'jerusalem',
@@ -158,7 +170,8 @@ export const cities: City[] = [
     shelterDistribution: { mamad: 0.50, stairwell: 0.35, public: 0.15 },
     population: 920000,
     region: 'jerusalem',
-    alertCount: 0, alertCountNormalized: 0, notificationCount: 0, threatSources: ['hamas', 'hezbollah', 'iran'],
+    alertCount: 0, alertCountNormalized: 0,
+      alertCountTotal: 0, notificationCount: 0, threatSources: ['hamas', 'hezbollah', 'iran'],
   },
   {
     id: 'rehovot',
@@ -170,7 +183,8 @@ export const cities: City[] = [
     shelterDistribution: { mamad: 0.52, stairwell: 0.33, public: 0.15 },
     population: 140000,
     region: 'center',
-    alertCount: 0, alertCountNormalized: 0, notificationCount: 0, threatSources: ['hamas', 'iran'],
+    alertCount: 0, alertCountNormalized: 0,
+      alertCountTotal: 0, notificationCount: 0, threatSources: ['hamas', 'iran'],
   },
   {
     id: 'petah-tikva',
@@ -182,7 +196,8 @@ export const cities: City[] = [
     shelterDistribution: { mamad: 0.53, stairwell: 0.33, public: 0.14 },
     population: 250000,
     region: 'center',
-    alertCount: 0, alertCountNormalized: 0, notificationCount: 0, threatSources: ['hamas', 'hezbollah', 'iran'],
+    alertCount: 0, alertCountNormalized: 0,
+      alertCountTotal: 0, notificationCount: 0, threatSources: ['hamas', 'hezbollah', 'iran'],
   },
   {
     id: 'modiin',
@@ -194,7 +209,8 @@ export const cities: City[] = [
     shelterDistribution: { mamad: 0.75, stairwell: 0.20, public: 0.05 },
     population: 100000,
     region: 'center',
-    alertCount: 0, alertCountNormalized: 0, notificationCount: 0, threatSources: ['hamas', 'iran'],
+    alertCount: 0, alertCountNormalized: 0,
+      alertCountTotal: 0, notificationCount: 0, threatSources: ['hamas', 'iran'],
   },
   {
     id: 'rishon-lezion',
@@ -206,7 +222,8 @@ export const cities: City[] = [
     shelterDistribution: { mamad: 0.55, stairwell: 0.30, public: 0.15 },
     population: 260000,
     region: 'center',
-    alertCount: 0, alertCountNormalized: 0, notificationCount: 0, threatSources: ['hamas', 'iran'],
+    alertCount: 0, alertCountNormalized: 0,
+      alertCountTotal: 0, notificationCount: 0, threatSources: ['hamas', 'iran'],
   },
   {
     id: 'netanya',
@@ -218,7 +235,8 @@ export const cities: City[] = [
     shelterDistribution: { mamad: 0.50, stairwell: 0.35, public: 0.15 },
     population: 220000,
     region: 'center',
-    alertCount: 0, alertCountNormalized: 0, notificationCount: 0, threatSources: ['hamas', 'hezbollah', 'iran'],
+    alertCount: 0, alertCountNormalized: 0,
+      alertCountTotal: 0, notificationCount: 0, threatSources: ['hamas', 'hezbollah', 'iran'],
   },
   {
     id: 'ramat-gan',
@@ -230,7 +248,8 @@ export const cities: City[] = [
     shelterDistribution: { mamad: 0.55, stairwell: 0.32, public: 0.13 },
     population: 165000,
     region: 'center',
-    alertCount: 0, alertCountNormalized: 0, notificationCount: 0, threatSources: ['hamas', 'hezbollah', 'iran'],
+    alertCount: 0, alertCountNormalized: 0,
+      alertCountTotal: 0, notificationCount: 0, threatSources: ['hamas', 'hezbollah', 'iran'],
   },
   {
     id: 'hadera',
@@ -242,7 +261,8 @@ export const cities: City[] = [
     shelterDistribution: { mamad: 0.45, stairwell: 0.38, public: 0.17 },
     population: 100000,
     region: 'center',
-    alertCount: 0, alertCountNormalized: 0, notificationCount: 0, threatSources: ['hezbollah', 'iran'],
+    alertCount: 0, alertCountNormalized: 0,
+      alertCountTotal: 0, notificationCount: 0, threatSources: ['hezbollah', 'iran'],
   },
   {
     id: 'tiberias',
@@ -254,7 +274,8 @@ export const cities: City[] = [
     shelterDistribution: { mamad: 0.25, stairwell: 0.45, public: 0.30 },
     population: 45000,
     region: 'north',
-    alertCount: 0, alertCountNormalized: 0, notificationCount: 0, threatSources: ['hezbollah'],
+    alertCount: 0, alertCountNormalized: 0,
+      alertCountTotal: 0, notificationCount: 0, threatSources: ['hezbollah'],
   },
   {
     id: 'nazareth',
@@ -266,7 +287,8 @@ export const cities: City[] = [
     shelterDistribution: { mamad: 0.20, stairwell: 0.45, public: 0.35 },
     population: 80000,
     region: 'north',
-    alertCount: 0, alertCountNormalized: 0, notificationCount: 0, threatSources: ['hezbollah'],
+    alertCount: 0, alertCountNormalized: 0,
+      alertCountTotal: 0, notificationCount: 0, threatSources: ['hezbollah'],
   },
   {
     id: 'dimona',
@@ -278,7 +300,8 @@ export const cities: City[] = [
     shelterDistribution: { mamad: 0.35, stairwell: 0.40, public: 0.25 },
     population: 37000,
     region: 'south',
-    alertCount: 0, alertCountNormalized: 0, notificationCount: 0, threatSources: ['iran'],
+    alertCount: 0, alertCountNormalized: 0,
+      alertCountTotal: 0, notificationCount: 0, threatSources: ['iran'],
   },
   {
     id: 'eilat',
@@ -290,7 +313,8 @@ export const cities: City[] = [
     shelterDistribution: { mamad: 0.60, stairwell: 0.30, public: 0.10 },
     population: 55000,
     region: 'south',
-    alertCount: 0, alertCountNormalized: 0, notificationCount: 0, threatSources: ['iran'],
+    alertCount: 0, alertCountNormalized: 0,
+      alertCountTotal: 0, notificationCount: 0, threatSources: ['iran'],
   },
   {
     id: 'safed',
@@ -302,6 +326,7 @@ export const cities: City[] = [
     shelterDistribution: { mamad: 0.22, stairwell: 0.43, public: 0.35 },
     population: 35000,
     region: 'north',
-    alertCount: 0, alertCountNormalized: 0, notificationCount: 0, threatSources: ['hezbollah'],
+    alertCount: 0, alertCountNormalized: 0,
+      alertCountTotal: 0, notificationCount: 0, threatSources: ['hezbollah'],
   },
 ];
