@@ -28,8 +28,8 @@ export const he = {
     safetyScore: 'ניקוד אזעקות אחרונות',
     locationScore: 'ניקוד מיקום עיר',
     familyScore: 'ניקוד מצב משפחתי',
-    alertCount: 'אזעקות היום',
-    notificationCount: 'התרעות מוקדמות היום',
+    alertCount: 'אזעקות ב-30 הימים האחרונים',
+    notificationCount: 'התרעות מוקדמות ב-30 הימים האחרונים',
     alertCountSuffix: 'פעמים',
     total: 'סה"כ',
     privilegeLabels: {
