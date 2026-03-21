@@ -221,7 +221,7 @@ async function fetchAlertHistoryRedalert(apiKey) {
 
   try {
     while (true) {
-      const url = `https://redalert.orielhaim.com/api/stats/cities?startDate=${startDate}&endDate=${endDate}&limit=${LIMIT}&offset=${offset}&origin=missiles`;
+      const url = `https://redalert.orielhaim.com/api/stats/cities?startDate=${startDate}&endDate=${endDate}&limit=${LIMIT}&offset=${offset}`;
       const res = await fetch(url, {
         headers: {
           'Authorization': `Bearer ${apiKey}`,
@@ -234,13 +234,13 @@ async function fetchAlertHistoryRedalert(apiKey) {
         throw new Error(`HTTP ${res.status}: ${txt.slice(0,100)}`);
       }
       const json = await res.json();
-      const rows = json.data ?? json ?? [];
-      if (total === null) total = json.total ?? rows.length;
+      const rows = json.data ?? [];
+      if (total === null) total = json.pagination?.total ?? rows.length;
 
       for (const row of rows) {
-        // row.name is Hebrew city name; row.count is alert count
-        const name = row.name ?? row.city ?? row.cityName;
-        const count = row.count ?? row.alertCount ?? row.total ?? 1;
+        // API returns { city: "Hebrew name", count: N }
+        const name = row.city ?? row.name ?? row.cityName;
+        const count = row.count ?? row.alertCount ?? 1;
         if (name) sirenCounts[name] = (sirenCounts[name] ?? 0) + count;
       }
 
@@ -400,7 +400,8 @@ async function main() {
   }
   const herzliyaCities = localities.filter(l => l.nameHe?.includes('הרצליה'));
   const herzliyaTotal = herzliyaCities.reduce((s, l) => s + l.alertCount, 0);
-  console.log(`\n📊 Alert range: 0–${maxAlerts} (last ~24h via tzevaadom)`);
+  const source = process.env.REDALERT_API_KEY ? 'redalert.orielhaim.com (last 30 days)' : 'tzevaadom (last ~24h)';
+  console.log(`\n📊 Alert range: 0–${maxAlerts} via ${source}`);
   if (herzliyaCities.length) console.log(`   Herzliya districts: ${herzliyaCities.map(l => l.nameHe + '=' + l.alertCount).join(', ')} (total: ${herzliyaTotal})`);
 
   // Save geocache
