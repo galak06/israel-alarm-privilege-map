@@ -28,3 +28,4 @@ jobs:
           FTP_USERNAME: ${{ secrets.FTP_USERNAME }}
           FTP_PASSWORD: ${{ secrets.FTP_PASSWORD }}
           FTP_REMOTE_PATH: ${{ secrets.FTP_REMOTE_PATH }}
+          REDALERT_API_KEY: ${{ secrets.REDALERT_API_KEY }}
