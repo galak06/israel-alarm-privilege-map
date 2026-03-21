@@ -215,7 +215,7 @@ async function fetchAlertHistoryRedalert(apiKey) {
   console.log(`   📅 ${startDate.slice(0,10)} → ${endDate.slice(0,10)}`);
 
   const sirenCounts = {};
-  const LIMIT = 100;
+  const LIMIT = 500; // API max
   let offset = 0;
   let total = null;
 
