@@ -229,44 +229,73 @@ function pruneAlertsCache(cache) {
   }
 }
 
-// Fetch tzevaadom, group by date, return { date → { cityName → { r, n } } }
-async function fetchTzevaadomByDate() {
-  console.log('📡 Fetching recent alerts from api.tzevaadom.co.il…');
-  try {
-    const res = await fetch('https://api.tzevaadom.co.il/alerts-history', {
-      headers: { 'User-Agent': 'Mozilla/5.0 (compatible; locality-fetcher/1.0)', 'Accept': 'application/json' },
-    });
-    if (!res.ok) throw new Error(`HTTP ${res.status}`);
-    const groups = await res.json();
-    const arr = Array.isArray(groups) ? groups : [];
+// Fetch Pikud HaOref per-city alerts in batches, grouped by date.
+// Categories: 1=rockets, 2=aircraft (both counted as real alarms), 14=advance warning
+// Returns { date → { cityName → { r, n } } }
+async function fetchOrefByDate(cityNames) {
+  console.log(`📡 Fetching per-city alerts from Pikud HaOref (${cityNames.length} cities, batches of 30)…`);
+  const today = new Date();
+  const yesterday = new Date(today - 24 * 3600 * 1000);
+  const fmt = d => `${String(d.getDate()).padStart(2,'0')}.${String(d.getMonth()+1).padStart(2,'0')}.${d.getFullYear()}`;
+  const fromDate = fmt(yesterday);
+  const toDate   = fmt(today);
 
-    const byDate = {}; // date → { cityName → { r: rockets, n: notifications } }
-    for (const group of arr) {
-      for (const alert of (group.alerts ?? [])) {
-        if (alert.isDrill) continue;
-        const isRocket = alert.threat === 0;
-        const isNotif  = alert.threat === 5;
+  const byDate = {}; // date → { cityName → { r, n } }
+  const BATCH = 30;
+  let totalRecords = 0;
+
+  for (let i = 0; i < cityNames.length; i += BATCH) {
+    const batch = cityNames.slice(i, i + BATCH);
+    const cityParams = batch.map((c, j) => `city_${j}=${encodeURIComponent(c)}`).join('&');
+    const url = `https://alerts-history.oref.org.il/Shared/Ajax/GetAlarmsHistory.aspx?lang=he&mode=1&fromDate=${fromDate}&toDate=${toDate}&${cityParams}`;
+
+    try {
+      const res = await fetch(url, {
+        headers: {
+          'Referer': 'https://alerts-history.oref.org.il/',
+          'X-Requested-With': 'XMLHttpRequest',
+          'User-Agent': 'Mozilla/5.0 (compatible; locality-fetcher/1.0)',
+        },
+      });
+      if (res.status === 404) continue; // no alerts for this batch
+      if (!res.ok) throw new Error(`HTTP ${res.status}`);
+      const text = await res.text();
+      if (!text || !text.trim()) continue; // empty = no alerts
+      let records;
+      try { records = JSON.parse(text); } catch { continue; }
+      if (!Array.isArray(records)) continue;
+
+      for (const rec of records) {
+        const cat  = rec.category;
+        const city = rec.data ?? rec.NAME_HE;
+        if (!city) continue;
+        // cat 1 = rockets, cat 2 = hostile aircraft → real alarms
+        // cat 14 = advance warning → notification
+        // cat 13 = event ended → skip
+        const isRocket = cat === 1 || cat === 2;
+        const isNotif  = cat === 14;
         if (!isRocket && !isNotif) continue;
 
-        const date = new Date(alert.time * 1000).toISOString().slice(0, 10);
+        const date = (rec.alertDate ?? '').slice(0, 10) || new Date().toISOString().slice(0, 10);
         if (!byDate[date]) byDate[date] = {};
-
-        for (const city of (alert.cities ?? [])) {
-          if (!byDate[date][city]) byDate[date][city] = { r: 0, n: 0 };
-          if (isRocket) byDate[date][city].r += 1;
-          if (isNotif)  byDate[date][city].n += 1;
-        }
+        if (!byDate[date][city]) byDate[date][city] = { r: 0, n: 0 };
+        if (isRocket) byDate[date][city].r += 1;
+        if (isNotif)  byDate[date][city].n += 1;
+        totalRecords++;
       }
+    } catch (e) {
+      console.warn(`   ⚠ batch ${i/BATCH + 1} failed: ${e.message}`);
     }
 
-    const dates = Object.keys(byDate);
-    const totalEvents = arr.reduce((s, g) => s + (g.alerts?.length ?? 0), 0);
-    console.log(`   ✓ ${totalEvents} events across ${dates.length} date(s): ${dates.join(', ')}`);
-    return byDate;
-  } catch (e) {
-    console.warn(`   ⚠ tzevaadom failed: ${e.message}`);
-    return {};
+    process.stdout.write(`\r   Progress: ${Math.min(i + BATCH, cityNames.length)} / ${cityNames.length} cities`);
+    await new Promise(r => setTimeout(r, 300)); // be polite to the API
   }
+  process.stdout.write('\n');
+
+  const dates = Object.keys(byDate);
+  const citiesWithAlerts = new Set(dates.flatMap(d => Object.keys(byDate[d]))).size;
+  console.log(`   ✓ ${totalRecords} records | ${citiesWithAlerts} cities with alerts | dates: ${dates.join(', ')}`);
+  return byDate;
 }
 
 // Fetch redalert 30-day totals (all types combined) for score normalization
@@ -338,9 +367,13 @@ async function main() {
   const cachedDays = Object.keys(alertsCache.days).length;
   console.log(`📦 Alerts cache has ${cachedDays} day(s) of history`);
 
-  // Fetch tzevaadom → group by date → update cache (replace each date, never double-count)
-  const tzevaadomByDate = await fetchTzevaadomByDate();
-  for (const [date, cities] of Object.entries(tzevaadomByDate)) {
+  // Fetch Oref locality list first (needed for city names to query per-city alerts)
+  const orefLocalities = await fetchOrefLocalities();
+  const cityNames = orefLocalities.map(loc => loc.label_he || loc.label);
+
+  // Fetch oref per-city alerts → group by date → update cache (replace each date, never double-count)
+  const orefByDate = await fetchOrefByDate(cityNames);
+  for (const [date, cities] of Object.entries(orefByDate)) {
     alertsCache.days[date] = cities; // overwrite that day — idempotent
   }
   pruneAlertsCache(alertsCache);
@@ -359,9 +392,6 @@ async function main() {
   } else {
     console.warn('⚠  REDALERT_API_KEY not set — score normalization will use cache rockets count.');
   }
-
-  // Fetch Oref data
-  const orefLocalities = await fetchOrefLocalities();
 
   // Fetch OSM data for bulk geocoding
   let osmIndex;
