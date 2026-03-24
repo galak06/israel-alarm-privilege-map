@@ -21,6 +21,8 @@ jobs:
 
       - name: Build
         run: npm run build
+        env:
+          VITE_REDALERT_API_KEY: ${{ secrets.REDALERT_API_KEY }}
 
       - name: Deploy via FTP
         run: node scripts/deploy-ftp.mjs

@@ -1,110 +1,130 @@
 /**
- * Per-city live alert cache.
+ * Per-city live alert cache using the Redalert API.
  *
- * On city select, attempts to fetch fresh alert counts directly from the
- * Pikud HaOref API. Results are stored in localStorage with a 24h TTL.
+ * On first city select (or when cache is stale) fetches the full 30-day
+ * city stats from redalert.orielhaim.com (all cities in one request).
+ * The dataset is stored in localStorage with a 24h TTL so subsequent
+ * city selections are instant.
  *
- * If the API call fails (CORS, network error, etc.) the caller falls back
- * to the static values already baked into localities.json.
+ * The API key is injected at build time via VITE_REDALERT_API_KEY
+ * (sourced from the REDALERT_API_KEY GitHub Secret — never in source).
+ *
+ * Falls back silently to static localities.json data if the API is
+ * unreachable or the key is not set.
  */
 
-const CACHE_PREFIX = 'alerts_v1_';
+const CACHE_KEY = 'redalert_v1';
 const TTL_MS = 24 * 60 * 60 * 1000; // 24 hours
 
 export interface LiveAlerts {
-  alertCount: number;       // rockets/aircraft last 30d (from 24h window rolled up)
-  notificationCount: number; // advance warnings last 30d
-  alertCountTotal: number;  // all categories last 30d
-  fetchedAt: number;        // Date.now() at fetch time
+  alertCountTotal: number;       // 30-day total across all alert types
+  alertCountNormalized: number;  // 0–1 normalized against current dataset max
+  fetchedAt: number;
 }
 
-function cacheKey(nameHe: string) {
-  return CACHE_PREFIX + nameHe;
+interface RedalertRow {
+  city: string;
+  count: number;
 }
 
-function readCache(nameHe: string): LiveAlerts | null {
+interface AllCitiesCache {
+  rows: RedalertRow[];
+  maxCount: number;
+  fetchedAt: number;
+}
+
+function readCache(): AllCitiesCache | null {
   try {
-    const raw = localStorage.getItem(cacheKey(nameHe));
+    const raw = localStorage.getItem(CACHE_KEY);
     if (!raw) return null;
-    const entry: LiveAlerts = JSON.parse(raw);
-    if (Date.now() - entry.fetchedAt > TTL_MS) return null; // stale
+    const entry: AllCitiesCache = JSON.parse(raw);
+    if (Date.now() - entry.fetchedAt > TTL_MS) return null;
     return entry;
   } catch {
     return null;
   }
 }
 
-function writeCache(nameHe: string, entry: LiveAlerts) {
+function writeCache(entry: AllCitiesCache) {
   try {
-    localStorage.setItem(cacheKey(nameHe), JSON.stringify(entry));
-  } catch { /* storage quota or private browsing */ }
+    localStorage.setItem(CACHE_KEY, JSON.stringify(entry));
+  } catch { /* quota or private browsing */ }
 }
 
-function fmtDate(d: Date): string {
-  return `${String(d.getDate()).padStart(2, '0')}.${String(d.getMonth() + 1).padStart(2, '0')}.${d.getFullYear()}`;
-}
+async function fetchRedalert(): Promise<AllCitiesCache | null> {
+  const key = import.meta.env.VITE_REDALERT_API_KEY as string | undefined;
+  if (!key) return null;
 
-async function parseOrefResponse(res: Response): Promise<unknown[]> {
-  if (!res.ok) return [];
-  const text = await res.text();
-  if (!text?.trim()) return [];
-  try { return JSON.parse(text); } catch { return []; }
-}
+  const endDate   = new Date().toISOString();
+  const startDate = new Date(Date.now() - 30 * 24 * 3600 * 1000).toISOString();
 
-async function fetchFromOref(nameHe: string): Promise<LiveAlerts | null> {
-  const now = new Date();
-  const yesterday = new Date(now.getTime() - 24 * 3600 * 1000);
-  const thirtyDaysAgo = new Date(now.getTime() - 30 * 24 * 3600 * 1000);
+  const rows: RedalertRow[] = [];
+  let offset = 0;
+  const LIMIT = 500;
 
-  const toDate  = fmtDate(now);
-  const from24  = fmtDate(yesterday);
-  const from30  = fmtDate(thirtyDaysAgo);
-
-  const base      = 'https://alerts-history.oref.org.il/Shared/Ajax/GetAlarmsHistory.aspx';
-  const cityParam = `city_0=${encodeURIComponent(nameHe)}`;
-
-  const [recs24, recs30] = await Promise.all([
-    fetch(`${base}?lang=he&mode=1&fromDate=${from24}&toDate=${toDate}&${cityParam}`).then(parseOrefResponse),
-    fetch(`${base}?lang=he&mode=1&fromDate=${from30}&toDate=${toDate}&${cityParam}`).then(parseOrefResponse),
-  ]);
-
-  let alertCount = 0;
-  let notificationCount = 0;
-
-  for (const r of recs24 as Array<{ category?: number }>) {
-    const cat = r.category;
-    if (cat === 1 || cat === 2 || cat === 13) alertCount++;
-    else if (cat === 14) notificationCount++;
+  try {
+    while (true) {
+      const url = `https://redalert.orielhaim.com/api/stats/cities?startDate=${startDate}&endDate=${endDate}&limit=${LIMIT}&offset=${offset}`;
+      const res = await fetch(url, {
+        headers: { Authorization: `Bearer ${key}`, Accept: 'application/json' },
+      });
+      if (!res.ok) return null;
+      const json = await res.json();
+      const page: Array<{ city?: string; name?: string; count?: number }> = json.data ?? [];
+      for (const r of page) {
+        const city = r.city ?? r.name;
+        if (city) rows.push({ city, count: r.count ?? 0 });
+      }
+      offset += page.length;
+      if (page.length < LIMIT || offset >= (json.pagination?.total ?? Infinity)) break;
+    }
+  } catch {
+    return null; // CORS or network error
   }
 
-  const alertCountTotal = recs30.length;
+  const maxCount = Math.max(1, ...rows.map((r) => r.count));
+  return { rows, maxCount, fetchedAt: Date.now() };
+}
 
-  return { alertCount, notificationCount, alertCountTotal, fetchedAt: Date.now() };
+function findCity(rows: RedalertRow[], nameHe: string): RedalertRow | undefined {
+  // Exact match first
+  const exact = rows.find((r) => r.city === nameHe);
+  if (exact) return exact;
+  // Substring fallback (handles district suffixes like "אשדוד - א,ב,ד,ה")
+  const base = nameHe.split(/[\s-–]/)[0].trim();
+  return rows.find((r) => r.city.startsWith(base) || base.startsWith(r.city.split(/[\s-–]/)[0].trim()));
 }
 
 /**
- * Returns live alert counts for a city, using localStorage cache (24h TTL).
- * Returns null if both cache and API fail — caller should use static data.
+ * Returns live alert data for a city, backed by a 24h localStorage cache.
+ * Returns null on failure — caller should use static data.
  */
 export async function getLiveAlerts(nameHe: string): Promise<LiveAlerts | null> {
-  const cached = readCache(nameHe);
-  if (cached) return cached;
+  let cache = readCache();
 
-  try {
-    const fresh = await fetchFromOref(nameHe);
-    if (fresh) writeCache(nameHe, fresh);
-    return fresh;
-  } catch {
-    return null; // CORS or network — silent fallback
+  if (!cache) {
+    cache = await fetchRedalert();
+    if (!cache) return null;
+    writeCache(cache);
   }
+
+  const row = findCity(cache.rows, nameHe);
+  if (!row) return null;
+
+  return {
+    alertCountTotal: row.count,
+    alertCountNormalized: row.count / cache.maxCount,
+    fetchedAt: cache.fetchedAt,
+  };
 }
 
-/** How old is the cached entry, in minutes. Returns null if no cache. */
-export function cacheAgeMinutes(nameHe: string): number | null {
+/** How old is the cache in minutes. Returns null if no valid cache. */
+export function cacheAgeMinutes(): number | null {
   try {
-    const raw = localStorage.getItem(cacheKey(nameHe));
+    const raw = localStorage.getItem(CACHE_KEY);
     if (!raw) return null;
-    const entry: LiveAlerts = JSON.parse(raw);
+    const entry: AllCitiesCache = JSON.parse(raw);
+    if (Date.now() - entry.fetchedAt > TTL_MS) return null;
     return Math.floor((Date.now() - entry.fetchedAt) / 60_000);
   } catch {
     return null;

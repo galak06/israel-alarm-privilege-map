@@ -181,16 +181,14 @@ export default function MyScorePanel({ language, cities, onCitySelect }: Props) 
   const shelterSelectId = useId();
   const familySelectId = useId();
 
-  // Merge static city data with live alert counts (if available)
+  // Merge static city data with live alert totals (if available)
   const enrichedCity = useMemo<City | null>(() => {
     if (!city) return null;
     if (!liveAlerts) return city;
     return {
       ...city,
-      alertCount: liveAlerts.alertCount,
-      notificationCount: liveAlerts.notificationCount,
       alertCountTotal: liveAlerts.alertCountTotal,
-      // alertCountNormalized kept from static data (needs global max to recompute)
+      alertCountNormalized: liveAlerts.alertCountNormalized,
     };
   }, [city, liveAlerts]);
 
@@ -251,14 +249,13 @@ export default function MyScorePanel({ language, cities, onCitySelect }: Props) 
           {!alertsLoading && city && (
             <div className="alerts-status">
               {liveAlerts
-                ? t.myScore.alertsLive.replace('{min}', String(cacheAgeMinutes(city.nameHe) ?? 0))
+                ? t.myScore.alertsLive.replace('{min}', String(cacheAgeMinutes() ?? 0))
                 : t.myScore.alertsStatic}
             </div>
           )}
 
           {personal !== null && cityAvg !== null && (
             <div className="personal-result">
-              <div className="personal-score-label">{t.myScore.result}</div>
               <div
                 className="personal-score-circle"
                 style={{ borderColor: colorForPrivilege((personal.total / (ALERTS_ENABLED ? 120 : 100)) * 100), color: colorForPrivilege((personal.total / (ALERTS_ENABLED ? 120 : 100)) * 100) }}
