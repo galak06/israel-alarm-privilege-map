@@ -74,8 +74,8 @@ export default function CityInfoPanel({ city, language }: Props) {
           <div className="city-stat alert-count-stat">
             <span className="stat-label">🚨 {t.cityInfo.alertCount}</span>
             <span className="stat-value alert-count-value">
-              {alertCount > 0 ? alertCount.toLocaleString() : '—'}
-              {alertCount > 0 && <span className="unit"> {t.cityInfo.alertCountSuffix}</span>}
+              {(isLive || alertCount > 0) ? alertCount.toLocaleString() : '—'}
+              {(isLive || alertCount > 0) && <span className="unit"> {t.cityInfo.alertCountSuffix}</span>}
               {isLive && <span className="live-badge">live</span>}
             </span>
           </div>
@@ -83,8 +83,8 @@ export default function CityInfoPanel({ city, language }: Props) {
           <div className="city-stat">
             <span className="stat-label">🔔 {t.cityInfo.notificationCount}</span>
             <span className="stat-value" style={{ color: notifCount > 0 ? '#f57c00' : undefined }}>
-              {notifCount > 0 ? notifCount.toLocaleString() : '—'}
-              {notifCount > 0 && <span className="unit"> {t.cityInfo.alertCountSuffix}</span>}
+              {(isLive || notifCount > 0) ? notifCount.toLocaleString() : '—'}
+              {(isLive || notifCount > 0) && <span className="unit"> {t.cityInfo.alertCountSuffix}</span>}
             </span>
           </div>
 
