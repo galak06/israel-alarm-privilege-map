@@ -39,14 +39,20 @@ const LOCATION_SCORE: Record<City['region'], number> = {
 //                         external shelter. People without a mamad must get dressed and go outside every
 //                         time — up to 4 penalty points subtracted based on notification count × shelter
 //                         vulnerability (0 penalty if you have a mamad).
+//   gapScore      0–10   average hours between alarm events (30d window) — GATED by ALERTS_ENABLED flag
+//                         Computed as: (30×24) / max(1, alertCountTotal), capped at MAX_GAP_HOURS.
+//                         Measures how long you typically go between alarms: higher = more rest.
 //
-//   City max (flag off):  40+40+10      = 90
-//   City max (flag on):   40+40+10+10   = 100
-//   Personal max (off):   40+40+10+10   = 100
-//   Personal max (on):    40+40+10+10+10= 110
+//   City max (flag off):  40+40+10         = 90
+//   City max (flag on):   40+40+10+10+10   = 110
+//   Personal max (off):   40+40+10+10      = 100
+//   Personal max (on):    40+40+10+10+10+10= 120
 
 // Normalize notification count: 20 notifications/month = max burden
 const MAX_NOTIF = 20;
+
+// Average gap normalization: 72 hours between alarms = full score (≈ one alarm every 3 days)
+const MAX_GAP_HOURS = 72;
 
 // Shelter vulnerability to advance-warning burden (mamad = can shelter in place, no burden)
 const NOTIF_SHELTER_VULN: Record<ShelterType, number> = {
@@ -65,12 +71,14 @@ export function calcPrivilegeScorePersonal(
   const shelterScore  = Math.round((SHELTER_WEIGHT[shelter] * 40) * 10) / 10;
   const notifPenalty  = Math.min(1, city.notificationCount / MAX_NOTIF) * NOTIF_SHELTER_VULN[shelter] * 4;
   const safetyScore   = Math.max(0, Math.round(((1 - city.alertCountNormalized) * 10 - notifPenalty) * 10) / 10);
+  const avgGapHours   = (30 * 24) / Math.max(1, city.alertCountTotal);
+  const gapScore      = Math.round(Math.min(10, (avgGapHours / MAX_GAP_HOURS) * 10) * 10) / 10;
   const locationScore = LOCATION_SCORE[city.region] ?? 5;
   const familyScore   = FAMILY_SCORE[familyStatus];
   const total = Math.round(
-    (timeScore + shelterScore + locationScore + familyScore + (ALERTS_ENABLED ? safetyScore : 0)) * 10
+    (timeScore + shelterScore + locationScore + familyScore + (ALERTS_ENABLED ? safetyScore + gapScore : 0)) * 10
   ) / 10;
-  return { total, timeScore, shelterScore, safetyScore, locationScore, familyScore, label: scoreLabel(total, true) };
+  return { total, timeScore, shelterScore, safetyScore, gapScore, locationScore, familyScore, label: scoreLabel(total, true) };
 }
 
 export function calcPrivilegeScore(city: City): PrivilegeScore {
@@ -82,19 +90,21 @@ export function calcPrivilegeScore(city: City): PrivilegeScore {
   // Notification burden: weighted by fraction of residents without a mamad
   const notifPenalty  = Math.min(1, city.notificationCount / MAX_NOTIF) * (1 - mamad) * 4;
   const safetyScore   = Math.max(0, Math.round(((1 - city.alertCountNormalized) * 10 - notifPenalty) * 10) / 10);
+  const avgGapHours   = (30 * 24) / Math.max(1, city.alertCountTotal);
+  const gapScore      = Math.round(Math.min(10, (avgGapHours / MAX_GAP_HOURS) * 10) * 10) / 10;
   const locationScore = LOCATION_SCORE[city.region] ?? 5;
 
   const total = Math.round(
-    (timeScore + shelterScore + locationScore + (ALERTS_ENABLED ? safetyScore : 0)) * 10
+    (timeScore + shelterScore + locationScore + (ALERTS_ENABLED ? safetyScore + gapScore : 0)) * 10
   ) / 10;
-  return { total, timeScore, shelterScore, safetyScore, locationScore, familyScore: 0, label: scoreLabel(total, false) };
+  return { total, timeScore, shelterScore, safetyScore, gapScore, locationScore, familyScore: 0, label: scoreLabel(total, false) };
 }
 
 // Labels use percentage of max
 function scoreLabel(total: number, personal: boolean): PrivilegeScore['label'] {
   const max = personal
-    ? (ALERTS_ENABLED ? 110 : 100)
-    : (ALERTS_ENABLED ? 100 : 90);
+    ? (ALERTS_ENABLED ? 120 : 100)
+    : (ALERTS_ENABLED ? 110 : 90);
   const pct = total / max;
   if (pct < 0.20) return 'very-low';
   if (pct < 0.40) return 'low';

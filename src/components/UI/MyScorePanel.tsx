@@ -230,7 +230,7 @@ export default function MyScorePanel({ language, cities, onCitySelect }: Props) 
               <div className="personal-score-label">{t.myScore.result}</div>
               <div
                 className="personal-score-circle"
-                style={{ borderColor: colorForPrivilege((personal.total / (ALERTS_ENABLED ? 110 : 100)) * 100), color: colorForPrivilege((personal.total / (ALERTS_ENABLED ? 110 : 100)) * 100) }}
+                style={{ borderColor: colorForPrivilege((personal.total / (ALERTS_ENABLED ? 120 : 100)) * 100), color: colorForPrivilege((personal.total / (ALERTS_ENABLED ? 120 : 100)) * 100) }}
               >
                 <span className="personal-score-num">{personal.total.toFixed(1)}</span>
                 <span className="personal-score-sublabel">
@@ -253,10 +253,16 @@ export default function MyScorePanel({ language, cities, onCitySelect }: Props) 
                   <span>{personal.shelterScore.toFixed(1)} / 40</span>
                 </div>
                 {ALERTS_ENABLED && (
-                  <div className="personal-row">
-                    <span>{t.cityInfo.safetyScore}</span>
-                    <span>{personal.safetyScore.toFixed(1)} / 10</span>
-                  </div>
+                  <>
+                    <div className="personal-row">
+                      <span>{t.cityInfo.safetyScore}</span>
+                      <span>{personal.safetyScore.toFixed(1)} / 10</span>
+                    </div>
+                    <div className="personal-row">
+                      <span>{t.cityInfo.gapScore}</span>
+                      <span>{personal.gapScore.toFixed(1)} / 10</span>
+                    </div>
+                  </>
                 )}
                 <div className="personal-row">
                   <span>{t.cityInfo.locationScore}</span>

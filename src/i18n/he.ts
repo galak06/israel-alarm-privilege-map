@@ -26,6 +26,7 @@ export const he = {
     timeScore: 'ניקוד זמן',
     shelterScore: 'ניקוד מיגון',
     safetyScore: 'ניקוד אזעקות אחרונות',
+    gapScore: 'ניקוד פערים בין אזעקות',
     locationScore: 'ניקוד מיקום עיר',
     familyScore: 'ניקוד מצב משפחתי',
     alertCount: 'אזעקות ב-24 שעות האחרונות',

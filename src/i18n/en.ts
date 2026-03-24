@@ -26,6 +26,7 @@ export const en = {
     timeScore: 'Time score',
     shelterScore: 'Shelter score',
     safetyScore: 'Recent alerts score',
+    gapScore: 'Alert gap score',
     locationScore: 'City location score',
     familyScore: 'Family status score',
     alertCount: 'Siren alerts (last 24h)',

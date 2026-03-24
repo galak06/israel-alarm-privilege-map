@@ -28,10 +28,11 @@ export interface City {
 }
 
 export interface PrivilegeScore {
-  total: number;         // 0–110 personal / 0–100 city
+  total: number;         // 0–120 personal / 0–110 city (with ALERTS_ENABLED)
   timeScore: number;     // 0–40
   shelterScore: number;  // 0–40
   safetyScore: number;   // 0–10 (inverse of last-30d alert frequency)
+  gapScore: number;      // 0–10 (fraction of alarm-free days in last 30d)
   locationScore: number; // 0–10 (city region: infrastructure & support resources)
   familyScore: number;   // 0–10 (family status factor, personal only)
   label: 'very-low' | 'low' | 'medium' | 'high' | 'very-high';
