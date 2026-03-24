@@ -21,7 +21,7 @@ export default function CityInfoPanel({ city, language }: Props) {
   }, [city?.id]);
 
   const alertCount      = liveAlerts?.alertCount      ?? city?.alertCount      ?? 0;
-  const notifCount      = city?.notificationCount ?? 0;   // static only — Redalert doesn't split by category
+  const notifCount      = liveAlerts?.notificationCount ?? city?.notificationCount ?? 0;
   const alertCountTotal = liveAlerts?.alertCountTotal ?? city?.alertCountTotal ?? 0;
   const isLive          = liveAlerts !== null && (
     liveAlerts.alertCount !== undefined || liveAlerts.alertCountTotal !== undefined
