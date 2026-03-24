@@ -83,6 +83,9 @@ export const en = {
     compareNote: 'City average',
     locationScore: 'City location score',
     familyScore: 'Family status score',
+    alertsLoading: 'Fetching live alert data…',
+    alertsLive: 'Live data (cached {min}m ago)',
+    alertsStatic: 'Using daily snapshot data',
   },
   about: {
     text: 'Colors show time-to-shelter privilege. Residents near Gaza & Lebanon borders have as little as 0–15 seconds. A mamad (ממ"ד) is a fortified in-unit safe room required in buildings built after 1992.',

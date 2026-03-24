@@ -6,6 +6,7 @@ import { colorForPrivilege } from '../../utils/colorScale';
 import { en } from '../../i18n/en';
 import { he } from '../../i18n/he';
 import { trackShelterSelect } from '../../utils/analytics';
+import { getLiveAlerts, cacheAgeMinutes, type LiveAlerts } from '../../utils/alertsCache';
 
 interface Props {
   language: Language;
@@ -175,16 +176,36 @@ export default function MyScorePanel({ language, cities, onCitySelect }: Props) 
   const [city, setCity] = useState<City | null>(null);
   const [shelter, setShelter] = useState<ShelterType>('stairwell');
   const [familyStatus, setFamilyStatus] = useState<FamilyStatus>('single');
+  const [liveAlerts, setLiveAlerts] = useState<LiveAlerts | null>(null);
+  const [alertsLoading, setAlertsLoading] = useState(false);
   const shelterSelectId = useId();
   const familySelectId = useId();
 
-  const personal = city ? calcPrivilegeScorePersonal(city, shelter, familyStatus) : null;
-  const cityAvg = city ? calcPrivilegeScore(city) : null;
+  // Merge static city data with live alert counts (if available)
+  const enrichedCity = useMemo<City | null>(() => {
+    if (!city) return null;
+    if (!liveAlerts) return city;
+    return {
+      ...city,
+      alertCount: liveAlerts.alertCount,
+      notificationCount: liveAlerts.notificationCount,
+      alertCountTotal: liveAlerts.alertCountTotal,
+      // alertCountNormalized kept from static data (needs global max to recompute)
+    };
+  }, [city, liveAlerts]);
 
-  // Fix 6: memoized so CityAutocomplete doesn't re-render on every parent render
+  const personal = enrichedCity ? calcPrivilegeScorePersonal(enrichedCity, shelter, familyStatus) : null;
+  const cityAvg = enrichedCity ? calcPrivilegeScore(enrichedCity) : null;
+
   const handleSelect = useCallback((selected: City) => {
     setCity(selected);
+    setLiveAlerts(null);
+    setAlertsLoading(true);
     onCitySelect(selected);
+    getLiveAlerts(selected.nameHe).then((alerts) => {
+      setLiveAlerts(alerts);
+      setAlertsLoading(false);
+    });
   }, [onCitySelect]);
 
   return (
@@ -224,7 +245,17 @@ export default function MyScorePanel({ language, cities, onCitySelect }: Props) 
             ))}
           </select>
 
-          {/* Fix 3: consistent null checks for both personal and cityAvg */}
+          {alertsLoading && (
+            <div className="alerts-status alerts-loading">{t.myScore.alertsLoading}</div>
+          )}
+          {!alertsLoading && city && (
+            <div className="alerts-status">
+              {liveAlerts
+                ? t.myScore.alertsLive.replace('{min}', String(cacheAgeMinutes(city.nameHe) ?? 0))
+                : t.myScore.alertsStatic}
+            </div>
+          )}
+
           {personal !== null && cityAvg !== null && (
             <div className="personal-result">
               <div className="personal-score-label">{t.myScore.result}</div>

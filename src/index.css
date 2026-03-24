@@ -508,6 +508,17 @@ body {
   direction: rtl;
 }
 
+.alerts-status {
+  margin-top: 6px;
+  font-size: 11px;
+  color: #666;
+  text-align: center;
+}
+.alerts-status.alerts-loading {
+  color: #1565c0;
+  font-style: italic;
+}
+
 .personal-result {
   margin-top: 12px;
   padding: 12px;
