@@ -20,12 +20,12 @@ export default function CityInfoPanel({ city, language }: Props) {
     getLiveAlerts(city.nameHe).then(setLiveAlerts);
   }, [city?.id]);
 
-  const alertCount      = liveAlerts?.notificationCount ?? city?.notificationCount ?? 0;
-  const notifCount      = liveAlerts?.alertCount      ?? city?.alertCount      ?? 0;
-  const hasLiveNotif    = liveAlerts?.alertCount !== undefined;
+  const alertCount      = liveAlerts?.alertCount      ?? city?.alertCount      ?? 0;
+  const notifCount      = liveAlerts?.notificationCount ?? city?.notificationCount ?? 0;
+  const hasLiveNotif    = liveAlerts?.notificationCount !== undefined;
   const alertCountTotal = liveAlerts?.alertCountTotal ?? city?.alertCountTotal ?? 0;
   const isLive          = liveAlerts !== null && (
-    liveAlerts.notificationCount !== undefined || liveAlerts.alertCountTotal !== undefined
+    liveAlerts.alertCount !== undefined || liveAlerts.alertCountTotal !== undefined
   );
 
   if (!city) {
