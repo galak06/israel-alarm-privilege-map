@@ -258,7 +258,7 @@ export default function MyScorePanel({ language, cities, onCitySelect }: Props) 
             </div>
           )}
 
-          {personal !== null && cityAvg !== null && (
+          {!alertsLoading && personal !== null && cityAvg !== null && (
             <div className="personal-result">
               <div
                 className="personal-score-circle"
