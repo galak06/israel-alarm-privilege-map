@@ -1,14 +1,13 @@
 <?php
 /**
  * Proxy for Pikud HaOref per-city alert history.
- * Browsers can't call alerts-history.oref.org.il directly (no CORS headers),
- * so this server-side script fetches on their behalf.
+ * Browsers can't call alerts-history.oref.org.il directly (no CORS headers).
  *
  * GET /api/oref-proxy.php?city=<hebrew city name>
  * Returns: { "alertCount": N, "notificationCount": N }
  *
- * Oref API uses granular neighborhood names (e.g. "שדרות, איבים") not city names,
- * so we fetch all records and filter by prefix match on the `data` field.
+ * Strategy: query with city_0=<name> twice (full name, then base name)
+ * and union the results to cover all sub-districts.
  */
 
 header('Content-Type: application/json');
@@ -26,67 +25,56 @@ $yesterday = new DateTime('-1 day', new DateTimeZone('Asia/Jerusalem'));
 $toDate    = $now->format('d.m.Y');
 $fromDate  = $yesterday->format('d.m.Y');
 
-// Fetch all records (no city filter — Oref uses granular neighborhood names
-// that don't match city-level names directly)
-$url = sprintf(
-    'https://alerts-history.oref.org.il/Shared/Ajax/GetAlarmsHistory.aspx'
-    . '?lang=he&mode=1&fromDate=%s&toDate=%s',
-    $fromDate,
-    $toDate
-);
-
-$ctx = stream_context_create([
-    'http' => [
-        'method'  => 'GET',
-        'header'  => implode("\r\n", [
-            'Referer: https://alerts-history.oref.org.il/',
-            'X-Requested-With: XMLHttpRequest',
-            'User-Agent: Mozilla/5.0 (compatible; oref-proxy/1.0)',
-        ]),
-        'timeout' => 10,
-        'ignore_errors' => true,
-    ],
-    'ssl' => ['verify_peer' => true],
-]);
-
-$body = @file_get_contents($url, false, $ctx);
-
-if ($body === false || trim($body) === '' || trim($body) === 'null') {
-    echo json_encode(['alertCount' => 0, 'notificationCount' => 0]);
-    exit;
-}
-
-$records = json_decode($body, true);
-if (!is_array($records)) {
-    echo json_encode(['alertCount' => 0, 'notificationCount' => 0]);
-    exit;
-}
-
-// Extract the base city name (before " - " or " – " district suffixes)
+// Extract base city name (before " - " / " – " district suffix)
 // e.g. "הרצליה - מרכז וגליל ים" → "הרצליה"
-$baseCity = preg_split('/[\s]+[-–][\s]+/', $city)[0];
+$parts    = preg_split('/\s+[-–]\s+/', $city, 2);
+$baseCity = trim($parts[0]);
+
+function fetchOrefCity($fromDate, $toDate, $cityName) {
+    $url = sprintf(
+        'https://alerts-history.oref.org.il/Shared/Ajax/GetAlarmsHistory.aspx'
+        . '?lang=he&mode=1&fromDate=%s&toDate=%s&city_0=%s',
+        $fromDate,
+        $toDate,
+        rawurlencode($cityName)
+    );
+    $ctx = stream_context_create([
+        'http' => [
+            'method'  => 'GET',
+            'header'  => implode("\r\n", [
+                'Referer: https://alerts-history.oref.org.il/',
+                'X-Requested-With: XMLHttpRequest',
+                'User-Agent: Mozilla/5.0 (compatible; oref-proxy/1.0)',
+            ]),
+            'timeout' => 10,
+            'ignore_errors' => true,
+        ],
+        'ssl' => ['verify_peer' => true],
+    ]);
+    $body = @file_get_contents($url, false, $ctx);
+    if ($body === false || trim($body) === '' || trim($body) === 'null') return [];
+    $records = json_decode($body, true);
+    return is_array($records) ? $records : [];
+}
+
+// Fetch with full name (e.g. "הרצליה - מרכז וגליל ים")
+$records = fetchOrefCity($fromDate, $toDate, $city);
+
+// If empty and base differs, also fetch with base name (e.g. "הרצליה")
+// to catch sibling districts
+if (count($records) === 0 && $baseCity !== $city) {
+    $records = fetchOrefCity($fromDate, $toDate, $baseCity);
+}
 
 $alertCount        = 0;
 $notificationCount = 0;
 
 foreach ($records as $r) {
-    $loc = $r['data'] ?? '';
-    // Match if the location starts with the city name or base city name
-    // e.g. city="שדרות" matches loc="שדרות, איבים"
-    if (
-        $loc === $city ||
-        strpos($loc, $city . ',') === 0 ||
-        strpos($loc, $city . ' ') === 0 ||
-        $loc === $baseCity ||
-        strpos($loc, $baseCity . ',') === 0 ||
-        strpos($loc, $baseCity . ' ') === 0
-    ) {
-        $cat = $r['category'] ?? 0;
-        if ($cat === 1 || $cat === 2 || $cat === 13) {
-            $alertCount++;
-        } elseif ($cat === 14) {
-            $notificationCount++;
-        }
+    $cat = $r['category'] ?? 0;
+    if ($cat === 1 || $cat === 2 || $cat === 13) {
+        $alertCount++;
+    } elseif ($cat === 14) {
+        $notificationCount++;
     }
 }
 
