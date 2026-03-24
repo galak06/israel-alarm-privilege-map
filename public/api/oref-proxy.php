@@ -75,11 +75,11 @@ foreach ($records as $r) {
     // e.g. city="שדרות" matches loc="שדרות, איבים"
     if (
         $loc === $city ||
-        str_starts_with($loc, $city . ',') ||
-        str_starts_with($loc, $city . ' ') ||
+        strpos($loc, $city . ',') === 0 ||
+        strpos($loc, $city . ' ') === 0 ||
         $loc === $baseCity ||
-        str_starts_with($loc, $baseCity . ',') ||
-        str_starts_with($loc, $baseCity . ' ')
+        strpos($loc, $baseCity . ',') === 0 ||
+        strpos($loc, $baseCity . ' ') === 0
     ) {
         $cat = $r['category'] ?? 0;
         if ($cat === 1 || $cat === 2 || $cat === 13) {
