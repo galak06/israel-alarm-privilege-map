@@ -297,20 +297,32 @@ async function fetchOrefByDate(cityNames) {
       for (const rec of records) {
         const cat  = rec.category;
         const city = rec.data ?? rec.NAME_HE;
-        if (!city) continue;
-        // cat 1 = rockets, cat 2 = hostile aircraft → real alarms
+        const timeStr = rec.alertDate || "";
+        if (!city || !timeStr) continue;
+
+        // cat 1 = rockets, cat 2 = hostile aircraft, cat 3 = terrorist infiltration → real alarms
         // cat 13 = event ended (closure message, ignored to avoid double counting)
         // cat 14 = advance warning → notification
-        const isAlarm = cat === 1 || cat === 2;
+        const isAlarm = cat === 1 || cat === 2 || cat === 3;
         const isNotif = cat === 14;
         if (!isAlarm && !isNotif) continue;
 
-        const date = (rec.alertDate ?? '').slice(0, 10) || new Date().toISOString().slice(0, 10);
+        const date = timeStr.slice(0, 10);
+        const minuteKey = timeStr.slice(0, 16);
+
         if (!byDate[date]) byDate[date] = {};
-        if (!byDate[date][city]) byDate[date][city] = { r: 0, n: 0 };
-        if (isAlarm) byDate[date][city].r += 1;
-        if (isNotif)  byDate[date][city].n += 1;
-        totalRecords++;
+        if (!byDate[date][city]) byDate[date][city] = { r: 0, n: 0, _r_minutes: new Set(), _n_minutes: new Set() };
+        
+        if (isAlarm && !byDate[date][city]._r_minutes.has(minuteKey)) {
+          byDate[date][city].r += 1;
+          byDate[date][city]._r_minutes.add(minuteKey);
+          totalRecords++;
+        }
+        if (isNotif && !byDate[date][city]._n_minutes.has(minuteKey)) {
+          byDate[date][city].n += 1;
+          byDate[date][city]._n_minutes.add(minuteKey);
+          totalRecords++;
+        }
       }    } catch (e) {
       console.warn(`   ⚠ batch ${i/BATCH + 1} failed: ${e.message}`);
     }

@@ -1,7 +1,7 @@
 /**
  * Update alertCount in public/localities.json based on new alert data.
- * Category 1 = rocket/missile fire (ירי רקטות וטילים) → alertCount
- * Category 14 = advance notification → notificationCount
+ * Category 1, 2, 3 = real alarms (sirens)
+ * Category 14 = advance notification
  * Category 13 = event ended → ignored
  *
  * Usage: node scripts/update-alerts.mjs <alerts-json-file>
@@ -35,37 +35,42 @@ localities.forEach((loc, i) => {
 let matched = 0;
 let unmatched = new Set();
 
-// Process category 1 (rocket fire) and 2 (hostile aircraft) alerts
-const catAlarms = alerts.filter(a => a.category === 1 || a.category === 2);
-// Use a Set of unique (name) to count unique alert events per locality
-// (one alert wave = multiple localities at same timestamp)
-// Count distinct alertDate+name combinations as individual alerts
-const alertCounts = new Map();
-catAlarms.forEach(a => {
-  const key = a.data;
-  alertCounts.set(key, (alertCounts.get(key) || 0) + 1);
+// Use sets to de-duplicate multiple records for the same minute/city
+// Map: CityName -> Set of "YYYY-MM-DD HH:mm" strings
+const cityAlarmMinutes = new Map();
+const cityNotifMinutes = new Map();
+
+alerts.forEach(a => {
+  const cat = a.category;
+  const name = a.data;
+  const timeStr = a.alertDate || ""; // "2024-03-24 16:09:42"
+  if (!name || !timeStr) return;
+
+  const minuteKey = timeStr.slice(0, 16); // "2024-03-24 16:09"
+
+  if (cat === 1 || cat === 2 || cat === 3) {
+    if (!cityAlarmMinutes.has(name)) cityAlarmMinutes.set(name, new Set());
+    cityAlarmMinutes.get(name).add(minuteKey);
+  } else if (cat === 14) {
+    if (!cityNotifMinutes.has(name)) cityNotifMinutes.set(name, new Set());
+    cityNotifMinutes.get(name).add(minuteKey);
+  }
 });
 
-alertCounts.forEach((count, name) => {
+cityAlarmMinutes.forEach((minutes, name) => {
   const idx = nameToIndex.get(name);
   if (idx !== undefined) {
-    localities[idx].alertCount = (localities[idx].alertCount || 0) + count;
+    localities[idx].alertCount = (localities[idx].alertCount || 0) + minutes.size;
     matched++;
   } else {
     unmatched.add(name);
   }
 });
 
-// Process category 14 (advance notifications) if any
-const cat14 = alerts.filter(a => a.category === 14);
-const notifCounts = new Map();
-cat14.forEach(a => {
-  notifCounts.set(a.data, (notifCounts.get(a.data) || 0) + 1);
-});
-notifCounts.forEach((count, name) => {
+cityNotifMinutes.forEach((minutes, name) => {
   const idx = nameToIndex.get(name);
   if (idx !== undefined) {
-    localities[idx].notificationCount = (localities[idx].notificationCount || 0) + count;
+    localities[idx].notificationCount = (localities[idx].notificationCount || 0) + minutes.size;
   }
 });
 

@@ -78,19 +78,26 @@ if ($debugMode) {
     exit;
 }
 
-$alertCount        = 0;
-$notificationCount = 0;
+$alertEvents = [];
+$notifEvents = [];
 
 foreach ($records as $r) {
     $cat = $r['category'] ?? 0;
-    // cat 1 = rockets, cat 2 = hostile aircraft → real alarms
+    $timeStr = $r['alertDate'] ?? ''; // e.g. "2024-03-24 16:09:00"
+    if ($timeStr === '') continue;
+
+    // Parse time to unix for de-duplication (1-minute window)
+    $ts = strtotime($timeStr);
+    $roundedTs = floor($ts / 60);
+
+    // cat 1 = rockets, cat 2 = hostile aircraft, cat 3 = terrorist infiltration → real alarms
     // cat 13 = event ended (closure message, ignored to avoid double counting)
     // cat 14 = advance warning → notification
-    if ($cat === 1 || $cat === 2) {
-        $alertCount++;
+    if ($cat === 1 || $cat === 2 || $cat === 3) {
+        $alertEvents[$roundedTs] = true;
     } elseif ($cat === 14) {
-        $notificationCount++;
+        $notifEvents[$roundedTs] = true;
     }
 }
 
-echo json_encode(['alertCount' => $alertCount, 'notificationCount' => $notificationCount]);
+echo json_encode(['alertCount' => count($alertEvents), 'notificationCount' => count($notifEvents)]);
