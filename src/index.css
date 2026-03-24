@@ -519,6 +519,18 @@ body {
   font-style: italic;
 }
 
+.live-badge {
+  margin-inline-start: 6px;
+  font-size: 9px;
+  font-weight: 700;
+  text-transform: uppercase;
+  color: #fff;
+  background: #2e7d32;
+  border-radius: 3px;
+  padding: 1px 4px;
+  vertical-align: middle;
+}
+
 .personal-result {
   margin-top: 12px;
   padding: 12px;

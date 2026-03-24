@@ -126,6 +126,8 @@ function CityAutocomplete({
       <div className="autocomplete-input-row">
         <input
           ref={inputRef}
+          id="city-search"
+          name="city-search"
           className="autocomplete-input"
           type="text"
           value={query}

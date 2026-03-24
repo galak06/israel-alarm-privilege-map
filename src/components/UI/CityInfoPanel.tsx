@@ -1,7 +1,9 @@
+import { useState, useEffect } from 'react';
 import type { City, Language, ThreatSource } from '../../types';
 import { en } from '../../i18n/en';
 import { he } from '../../i18n/he';
 import { ALERTS_ENABLED } from '../../utils/featureFlags';
+import { getLiveAlerts, type LiveAlerts } from '../../utils/alertsCache';
 
 interface Props {
   city: City | null;
@@ -10,6 +12,15 @@ interface Props {
 
 export default function CityInfoPanel({ city, language }: Props) {
   const t = language === 'he' ? he : en;
+  const [liveAlerts, setLiveAlerts] = useState<LiveAlerts | null>(null);
+
+  useEffect(() => {
+    if (!city) { setLiveAlerts(null); return; }
+    setLiveAlerts(null);
+    getLiveAlerts(city.nameHe).then(setLiveAlerts);
+  }, [city?.id]);
+
+  const alertCountTotal = liveAlerts?.alertCountTotal ?? city?.alertCountTotal ?? 0;
 
   if (!city) {
     return (
@@ -74,8 +85,9 @@ export default function CityInfoPanel({ city, language }: Props) {
           <div className="city-stat">
             <span className="stat-label">📊 {t.cityInfo.alertCountTotal}</span>
             <span className="stat-value">
-              {city.alertCountTotal > 0 ? city.alertCountTotal.toLocaleString() : '—'}
-              {city.alertCountTotal > 0 && <span className="unit"> {t.cityInfo.alertCountSuffix}</span>}
+              {alertCountTotal > 0 ? alertCountTotal.toLocaleString() : '—'}
+              {alertCountTotal > 0 && <span className="unit"> {t.cityInfo.alertCountSuffix}</span>}
+              {liveAlerts && <span className="live-badge">live</span>}
             </span>
           </div>
         </>
