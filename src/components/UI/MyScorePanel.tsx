@@ -307,21 +307,21 @@ export default function MyScorePanel({ language, cities, selectedCity: externalC
               <div className="personal-breakdown">
                 <div className="personal-row">
                   <span>{t.cityInfo.timeScore}</span>
-                  <span>{personal.timeScore.toFixed(1)} / 40</span>
+                  <span>{personal.timeScore.toFixed(1)} / 20</span>
                 </div>
                 <div className="personal-row">
                   <span>{t.cityInfo.shelterScore}</span>
-                  <span>{personal.shelterScore.toFixed(1)} / 40</span>
+                  <span>{personal.shelterScore.toFixed(1)} / 20</span>
                 </div>
                 {ALERTS_ENABLED && (
                   <>
                     <div className="personal-row">
                       <span>{t.cityInfo.safetyScore}</span>
-                      <span>{personal.safetyScore.toFixed(1)} / 10</span>
+                      <span>{personal.safetyScore.toFixed(1)} / 30</span>
                     </div>
                     <div className="personal-row">
                       <span>{t.cityInfo.gapScore}</span>
-                      <span>{personal.gapScore.toFixed(1)} / 10</span>
+                      <span>{personal.gapScore.toFixed(1)} / 30</span>
                     </div>
                   </>
                 )}

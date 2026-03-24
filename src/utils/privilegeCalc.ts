@@ -36,24 +36,22 @@ const LOCATION_SCORE: Record<City['region'], number> = {
   south:      3,  // Gaza envelope — sustained conflict, economic disadvantage
 };
 
-// Scoring breakdown (ALERTS_ENABLED=false):
-//   timeScore     0–40   warning time
-//   shelterScore  0–40   shelter quality
+// Scoring breakdown:
+//   timeScore     0–20   warning time adequacy (relative to shelter type)
+//   shelterScore  0–20   shelter quality
+//   safetyScore   0–30   last-30d alert frequency + notification burden (dominant factor)
+//                         No alerts → full 30 pts regardless of shelter/time.
+//                         Notification burden: advance warnings require physically going to an
+//                         external shelter. People without a mamad must leave every time —
+//                         up to 12 penalty points subtracted based on notif count × shelter vuln.
+//   gapScore      0–30   average hours between alarm events (30d window) (dominant factor)
+//                         No alerts → full 30 pts. Computed as: (30×24)/max(1,alertCountTotal),
+//                         capped at MAX_GAP_HOURS. Measures alarm-free rest time.
 //   locationScore 0–10   city region infrastructure & support
 //   familyScore   0–10   family situation (personal only)
-//   safetyScore   0–10   last-30d alert frequency + notification burden — GATED by ALERTS_ENABLED flag
-//                         Notification burden: advance warnings (cat=14) require physically going to an
-//                         external shelter. People without a mamad must get dressed and go outside every
-//                         time — up to 4 penalty points subtracted based on notification count × shelter
-//                         vulnerability (0 penalty if you have a mamad).
-//   gapScore      0–10   average hours between alarm events (30d window) — GATED by ALERTS_ENABLED flag
-//                         Computed as: (30×24) / max(1, alertCountTotal), capped at MAX_GAP_HOURS.
-//                         Measures how long you typically go between alarms: higher = more rest.
 //
-//   City max (flag off):  40+40+10         = 90
-//   City max (flag on):   40+40+10+10+10   = 110
-//   Personal max (off):   40+40+10+10      = 100
-//   Personal max (on):    40+40+10+10+10+10= 120
+//   City max:     20+20+30+30+10         = 110
+//   Personal max: 20+20+30+30+10+10      = 120
 
 // Normalize notification count: 20 notifications/month = max burden
 const MAX_NOTIF = 20;
@@ -75,12 +73,12 @@ export function calcPrivilegeScorePersonal(
   familyStatus: FamilyStatus,
 ): PrivilegeScore {
   const timeAdequacy  = Math.min(1, city.alarmSeconds / MIN_TIME_NEEDED[shelter]);
-  const timeScore     = Math.round(timeAdequacy * 40 * 10) / 10;
-  const shelterScore  = Math.round((SHELTER_WEIGHT[shelter] * 40) * 10) / 10;
-  const notifPenalty  = Math.min(1, city.notificationCount / MAX_NOTIF) * NOTIF_SHELTER_VULN[shelter] * 4;
-  const safetyScore   = Math.max(0, Math.round(((1 - city.alertCountNormalized) * 10 - notifPenalty) * 10) / 10);
+  const timeScore     = Math.round(timeAdequacy * 20 * 10) / 10;
+  const shelterScore  = Math.round((SHELTER_WEIGHT[shelter] * 20) * 10) / 10;
+  const notifPenalty  = Math.min(1, city.notificationCount / MAX_NOTIF) * NOTIF_SHELTER_VULN[shelter] * 12;
+  const safetyScore   = Math.max(0, Math.round(((1 - city.alertCountNormalized) * 30 - notifPenalty) * 10) / 10);
   const avgGapHours   = (30 * 24) / Math.max(1, city.alertCountTotal);
-  const gapScore      = Math.round(Math.min(10, (avgGapHours / MAX_GAP_HOURS) * 10) * 10) / 10;
+  const gapScore      = Math.round(Math.min(30, (avgGapHours / MAX_GAP_HOURS) * 30) * 10) / 10;
   const locationScore = LOCATION_SCORE[city.region] ?? 5;
   const familyScore   = FAMILY_SCORE[familyStatus];
   const total = Math.round(
@@ -97,14 +95,14 @@ export function calcPrivilegeScore(city: City): PrivilegeScore {
     + stairwell * MIN_TIME_NEEDED.stairwell
     + bldgShelter * MIN_TIME_NEEDED.shelter
     + pub * MIN_TIME_NEEDED.public;
-  const timeScore    = Math.round(Math.min(1, city.alarmSeconds / weightedMinTime) * 40 * 10) / 10;
-  const shelterScore = Math.round(((mamad * 1.0 + stairwell * 0.5) * 40) * 10) / 10;
+  const timeScore    = Math.round(Math.min(1, city.alarmSeconds / weightedMinTime) * 20 * 10) / 10;
+  const shelterScore = Math.round(((mamad * 1.0 + stairwell * SHELTER_WEIGHT.stairwell) * 20) * 10) / 10;
 
   // Notification burden: weighted by fraction of residents without a mamad
-  const notifPenalty  = Math.min(1, city.notificationCount / MAX_NOTIF) * (1 - mamad) * 4;
-  const safetyScore   = Math.max(0, Math.round(((1 - city.alertCountNormalized) * 10 - notifPenalty) * 10) / 10);
+  const notifPenalty  = Math.min(1, city.notificationCount / MAX_NOTIF) * (1 - mamad) * 12;
+  const safetyScore   = Math.max(0, Math.round(((1 - city.alertCountNormalized) * 30 - notifPenalty) * 10) / 10);
   const avgGapHours   = (30 * 24) / Math.max(1, city.alertCountTotal);
-  const gapScore      = Math.round(Math.min(10, (avgGapHours / MAX_GAP_HOURS) * 10) * 10) / 10;
+  const gapScore      = Math.round(Math.min(30, (avgGapHours / MAX_GAP_HOURS) * 30) * 10) / 10;
   const locationScore = LOCATION_SCORE[city.region] ?? 5;
 
   const total = Math.round(
