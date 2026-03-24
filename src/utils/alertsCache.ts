@@ -10,15 +10,13 @@
  */
 
 const REDALERT_CACHE_KEY = 'redalert_v3';
-const OREF_CACHE_PREFIX  = 'oref_v3_';
 const TTL_MS             = 24 * 60 * 60 * 1000;
 const FETCH_TIMEOUT      = 8_000;
 
 export interface LiveAlerts {
-  alertCount?:           number;  // rockets/aircraft 24h  (Oref proxy)
-  notificationCount?:    number;  // advance warnings 24h  (Oref proxy)
-  alertCountTotal?:      number;  // all types 30d          (Redalert)
-  alertCountNormalized?: number;  // 0-1 vs dataset max     (Redalert)
+  alertCount?:           number;  // all types 24h  (Redalert)
+  alertCountTotal?:      number;  // all types 30d  (Redalert)
+  alertCountNormalized?: number;  // 0-1 vs dataset max (Redalert)
   fetchedAt:             number;
 }
 
@@ -32,27 +30,6 @@ interface RedalertCache {
   rows:      RedalertRow[];
   maxCount:  number;   // max of count30d across all cities
   fetchedAt: number;
-}
-
-// ── Oref proxy (per-city rockets / notifications, 24h) ────────────────────────
-
-interface OrefEntry { alertCount: number; notificationCount: number; fetchedAt: number; }
-
-function readOrefCache(nameHe: string): OrefEntry | null {
-  const c = lsRead<OrefEntry>(OREF_CACHE_PREFIX + nameHe);
-  return c && Date.now() - c.fetchedAt < TTL_MS ? c : null;
-}
-
-async function fetchOrefProxy(nameHe: string): Promise<OrefEntry | null> {
-  try {
-    const res = await withTimeout(
-      fetch(`/api/oref-proxy.php?city=${encodeURIComponent(nameHe)}`),
-      FETCH_TIMEOUT,
-    );
-    if (!res?.ok) return null;
-    const json = await res.json() as { alertCount?: number; notificationCount?: number };
-    return { alertCount: json.alertCount ?? 0, notificationCount: json.notificationCount ?? 0, fetchedAt: Date.now() };
-  } catch { return null; }
 }
 
 // ── helpers ───────────────────────────────────────────────────────────────────
@@ -144,41 +121,24 @@ function findCity(rows: RedalertRow[], nameHe: string): RedalertRow | undefined 
 // ── Public API ────────────────────────────────────────────────────────────────
 
 export async function getLiveAlerts(nameHe: string): Promise<LiveAlerts | null> {
-  // Fetch Redalert (30d totals + 24h combined) and Oref proxy (24h split) in parallel
   let redalertCache = readCache();
-  const orefCached  = readOrefCache(nameHe);
 
-  const [freshRedalert, freshOref] = await Promise.all([
-    redalertCache ? Promise.resolve(null) : fetchRedalert(),
-    orefCached    ? Promise.resolve(null) : fetchOrefProxy(nameHe),
-  ]);
-
-  if (freshRedalert) { redalertCache = freshRedalert; lsWrite(REDALERT_CACHE_KEY, freshRedalert); }
-  const oref = orefCached ?? freshOref;
-  if (freshOref) lsWrite(OREF_CACHE_PREFIX + nameHe, freshOref);
+  if (!redalertCache) {
+    const fresh = await fetchRedalert();
+    if (fresh) { redalertCache = fresh; lsWrite(REDALERT_CACHE_KEY, fresh); }
+  }
 
   if (!redalertCache) return null;
 
-  const row    = redalertCache ? findCity(redalertCache.rows, nameHe) : null;
-  const result: LiveAlerts = { fetchedAt: Date.now() };
-
-  // Redalert gives both 24h and 30d totals
-  if (row && redalertCache) {
-    result.alertCount           = row.count24h;
-    result.alertCountTotal      = row.count30d;
-    result.alertCountNormalized = row.count30d / redalertCache.maxCount;
-  }
-
-  // Oref proxy gives the split (rockets vs advance warnings) — use if available
-  // Note: Oref API blocks requests from shared hosting IPs (403), so this is
-  // best-effort only. If available, we use these more specific counts.
-  if (oref && (oref.alertCount > 0 || oref.notificationCount > 0)) {
-    result.alertCount        = oref.alertCount;
-    result.notificationCount = oref.notificationCount;
-  }
-
+  const row = findCity(redalertCache.rows, nameHe);
   if (!row) return null;
-  return result;
+
+  return {
+    alertCount:           row.count24h,
+    alertCountTotal:      row.count30d,
+    alertCountNormalized: row.count30d / redalertCache.maxCount,
+    fetchedAt:            Date.now(),
+  };
 }
 
 export function cacheAgeMinutes(): number | null {

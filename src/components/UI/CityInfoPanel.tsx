@@ -21,15 +21,10 @@ export default function CityInfoPanel({ city, language }: Props) {
   }, [city?.id]);
 
   const alertCount      = liveAlerts?.alertCount      ?? city?.alertCount      ?? 0;
-  const notifCount      = liveAlerts?.notificationCount ?? city?.notificationCount ?? 0;
-  const hasLiveNotif    = liveAlerts?.notificationCount !== undefined;
   const alertCountTotal = liveAlerts?.alertCountTotal ?? city?.alertCountTotal ?? 0;
   const isLive          = liveAlerts !== null && (
     liveAlerts.alertCount !== undefined || liveAlerts.alertCountTotal !== undefined
   );
-  // Only show notification count when we have live split data OR when showing purely static data.
-  // Avoid mixing Redalert 24h alertCount (all types) with static 30-day notificationCount.
-  const showNotifCount  = hasLiveNotif || (!isLive && notifCount > 0);
 
   if (!city) {
     return (
@@ -83,16 +78,6 @@ export default function CityInfoPanel({ city, language }: Props) {
               {isLive && <span className="live-badge">live</span>}
             </span>
           </div>
-
-          {showNotifCount && (
-            <div className="city-stat">
-              <span className="stat-label">🔔 {t.cityInfo.notificationCount}</span>
-              <span className="stat-value" style={{ color: notifCount > 0 ? '#f57c00' : undefined }}>
-                {notifCount.toLocaleString()}
-                <span className="unit"> {t.cityInfo.alertCountSuffix}</span>
-              </span>
-            </div>
-          )}
 
           <div className="city-stat">
             <span className="stat-label">📊 {t.cityInfo.alertCountTotal}</span>

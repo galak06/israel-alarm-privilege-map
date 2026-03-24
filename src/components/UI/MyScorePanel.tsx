@@ -216,7 +216,6 @@ export default function MyScorePanel({ language, cities, selectedCity: externalC
     return {
       ...city,
       ...(liveAlerts.alertCount            !== undefined && { alertCount:            liveAlerts.alertCount }),
-      ...(liveAlerts.notificationCount    !== undefined && { notificationCount:    liveAlerts.notificationCount }),
       ...(liveAlerts.alertCountTotal      !== undefined && { alertCountTotal:      liveAlerts.alertCountTotal }),
       ...(liveAlerts.alertCountNormalized !== undefined && { alertCountNormalized: liveAlerts.alertCountNormalized }),
     };
