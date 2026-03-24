@@ -9,8 +9,8 @@
  * API key injected at build time via VITE_REDALERT_API_KEY.
  */
 
-const REDALERT_CACHE_KEY = 'redalert_v2';
-const OREF_CACHE_PREFIX  = 'oref_v2_';
+const REDALERT_CACHE_KEY = 'redalert_v3';
+const OREF_CACHE_PREFIX  = 'oref_v3_';
 const TTL_MS             = 24 * 60 * 60 * 1000;
 const FETCH_TIMEOUT      = 8_000;
 
