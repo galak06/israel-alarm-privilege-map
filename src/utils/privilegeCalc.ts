@@ -13,7 +13,7 @@ const MIN_TIME_NEEDED: Record<ShelterType, number> = {
 const SHELTER_WEIGHT: Record<ShelterType, number> = {
   mamad:     1.0,  // in-apartment safe room
   shelter:   0.75, // dedicated building shelter room (leave apartment, stay in building)
-  stairwell: 0.5,  // reinforced stairwell
+  stairwell: 0.2,  // reinforced stairwell — thin walls, open staircase, very limited protection
   public:    0.0,  // public shelter outside
 };
 
@@ -65,7 +65,7 @@ const MAX_GAP_HOURS = 72;
 const NOTIF_SHELTER_VULN: Record<ShelterType, number> = {
   mamad:     0.0,  // in-unit safe room — no need to go anywhere
   shelter:   0.5,  // building shelter — leave apartment but stay inside building
-  stairwell: 0.75, // reinforced stairwell — leave apartment, stay in building
+  stairwell: 0.9,  // reinforced stairwell — leave apartment, very limited protection
   public:    1.0,  // must go outside — maximum burden
 };
 
