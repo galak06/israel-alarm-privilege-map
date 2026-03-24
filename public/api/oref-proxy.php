@@ -6,6 +6,9 @@
  *
  * GET /api/oref-proxy.php?city=<hebrew city name>
  * Returns: { "alertCount": N, "notificationCount": N }
+ *
+ * Oref API uses granular neighborhood names (e.g. "שדרות, איבים") not city names,
+ * so we fetch all records and filter by prefix match on the `data` field.
  */
 
 header('Content-Type: application/json');
@@ -18,17 +21,18 @@ if ($city === '') {
     exit;
 }
 
-$now          = new DateTime('now', new DateTimeZone('Asia/Jerusalem'));
-$yesterday    = new DateTime('-1 day', new DateTimeZone('Asia/Jerusalem'));
-$toDate       = $now->format('d.m.Y');
-$fromDate     = $yesterday->format('d.m.Y');
+$now       = new DateTime('now', new DateTimeZone('Asia/Jerusalem'));
+$yesterday = new DateTime('-1 day', new DateTimeZone('Asia/Jerusalem'));
+$toDate    = $now->format('d.m.Y');
+$fromDate  = $yesterday->format('d.m.Y');
 
+// Fetch all records (no city filter — Oref uses granular neighborhood names
+// that don't match city-level names directly)
 $url = sprintf(
     'https://alerts-history.oref.org.il/Shared/Ajax/GetAlarmsHistory.aspx'
-    . '?lang=he&mode=1&fromDate=%s&toDate=%s&city_0=%s',
+    . '?lang=he&mode=1&fromDate=%s&toDate=%s',
     $fromDate,
-    $toDate,
-    rawurlencode($city)
+    $toDate
 );
 
 $ctx = stream_context_create([
@@ -58,15 +62,31 @@ if (!is_array($records)) {
     exit;
 }
 
+// Extract the base city name (before " - " or " – " district suffixes)
+// e.g. "הרצליה - מרכז וגליל ים" → "הרצליה"
+$baseCity = preg_split('/[\s]+[-–][\s]+/', $city)[0];
+
 $alertCount        = 0;
 $notificationCount = 0;
 
 foreach ($records as $r) {
-    $cat = $r['category'] ?? 0;
-    if ($cat === 1 || $cat === 2 || $cat === 13) {
-        $alertCount++;
-    } elseif ($cat === 14) {
-        $notificationCount++;
+    $loc = $r['data'] ?? '';
+    // Match if the location starts with the city name or base city name
+    // e.g. city="שדרות" matches loc="שדרות, איבים"
+    if (
+        $loc === $city ||
+        str_starts_with($loc, $city . ',') ||
+        str_starts_with($loc, $city . ' ') ||
+        $loc === $baseCity ||
+        str_starts_with($loc, $baseCity . ',') ||
+        str_starts_with($loc, $baseCity . ' ')
+    ) {
+        $cat = $r['category'] ?? 0;
+        if ($cat === 1 || $cat === 2 || $cat === 13) {
+            $alertCount++;
+        } elseif ($cat === 14) {
+            $notificationCount++;
+        }
     }
 }
 

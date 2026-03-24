@@ -174,7 +174,7 @@ export async function getLiveAlerts(nameHe: string): Promise<LiveAlerts | null> 
     result.alertCountNormalized = row.count30d / redalertCache.maxCount;
   }
 
-  if (!result.alertCount && !result.alertCountTotal) return null;
+  if (!oref && !row) return null;
   return result;
 }
 
