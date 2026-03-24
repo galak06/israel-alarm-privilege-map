@@ -4,6 +4,7 @@ import { en } from '../../i18n/en';
 import { he } from '../../i18n/he';
 import { ALERTS_ENABLED } from '../../utils/featureFlags';
 import { getLiveAlerts, type LiveAlerts } from '../../utils/alertsCache';
+import PrivilegeScoreCard from './PrivilegeScoreCard';
 
 interface Props {
   city: City | null;
@@ -117,6 +118,7 @@ export default function CityInfoPanel({ city, language }: Props) {
         </div>
       </div>
 
+      <PrivilegeScoreCard city={city} language={language} />
     </div>
   );
 }

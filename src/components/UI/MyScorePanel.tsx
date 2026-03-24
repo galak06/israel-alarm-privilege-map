@@ -11,6 +11,7 @@ import { getLiveAlerts, cacheAgeMinutes, type LiveAlerts } from '../../utils/ale
 interface Props {
   language: Language;
   cities: City[];
+  selectedCity?: City | null;
   onCitySelect: (city: City) => void;
 }
 
@@ -36,17 +37,27 @@ function CityAutocomplete({
   cities,
   language,
   placeholder,
+  initialCity,
   onSelect,
 }: {
   cities: City[];
   language: Language;
   placeholder: string;
+  initialCity?: City | null;
   onSelect: (city: City) => void;
 }) {
-  const [query, setQuery] = useState('');
+  const initialName = initialCity ? (language === 'he' ? initialCity.nameHe : initialCity.nameEn) : '';
+  const [query, setQuery] = useState(initialName);
   const [open, setOpen] = useState(false);
   const [highlighted, setHighlighted] = useState(0);
-  const [selectedName, setSelectedName] = useState('');
+  const [selectedName, setSelectedName] = useState(initialName);
+
+  useEffect(() => {
+    if (!initialCity) return;
+    const name = language === 'he' ? initialCity.nameHe : initialCity.nameEn;
+    setQuery(name);
+    setSelectedName(name);
+  }, [initialCity?.id]);
   const inputRef = useRef<HTMLInputElement>(null);
   const listRef = useRef<HTMLUListElement>(null);
 
@@ -173,14 +184,28 @@ function CityAutocomplete({
   );
 }
 
-export default function MyScorePanel({ language, cities, onCitySelect }: Props) {
+export default function MyScorePanel({ language, cities, selectedCity: externalCity, onCitySelect }: Props) {
   const t = language === 'he' ? he : en;
-  const [city, setCity] = useState<City | null>(null);
+  const [city, setCity] = useState<City | null>(externalCity ?? null);
   const [shelter, setShelter] = useState<ShelterType>('stairwell');
   const [familyStatus, setFamilyStatus] = useState<FamilyStatus>('single');
   const [liveAlerts, setLiveAlerts] = useState<LiveAlerts | null>(null);
   const [alertsLoading, setAlertsLoading] = useState(false);
   const fetchSeqRef = useRef(0);
+
+  // Sync when App restores a city on refresh (externalCity arrives after cities load)
+  useEffect(() => {
+    if (!externalCity || city?.id === externalCity.id) return;
+    const seq = ++fetchSeqRef.current;
+    setCity(externalCity);
+    setLiveAlerts(null);
+    setAlertsLoading(true);
+    getLiveAlerts(externalCity.nameHe).then((alerts) => {
+      if (fetchSeqRef.current !== seq) return;
+      setLiveAlerts(alerts);
+      setAlertsLoading(false);
+    });
+  }, [externalCity?.id]);
   const shelterSelectId = useId();
   const familySelectId = useId();
 
@@ -221,6 +246,7 @@ export default function MyScorePanel({ language, cities, onCitySelect }: Props) 
         cities={cities}
         language={language}
         placeholder={t.myScore.searchPlaceholder}
+        initialCity={externalCity}
         onSelect={handleSelect}
       />
 

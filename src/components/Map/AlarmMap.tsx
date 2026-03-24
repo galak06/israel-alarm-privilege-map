@@ -56,7 +56,7 @@ function MapMarkers({ cities, colorMode, language, selectedCity, threatFilter, o
     <>
       {visible.map((city) => (
         <CityMarker
-          key={city.id}
+          key={`${city.id}-${colorMode}`}
           city={city}
           colorMode={colorMode}
           language={language}

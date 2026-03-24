@@ -9,19 +9,26 @@ import MyScorePanel from './components/UI/MyScorePanel';
 import { trackCitySelect, trackLanguageToggle, trackColorModeChange, trackThreatFilterChange } from './utils/analytics';
 
 const LAST_CITY_KEY = 'lastCityId';
+const DRAWER_OPEN_KEY = 'drawerOpen';
 
 export default function App() {
   const [language, setLanguage] = useState<Language>('he');
   const [colorMode, setColorMode] = useState<ColorMode>('time');
   const [selectedCity, setSelectedCity] = useState<City | null>(null);
   const [threatFilter, setThreatFilter] = useState<ThreatSource | null>(null);
-  const [drawerOpen, setDrawerOpen] = useState(false);
+  const [drawerOpen, setDrawerOpen] = useState(() => {
+    try { return localStorage.getItem(DRAWER_OPEN_KEY) === 'true'; } catch { return false; }
+  });
   const { cities, loaded } = useLocalities();
 
   useEffect(() => {
     document.documentElement.dir = language === 'he' ? 'rtl' : 'ltr';
     document.documentElement.lang = language;
   }, [language]);
+
+  useEffect(() => {
+    try { localStorage.setItem(DRAWER_OPEN_KEY, String(drawerOpen)); } catch { /* quota */ }
+  }, [drawerOpen]);
 
   // Restore last selected city after cities load
   useEffect(() => {
@@ -72,7 +79,7 @@ export default function App() {
         )}
         <aside className={`sidebar${drawerOpen ? ' drawer-open' : ''}`}>
           <button className="drawer-close" onClick={() => setDrawerOpen(false)}>✕</button>
-          <MyScorePanel language={language} cities={cities} onCitySelect={(c) => handleCityClick(c, 'search')} />
+          <MyScorePanel language={language} cities={cities} selectedCity={selectedCity} onCitySelect={(c) => handleCityClick(c, 'search')} />
           <FilterPanel
             colorMode={colorMode}
             language={language}

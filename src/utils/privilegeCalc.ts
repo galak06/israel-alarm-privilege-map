@@ -3,6 +3,15 @@ import { ALERTS_ENABLED } from './featureFlags';
 
 const MAX_TIME = 180;
 
+// Minimum seconds needed to reach each shelter type
+// mamad = inside your apartment, stairwell = leave flat but stay in building, etc.
+const MIN_TIME_NEEDED: Record<ShelterType, number> = {
+  mamad:     15,   // a few steps inside your apartment
+  stairwell: 25,   // walk to stairwell
+  shelter:   45,   // go to building's shelter room
+  public:    90,   // exit building + reach public shelter
+};
+
 const SHELTER_WEIGHT: Record<ShelterType, number> = {
   mamad:     1.0,  // in-apartment safe room
   shelter:   0.75, // dedicated building shelter room (leave apartment, stay in building)
@@ -67,7 +76,8 @@ export function calcPrivilegeScorePersonal(
   shelter: ShelterType,
   familyStatus: FamilyStatus,
 ): PrivilegeScore {
-  const timeScore     = Math.round((Math.min(40, (city.alarmSeconds / MAX_TIME) * 40)) * 10) / 10;
+  const timeAdequacy  = Math.min(1, city.alarmSeconds / MIN_TIME_NEEDED[shelter]);
+  const timeScore     = Math.round(timeAdequacy * 40 * 10) / 10;
   const shelterScore  = Math.round((SHELTER_WEIGHT[shelter] * 40) * 10) / 10;
   const notifPenalty  = Math.min(1, city.notificationCount / MAX_NOTIF) * NOTIF_SHELTER_VULN[shelter] * 4;
   const safetyScore   = Math.max(0, Math.round(((1 - city.alertCountNormalized) * 10 - notifPenalty) * 10) / 10);
@@ -82,9 +92,14 @@ export function calcPrivilegeScorePersonal(
 }
 
 export function calcPrivilegeScore(city: City): PrivilegeScore {
-  const timeScore    = Math.round((Math.min(40, (city.alarmSeconds / MAX_TIME) * 40)) * 10) / 10;
-
   const { mamad, stairwell } = city.shelterDistribution;
+  const pub = city.shelterDistribution.public;
+  const bldgShelter = Math.max(0, 1 - mamad - stairwell - pub);
+  const weightedMinTime = mamad * MIN_TIME_NEEDED.mamad
+    + stairwell * MIN_TIME_NEEDED.stairwell
+    + bldgShelter * MIN_TIME_NEEDED.shelter
+    + pub * MIN_TIME_NEEDED.public;
+  const timeScore    = Math.round(Math.min(1, city.alarmSeconds / weightedMinTime) * 40 * 10) / 10;
   const shelterScore = Math.round(((mamad * 1.0 + stairwell * 0.5) * 40) * 10) / 10;
 
   // Notification burden: weighted by fraction of residents without a mamad
