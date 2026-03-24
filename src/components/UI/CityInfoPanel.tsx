@@ -22,6 +22,7 @@ export default function CityInfoPanel({ city, language }: Props) {
 
   const alertCount      = liveAlerts?.alertCount      ?? city?.alertCount      ?? 0;
   const notifCount      = liveAlerts?.notificationCount ?? city?.notificationCount ?? 0;
+  const hasLiveNotif    = liveAlerts?.notificationCount !== undefined;
   const alertCountTotal = liveAlerts?.alertCountTotal ?? city?.alertCountTotal ?? 0;
   const isLive          = liveAlerts !== null && (
     liveAlerts.alertCount !== undefined || liveAlerts.alertCountTotal !== undefined
@@ -80,13 +81,15 @@ export default function CityInfoPanel({ city, language }: Props) {
             </span>
           </div>
 
-          <div className="city-stat">
-            <span className="stat-label">🔔 {t.cityInfo.notificationCount}</span>
-            <span className="stat-value" style={{ color: notifCount > 0 ? '#f57c00' : undefined }}>
-              {(isLive || notifCount > 0) ? notifCount.toLocaleString() : '—'}
-              {(isLive || notifCount > 0) && <span className="unit"> {t.cityInfo.alertCountSuffix}</span>}
-            </span>
-          </div>
+          {(hasLiveNotif || notifCount > 0) && (
+            <div className="city-stat">
+              <span className="stat-label">🔔 {t.cityInfo.notificationCount}</span>
+              <span className="stat-value" style={{ color: notifCount > 0 ? '#f57c00' : undefined }}>
+                {notifCount.toLocaleString()}
+                <span className="unit"> {t.cityInfo.alertCountSuffix}</span>
+              </span>
+            </div>
+          )}
 
           <div className="city-stat">
             <span className="stat-label">📊 {t.cityInfo.alertCountTotal}</span>

@@ -157,24 +157,27 @@ export async function getLiveAlerts(nameHe: string): Promise<LiveAlerts | null> 
   const oref = orefCached ?? freshOref;
   if (freshOref) lsWrite(OREF_CACHE_PREFIX + nameHe, freshOref);
 
-  if (!redalertCache && !oref) return null;
+  if (!redalertCache) return null;
 
   const row    = redalertCache ? findCity(redalertCache.rows, nameHe) : null;
   const result: LiveAlerts = { fetchedAt: Date.now() };
 
-  // Oref proxy gives the accurate split (rockets vs advance warnings)
-  if (oref) {
-    result.alertCount        = oref.alertCount;
-    result.notificationCount = oref.notificationCount;
-  }
-
-  // Redalert gives 30d totals for scoring
+  // Redalert gives both 24h and 30d totals
   if (row && redalertCache) {
+    result.alertCount           = row.count24h;
     result.alertCountTotal      = row.count30d;
     result.alertCountNormalized = row.count30d / redalertCache.maxCount;
   }
 
-  if (!oref && !row) return null;
+  // Oref proxy gives the split (rockets vs advance warnings) — use if available
+  // Note: Oref API blocks requests from shared hosting IPs (403), so this is
+  // best-effort only. Redalert 24h is always used as the primary alertCount.
+  if (oref && (oref.alertCount > 0 || oref.notificationCount > 0)) {
+    result.alertCount        = oref.alertCount;
+    result.notificationCount = oref.notificationCount;
+  }
+
+  if (!row) return null;
   return result;
 }
 
