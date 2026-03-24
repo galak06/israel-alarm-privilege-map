@@ -8,6 +8,8 @@ import FilterPanel from './components/Controls/FilterPanel';
 import MyScorePanel from './components/UI/MyScorePanel';
 import { trackCitySelect, trackLanguageToggle, trackColorModeChange, trackThreatFilterChange } from './utils/analytics';
 
+const LAST_CITY_KEY = 'lastCityId';
+
 export default function App() {
   const [language, setLanguage] = useState<Language>('he');
   const [colorMode, setColorMode] = useState<ColorMode>('time');
@@ -21,6 +23,17 @@ export default function App() {
     document.documentElement.lang = language;
   }, [language]);
 
+  // Restore last selected city after cities load
+  useEffect(() => {
+    if (!loaded || cities.length === 0 || selectedCity) return;
+    try {
+      const savedId = localStorage.getItem(LAST_CITY_KEY);
+      if (!savedId) return;
+      const city = cities.find((c) => c.id === savedId);
+      if (city) { setSelectedCity(city); setDrawerOpen(true); }
+    } catch { /* localStorage unavailable */ }
+  }, [loaded, cities]);
+
   const toggleLanguage = () => {
     const next = language === 'he' ? 'en' : 'he';
     trackLanguageToggle(next);
@@ -31,6 +44,7 @@ export default function App() {
     trackCitySelect(city.id, city.nameEn, source);
     setSelectedCity(city);
     setDrawerOpen(true);
+    try { localStorage.setItem(LAST_CITY_KEY, city.id); } catch { /* quota */ }
   }
 
   function handleColorModeChange(mode: ColorMode) {

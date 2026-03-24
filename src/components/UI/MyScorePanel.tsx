@@ -183,16 +183,16 @@ export default function MyScorePanel({ language, cities, onCitySelect }: Props) 
   const shelterSelectId = useId();
   const familySelectId = useId();
 
-  // Merge static city data with live alert data (if available)
+  // Merge static city data with live alert data — only override fields that are present
   const enrichedCity = useMemo<City | null>(() => {
     if (!city) return null;
     if (!liveAlerts) return city;
     return {
       ...city,
-      alertCount:           liveAlerts.alertCount,
-      notificationCount:    liveAlerts.notificationCount,
-      alertCountTotal:      liveAlerts.alertCountTotal,
-      alertCountNormalized: liveAlerts.alertCountNormalized,
+      ...(liveAlerts.alertCount        !== undefined && { alertCount:           liveAlerts.alertCount }),
+      ...(liveAlerts.notificationCount !== undefined && { notificationCount:    liveAlerts.notificationCount }),
+      ...(liveAlerts.alertCountTotal   !== undefined && { alertCountTotal:      liveAlerts.alertCountTotal }),
+      ...(liveAlerts.alertCountNormalized !== undefined && { alertCountNormalized: liveAlerts.alertCountNormalized }),
     };
   }, [city, liveAlerts]);
 

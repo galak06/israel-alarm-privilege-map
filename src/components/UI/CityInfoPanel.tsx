@@ -23,7 +23,9 @@ export default function CityInfoPanel({ city, language }: Props) {
   const alertCount      = liveAlerts?.alertCount        ?? city?.alertCount        ?? 0;
   const notifCount      = liveAlerts?.notificationCount ?? city?.notificationCount ?? 0;
   const alertCountTotal = liveAlerts?.alertCountTotal   ?? city?.alertCountTotal   ?? 0;
-  const isLive          = liveAlerts !== null;
+  const isLive          = liveAlerts !== null && (
+    liveAlerts.alertCount !== undefined || liveAlerts.alertCountTotal !== undefined
+  );
 
   if (!city) {
     return (

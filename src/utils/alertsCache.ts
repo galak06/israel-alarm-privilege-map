@@ -1,96 +1,62 @@
 /**
- * Per-city live alert cache using the Redalert API.
+ * Per-city live alert cache.
  *
- * On first city select (or when cache is stale) fetches the full 30-day
- * city stats from redalert.orielhaim.com (all cities in one request).
- * The dataset is stored in localStorage with a 24h TTL so subsequent
- * city selections are instant.
+ * Fetches from two sources in parallel (both with 8s timeout):
+ *   - Redalert API  → alertCountTotal, alertCountNormalized  (all cities, one request)
+ *   - /api/oref-proxy.php → alertCount, notificationCount   (per city, server-side proxy)
  *
- * The API key is injected at build time via VITE_REDALERT_API_KEY
- * (sourced from the REDALERT_API_KEY GitHub Secret — never in source).
- *
- * Falls back silently to static localities.json data if the API is
- * unreachable or the key is not set.
+ * Results are stored in localStorage with a 24h TTL.
+ * Fields are optional — only populated when the source succeeds.
+ * Callers fall back to static data for any missing field.
  */
 
-const CACHE_KEY = 'redalert_v1';
-const TTL_MS = 24 * 60 * 60 * 1000; // 24 hours
+const REDALERT_CACHE_KEY  = 'redalert_v1';
+const OREF_CACHE_PREFIX   = 'oref_v1_';
+const TTL_MS              = 24 * 60 * 60 * 1000; // 24 hours
+const FETCH_TIMEOUT_MS    = 8_000;
 
 export interface LiveAlerts {
-  alertCount: number;            // rockets/aircraft last 30d (from Oref via proxy)
-  notificationCount: number;     // advance warnings last 30d (from Oref via proxy)
-  alertCountTotal: number;       // 30-day total across all alert types (from redalert)
-  alertCountNormalized: number;  // 0–1 normalized against current dataset max
-  fetchedAt: number;
+  alertCount?:           number;  // rockets last 30d  (oref proxy)
+  notificationCount?:    number;  // advance warnings  (oref proxy)
+  alertCountTotal?:      number;  // all types 30d     (redalert)
+  alertCountNormalized?: number;  // 0-1 vs dataset max (redalert)
+  fetchedAt:             number;
 }
 
-interface RedalertRow {
-  city: string;
-  count: number;
+// ── helpers ──────────────────────────────────────────────────────────────────
+
+function withTimeout<T>(p: Promise<T>, ms: number): Promise<T | null> {
+  return Promise.race([p, new Promise<null>((resolve) => setTimeout(() => resolve(null), ms))]);
 }
 
-interface AllCitiesCache {
-  rows: RedalertRow[];
-  maxCount: number;
-  fetchedAt: number;
-}
-
-const OREF_CACHE_PREFIX = 'oref_v1_';
-
-interface OrefCacheEntry {
-  alertCount: number;
-  notificationCount: number;
-  fetchedAt: number;
-}
-
-function readOrefCache(nameHe: string): OrefCacheEntry | null {
+function lsRead<T>(key: string): T | null {
   try {
-    const raw = localStorage.getItem(OREF_CACHE_PREFIX + nameHe);
+    const raw = localStorage.getItem(key);
     if (!raw) return null;
-    const entry: OrefCacheEntry = JSON.parse(raw);
-    if (Date.now() - entry.fetchedAt > TTL_MS) return null;
-    return entry;
+    return JSON.parse(raw) as T;
   } catch { return null; }
 }
 
-function writeOrefCache(nameHe: string, entry: OrefCacheEntry) {
-  try { localStorage.setItem(OREF_CACHE_PREFIX + nameHe, JSON.stringify(entry)); } catch { /* quota */ }
+function lsWrite(key: string, value: unknown) {
+  try { localStorage.setItem(key, JSON.stringify(value)); } catch { /* quota */ }
 }
 
-async function fetchOrefProxy(nameHe: string): Promise<OrefCacheEntry | null> {
-  try {
-    const res = await fetch(`/api/oref-proxy.php?city=${encodeURIComponent(nameHe)}`);
-    if (!res.ok) return null;
-    const json = await res.json() as { alertCount?: number; notificationCount?: number };
-    return { alertCount: json.alertCount ?? 0, notificationCount: json.notificationCount ?? 0, fetchedAt: Date.now() };
-  } catch { return null; }
+// ── Redalert (all-cities totals) ─────────────────────────────────────────────
+
+interface RedalertRow   { city: string; count: number; }
+interface RedalertCache { rows: RedalertRow[]; maxCount: number; fetchedAt: number; }
+
+function readRedalertCache(): RedalertCache | null {
+  const c = lsRead<RedalertCache>(REDALERT_CACHE_KEY);
+  return c && Date.now() - c.fetchedAt < TTL_MS ? c : null;
 }
 
-function readCache(): AllCitiesCache | null {
-  try {
-    const raw = localStorage.getItem(CACHE_KEY);
-    if (!raw) return null;
-    const entry: AllCitiesCache = JSON.parse(raw);
-    if (Date.now() - entry.fetchedAt > TTL_MS) return null;
-    return entry;
-  } catch {
-    return null;
-  }
-}
-
-function writeCache(entry: AllCitiesCache) {
-  try {
-    localStorage.setItem(CACHE_KEY, JSON.stringify(entry));
-  } catch { /* quota or private browsing */ }
-}
-
-async function fetchRedalert(): Promise<AllCitiesCache | null> {
+async function fetchRedalert(): Promise<RedalertCache | null> {
   const key = import.meta.env.VITE_REDALERT_API_KEY as string | undefined;
   if (!key) return null;
 
   const endDate   = new Date().toISOString();
   const startDate = new Date(Date.now() - 30 * 24 * 3600 * 1000).toISOString();
-
   const rows: RedalertRow[] = [];
   let offset = 0;
   const LIMIT = 500;
@@ -98,10 +64,11 @@ async function fetchRedalert(): Promise<AllCitiesCache | null> {
   try {
     while (true) {
       const url = `https://redalert.orielhaim.com/api/stats/cities?startDate=${startDate}&endDate=${endDate}&limit=${LIMIT}&offset=${offset}`;
-      const res = await fetch(url, {
-        headers: { Authorization: `Bearer ${key}`, Accept: 'application/json' },
-      });
-      if (!res.ok) return null;
+      const res = await withTimeout(
+        fetch(url, { headers: { Authorization: `Bearer ${key}`, Accept: 'application/json' } }),
+        FETCH_TIMEOUT_MS,
+      );
+      if (!res?.ok) break;
       const json = await res.json();
       const page: Array<{ city?: string; name?: string; count?: number }> = json.data ?? [];
       for (const r of page) {
@@ -111,64 +78,93 @@ async function fetchRedalert(): Promise<AllCitiesCache | null> {
       offset += page.length;
       if (page.length < LIMIT || offset >= (json.pagination?.total ?? Infinity)) break;
     }
-  } catch {
-    return null; // CORS or network error
-  }
+  } catch { return null; }
 
+  if (rows.length === 0) return null;
   const maxCount = Math.max(1, ...rows.map((r) => r.count));
   return { rows, maxCount, fetchedAt: Date.now() };
 }
 
 function findCity(rows: RedalertRow[], nameHe: string): RedalertRow | undefined {
-  // Exact match first
   const exact = rows.find((r) => r.city === nameHe);
   if (exact) return exact;
-  // Substring fallback (handles district suffixes like "אשדוד - א,ב,ד,ה")
-  const base = nameHe.split(/[\s-–]/)[0].trim();
-  return rows.find((r) => r.city.startsWith(base) || base.startsWith(r.city.split(/[\s-–]/)[0].trim()));
+  const base = nameHe.split(/[\s\-–]/)[0].trim();
+  return rows.find((r) => r.city.startsWith(base) || base.startsWith(r.city.split(/[\s\-–]/)[0].trim()));
 }
+
+// ── Oref proxy (per-city rockets / notifications) ────────────────────────────
+
+interface OrefEntry { alertCount: number; notificationCount: number; fetchedAt: number; }
+
+function readOrefCache(nameHe: string): OrefEntry | null {
+  const c = lsRead<OrefEntry>(OREF_CACHE_PREFIX + nameHe);
+  return c && Date.now() - c.fetchedAt < TTL_MS ? c : null;
+}
+
+async function fetchOrefProxy(nameHe: string): Promise<OrefEntry | null> {
+  try {
+    const res = await withTimeout(
+      fetch(`/api/oref-proxy.php?city=${encodeURIComponent(nameHe)}`),
+      FETCH_TIMEOUT_MS,
+    );
+    if (!res?.ok) return null;
+    const json = await res.json() as { alertCount?: number; notificationCount?: number };
+    return { alertCount: json.alertCount ?? 0, notificationCount: json.notificationCount ?? 0, fetchedAt: Date.now() };
+  } catch { return null; }
+}
+
+// ── Public API ────────────────────────────────────────────────────────────────
 
 /**
- * Returns live alert data for a city, backed by a 24h localStorage cache.
- * Fetches redalert (all cities, totals) and Oref proxy (per-city, rockets/notifications) in parallel.
- * Returns null on total failure — caller should use static data.
+ * Returns live alert data for a city. Fields are only set when their source
+ * succeeded — callers should fall back to static data for missing fields.
+ * Returns null only if both sources fail entirely.
  */
 export async function getLiveAlerts(nameHe: string): Promise<LiveAlerts | null> {
-  // Fetch redalert (all cities) and Oref (per city) in parallel, both cache-backed
-  let redalertCache = readCache();
-  const orefCached = readOrefCache(nameHe);
+  const cachedRedalert = readRedalertCache();
+  const cachedOref     = readOrefCache(nameHe);
 
   const [freshRedalert, freshOref] = await Promise.all([
-    redalertCache ? Promise.resolve(null) : fetchRedalert(),
-    orefCached    ? Promise.resolve(null) : fetchOrefProxy(nameHe),
+    cachedRedalert ? Promise.resolve(null) : fetchRedalert(),
+    cachedOref     ? Promise.resolve(null) : fetchOrefProxy(nameHe),
   ]);
 
-  if (freshRedalert) { redalertCache = freshRedalert; writeCache(freshRedalert); }
-  const oref = orefCached ?? freshOref;
-  if (oref && !orefCached) writeOrefCache(nameHe, oref);
+  const redalert = cachedRedalert ?? freshRedalert;
+  const oref     = cachedOref     ?? freshOref;
 
-  if (!redalertCache && !oref) return null;
+  if (freshRedalert) lsWrite(REDALERT_CACHE_KEY, freshRedalert);
+  if (freshOref)     lsWrite(OREF_CACHE_PREFIX + nameHe, freshOref);
 
-  const row = redalertCache ? findCity(redalertCache.rows, nameHe) : null;
+  if (!redalert && !oref) return null;
 
-  return {
-    alertCount:            oref?.alertCount        ?? 0,
-    notificationCount:     oref?.notificationCount ?? 0,
-    alertCountTotal:       row?.count              ?? 0,
-    alertCountNormalized:  row && redalertCache ? row.count / redalertCache.maxCount : 0,
-    fetchedAt:             Date.now(),
-  };
+  const result: LiveAlerts = { fetchedAt: Date.now() };
+
+  if (oref) {
+    result.alertCount        = oref.alertCount;
+    result.notificationCount = oref.notificationCount;
+  }
+
+  if (redalert) {
+    const row = findCity(redalert.rows, nameHe);
+    if (row) {
+      result.alertCountTotal      = row.count;
+      result.alertCountNormalized = row.count / redalert.maxCount;
+    }
+  }
+
+  // Return null if we got a response but couldn't populate any useful field
+  if (
+    result.alertCount        === undefined &&
+    result.notificationCount === undefined &&
+    result.alertCountTotal   === undefined
+  ) return null;
+
+  return result;
 }
 
-/** How old is the cache in minutes. Returns null if no valid cache. */
+/** Minutes since the redalert cache was last populated. Null if no valid cache. */
 export function cacheAgeMinutes(): number | null {
-  try {
-    const raw = localStorage.getItem(CACHE_KEY);
-    if (!raw) return null;
-    const entry: AllCitiesCache = JSON.parse(raw);
-    if (Date.now() - entry.fetchedAt > TTL_MS) return null;
-    return Math.floor((Date.now() - entry.fetchedAt) / 60_000);
-  } catch {
-    return null;
-  }
+  const c = lsRead<RedalertCache>(REDALERT_CACHE_KEY);
+  if (!c || Date.now() - c.fetchedAt > TTL_MS) return null;
+  return Math.floor((Date.now() - c.fetchedAt) / 60_000);
 }
