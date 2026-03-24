@@ -1,8 +1,6 @@
 import type { City, FamilyStatus, PrivilegeScore, ShelterType } from '../types';
 import { ALERTS_ENABLED } from './featureFlags';
 
-const MAX_TIME = 180;
-
 // Minimum seconds needed to reach each shelter type
 // mamad = inside your apartment, stairwell = leave flat but stay in building, etc.
 const MIN_TIME_NEEDED: Record<ShelterType, number> = {
