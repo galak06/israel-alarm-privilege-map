@@ -83,7 +83,10 @@ $notificationCount = 0;
 
 foreach ($records as $r) {
     $cat = $r['category'] ?? 0;
-    if ($cat === 1 || $cat === 2 || $cat === 13) {
+    // cat 1 = rockets, cat 2 = hostile aircraft → real alarms
+    // cat 13 = event ended (closure message, ignored to avoid double counting)
+    // cat 14 = advance warning → notification
+    if ($cat === 1 || $cat === 2) {
         $alertCount++;
     } elseif ($cat === 14) {
         $notificationCount++;

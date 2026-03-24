@@ -35,13 +35,13 @@ localities.forEach((loc, i) => {
 let matched = 0;
 let unmatched = new Set();
 
-// Process category 1 (rocket fire) alerts
-const cat1 = alerts.filter(a => a.category === 1);
+// Process category 1 (rocket fire) and 2 (hostile aircraft) alerts
+const catAlarms = alerts.filter(a => a.category === 1 || a.category === 2);
 // Use a Set of unique (name) to count unique alert events per locality
 // (one alert wave = multiple localities at same timestamp)
 // Count distinct alertDate+name combinations as individual alerts
 const alertCounts = new Map();
-cat1.forEach(a => {
+catAlarms.forEach(a => {
   const key = a.data;
   alertCounts.set(key, (alertCounts.get(key) || 0) + 1);
 });

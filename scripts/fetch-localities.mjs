@@ -299,20 +299,19 @@ async function fetchOrefByDate(cityNames) {
         const city = rec.data ?? rec.NAME_HE;
         if (!city) continue;
         // cat 1 = rockets, cat 2 = hostile aircraft → real alarms
-        // cat 13 = event ended (closure message, counted by oref in their total)
+        // cat 13 = event ended (closure message, ignored to avoid double counting)
         // cat 14 = advance warning → notification
-        const isRocket = cat === 1 || cat === 2 || cat === 13;
-        const isNotif  = cat === 14;
-        if (!isRocket && !isNotif) continue;
+        const isAlarm = cat === 1 || cat === 2;
+        const isNotif = cat === 14;
+        if (!isAlarm && !isNotif) continue;
 
         const date = (rec.alertDate ?? '').slice(0, 10) || new Date().toISOString().slice(0, 10);
         if (!byDate[date]) byDate[date] = {};
         if (!byDate[date][city]) byDate[date][city] = { r: 0, n: 0 };
-        if (isRocket) byDate[date][city].r += 1;
+        if (isAlarm) byDate[date][city].r += 1;
         if (isNotif)  byDate[date][city].n += 1;
         totalRecords++;
-      }
-    } catch (e) {
+      }    } catch (e) {
       console.warn(`   ⚠ batch ${i/BATCH + 1} failed: ${e.message}`);
     }
 
