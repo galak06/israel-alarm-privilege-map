@@ -171,7 +171,7 @@ export async function getLiveAlerts(nameHe: string): Promise<LiveAlerts | null> 
 
   // Oref proxy gives the split (rockets vs advance warnings) — use if available
   // Note: Oref API blocks requests from shared hosting IPs (403), so this is
-  // best-effort only. Redalert 24h is always used as the primary alertCount.
+  // best-effort only. If available, we use these more specific counts.
   if (oref && (oref.alertCount > 0 || oref.notificationCount > 0)) {
     result.alertCount        = oref.alertCount;
     result.notificationCount = oref.notificationCount;
