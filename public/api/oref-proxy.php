@@ -19,9 +19,9 @@ if ($city === '') {
 }
 
 $now          = new DateTime('now', new DateTimeZone('Asia/Jerusalem'));
-$thirtyAgo    = new DateTime('-30 days', new DateTimeZone('Asia/Jerusalem'));
+$yesterday    = new DateTime('-1 day', new DateTimeZone('Asia/Jerusalem'));
 $toDate       = $now->format('d.m.Y');
-$fromDate     = $thirtyAgo->format('d.m.Y');
+$fromDate     = $yesterday->format('d.m.Y');
 
 $url = sprintf(
     'https://alerts-history.oref.org.il/Shared/Ajax/GetAlarmsHistory.aspx'
