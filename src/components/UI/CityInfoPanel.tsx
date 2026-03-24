@@ -20,7 +20,10 @@ export default function CityInfoPanel({ city, language }: Props) {
     getLiveAlerts(city.nameHe).then(setLiveAlerts);
   }, [city?.id]);
 
-  const alertCountTotal = liveAlerts?.alertCountTotal ?? city?.alertCountTotal ?? 0;
+  const alertCount      = liveAlerts?.alertCount        ?? city?.alertCount        ?? 0;
+  const notifCount      = liveAlerts?.notificationCount ?? city?.notificationCount ?? 0;
+  const alertCountTotal = liveAlerts?.alertCountTotal   ?? city?.alertCountTotal   ?? 0;
+  const isLive          = liveAlerts !== null;
 
   if (!city) {
     return (
@@ -69,16 +72,17 @@ export default function CityInfoPanel({ city, language }: Props) {
           <div className="city-stat alert-count-stat">
             <span className="stat-label">🚨 {t.cityInfo.alertCount}</span>
             <span className="stat-value alert-count-value">
-              {city.alertCount > 0 ? city.alertCount.toLocaleString() : '—'}
-              {city.alertCount > 0 && <span className="unit"> {t.cityInfo.alertCountSuffix}</span>}
+              {alertCount > 0 ? alertCount.toLocaleString() : '—'}
+              {alertCount > 0 && <span className="unit"> {t.cityInfo.alertCountSuffix}</span>}
+              {isLive && <span className="live-badge">live</span>}
             </span>
           </div>
 
           <div className="city-stat">
             <span className="stat-label">🔔 {t.cityInfo.notificationCount}</span>
-            <span className="stat-value" style={{ color: city.notificationCount > 0 ? '#f57c00' : undefined }}>
-              {city.notificationCount > 0 ? city.notificationCount.toLocaleString() : '—'}
-              {city.notificationCount > 0 && <span className="unit"> {t.cityInfo.alertCountSuffix}</span>}
+            <span className="stat-value" style={{ color: notifCount > 0 ? '#f57c00' : undefined }}>
+              {notifCount > 0 ? notifCount.toLocaleString() : '—'}
+              {notifCount > 0 && <span className="unit"> {t.cityInfo.alertCountSuffix}</span>}
             </span>
           </div>
 
@@ -87,7 +91,6 @@ export default function CityInfoPanel({ city, language }: Props) {
             <span className="stat-value">
               {alertCountTotal > 0 ? alertCountTotal.toLocaleString() : '—'}
               {alertCountTotal > 0 && <span className="unit"> {t.cityInfo.alertCountSuffix}</span>}
-              {liveAlerts && <span className="live-badge">live</span>}
             </span>
           </div>
         </>

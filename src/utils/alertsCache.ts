@@ -17,7 +17,9 @@ const CACHE_KEY = 'redalert_v1';
 const TTL_MS = 24 * 60 * 60 * 1000; // 24 hours
 
 export interface LiveAlerts {
-  alertCountTotal: number;       // 30-day total across all alert types
+  alertCount: number;            // rockets/aircraft last 30d (from Oref via proxy)
+  notificationCount: number;     // advance warnings last 30d (from Oref via proxy)
+  alertCountTotal: number;       // 30-day total across all alert types (from redalert)
   alertCountNormalized: number;  // 0–1 normalized against current dataset max
   fetchedAt: number;
 }
@@ -31,6 +33,37 @@ interface AllCitiesCache {
   rows: RedalertRow[];
   maxCount: number;
   fetchedAt: number;
+}
+
+const OREF_CACHE_PREFIX = 'oref_v1_';
+
+interface OrefCacheEntry {
+  alertCount: number;
+  notificationCount: number;
+  fetchedAt: number;
+}
+
+function readOrefCache(nameHe: string): OrefCacheEntry | null {
+  try {
+    const raw = localStorage.getItem(OREF_CACHE_PREFIX + nameHe);
+    if (!raw) return null;
+    const entry: OrefCacheEntry = JSON.parse(raw);
+    if (Date.now() - entry.fetchedAt > TTL_MS) return null;
+    return entry;
+  } catch { return null; }
+}
+
+function writeOrefCache(nameHe: string, entry: OrefCacheEntry) {
+  try { localStorage.setItem(OREF_CACHE_PREFIX + nameHe, JSON.stringify(entry)); } catch { /* quota */ }
+}
+
+async function fetchOrefProxy(nameHe: string): Promise<OrefCacheEntry | null> {
+  try {
+    const res = await fetch(`/api/oref-proxy.php?city=${encodeURIComponent(nameHe)}`);
+    if (!res.ok) return null;
+    const json = await res.json() as { alertCount?: number; notificationCount?: number };
+    return { alertCount: json.alertCount ?? 0, notificationCount: json.notificationCount ?? 0, fetchedAt: Date.now() };
+  } catch { return null; }
 }
 
 function readCache(): AllCitiesCache | null {
@@ -97,24 +130,33 @@ function findCity(rows: RedalertRow[], nameHe: string): RedalertRow | undefined 
 
 /**
  * Returns live alert data for a city, backed by a 24h localStorage cache.
- * Returns null on failure — caller should use static data.
+ * Fetches redalert (all cities, totals) and Oref proxy (per-city, rockets/notifications) in parallel.
+ * Returns null on total failure — caller should use static data.
  */
 export async function getLiveAlerts(nameHe: string): Promise<LiveAlerts | null> {
-  let cache = readCache();
+  // Fetch redalert (all cities) and Oref (per city) in parallel, both cache-backed
+  let redalertCache = readCache();
+  const orefCached = readOrefCache(nameHe);
 
-  if (!cache) {
-    cache = await fetchRedalert();
-    if (!cache) return null;
-    writeCache(cache);
-  }
+  const [freshRedalert, freshOref] = await Promise.all([
+    redalertCache ? Promise.resolve(null) : fetchRedalert(),
+    orefCached    ? Promise.resolve(null) : fetchOrefProxy(nameHe),
+  ]);
 
-  const row = findCity(cache.rows, nameHe);
-  if (!row) return null;
+  if (freshRedalert) { redalertCache = freshRedalert; writeCache(freshRedalert); }
+  const oref = orefCached ?? freshOref;
+  if (oref && !orefCached) writeOrefCache(nameHe, oref);
+
+  if (!redalertCache && !oref) return null;
+
+  const row = redalertCache ? findCity(redalertCache.rows, nameHe) : null;
 
   return {
-    alertCountTotal: row.count,
-    alertCountNormalized: row.count / cache.maxCount,
-    fetchedAt: cache.fetchedAt,
+    alertCount:            oref?.alertCount        ?? 0,
+    notificationCount:     oref?.notificationCount ?? 0,
+    alertCountTotal:       row?.count              ?? 0,
+    alertCountNormalized:  row && redalertCache ? row.count / redalertCache.maxCount : 0,
+    fetchedAt:             Date.now(),
   };
 }
 
