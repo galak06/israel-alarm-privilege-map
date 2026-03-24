@@ -180,6 +180,7 @@ export default function MyScorePanel({ language, cities, onCitySelect }: Props) 
   const [familyStatus, setFamilyStatus] = useState<FamilyStatus>('single');
   const [liveAlerts, setLiveAlerts] = useState<LiveAlerts | null>(null);
   const [alertsLoading, setAlertsLoading] = useState(false);
+  const fetchSeqRef = useRef(0);
   const shelterSelectId = useId();
   const familySelectId = useId();
 
@@ -200,11 +201,13 @@ export default function MyScorePanel({ language, cities, onCitySelect }: Props) 
   const cityAvg = enrichedCity ? calcPrivilegeScore(enrichedCity) : null;
 
   const handleSelect = useCallback((selected: City) => {
+    const seq = ++fetchSeqRef.current;
     setCity(selected);
     setLiveAlerts(null);
     setAlertsLoading(true);
     onCitySelect(selected);
     getLiveAlerts(selected.nameHe).then((alerts) => {
+      if (fetchSeqRef.current !== seq) return; // stale — a newer city was selected
       setLiveAlerts(alerts);
       setAlertsLoading(false);
     });
