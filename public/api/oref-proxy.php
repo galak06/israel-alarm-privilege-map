@@ -5,9 +5,6 @@
  *
  * GET /api/oref-proxy.php?city=<hebrew city name>
  * Returns: { "alertCount": N, "notificationCount": N }
- *
- * Strategy: query with city_0=<name> twice (full name, then base name)
- * and union the results to cover all sub-districts.
  */
 
 header('Content-Type: application/json');
@@ -25,7 +22,7 @@ $yesterday = new DateTime('-1 day', new DateTimeZone('Asia/Jerusalem'));
 $toDate    = $now->format('d.m.Y');
 $fromDate  = $yesterday->format('d.m.Y');
 
-// Extract base city name (before " - " / " – " district suffix)
+// Extract base city name before " - " / " – " district suffix
 // e.g. "הרצליה - מרכז וגליל ים" → "הרצליה"
 $parts    = preg_split('/\s+[-–]\s+/', $city, 2);
 $baseCity = trim($parts[0]);
@@ -38,30 +35,30 @@ function fetchOrefCity($fromDate, $toDate, $cityName) {
         $toDate,
         rawurlencode($cityName)
     );
-    $ctx = stream_context_create([
-        'http' => [
-            'method'  => 'GET',
-            'header'  => implode("\r\n", [
-                'Referer: https://alerts-history.oref.org.il/',
-                'X-Requested-With: XMLHttpRequest',
-                'User-Agent: Mozilla/5.0 (compatible; oref-proxy/1.0)',
-            ]),
-            'timeout' => 10,
-            'ignore_errors' => true,
+
+    $ch = curl_init($url);
+    curl_setopt_array($ch, [
+        CURLOPT_RETURNTRANSFER => true,
+        CURLOPT_TIMEOUT        => 10,
+        CURLOPT_HTTPHEADER     => [
+            'Referer: https://alerts-history.oref.org.il/',
+            'X-Requested-With: XMLHttpRequest',
+            'User-Agent: Mozilla/5.0 (compatible; oref-proxy/1.0)',
         ],
-        'ssl' => ['verify_peer' => true],
+        CURLOPT_SSL_VERIFYPEER => true,
+        CURLOPT_SSL_VERIFYHOST => 2,
+        CURLOPT_FOLLOWLOCATION => true,
     ]);
-    $body = @file_get_contents($url, false, $ctx);
+    $body = curl_exec($ch);
+    curl_close($ch);
+
     if ($body === false || trim($body) === '' || trim($body) === 'null') return [];
     $records = json_decode($body, true);
     return is_array($records) ? $records : [];
 }
 
-// Fetch with full name (e.g. "הרצליה - מרכז וגליל ים")
+// Try full city name first; fall back to base name if empty
 $records = fetchOrefCity($fromDate, $toDate, $city);
-
-// If empty and base differs, also fetch with base name (e.g. "הרצליה")
-// to catch sibling districts
 if (count($records) === 0 && $baseCity !== $city) {
     $records = fetchOrefCity($fromDate, $toDate, $baseCity);
 }
