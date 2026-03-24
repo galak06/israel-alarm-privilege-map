@@ -27,7 +27,7 @@ $fromDate  = $yesterday->format('d.m.Y');
 $parts    = preg_split('/\s+[-–]\s+/', $city, 2);
 $baseCity = trim($parts[0]);
 
-function fetchOrefCity($fromDate, $toDate, $cityName) {
+function fetchOrefCity($fromDate, $toDate, $cityName, &$debug = null) {
     $url = sprintf(
         'https://alerts-history.oref.org.il/Shared/Ajax/GetAlarmsHistory.aspx'
         . '?lang=he&mode=1&fromDate=%s&toDate=%s&city_0=%s',
@@ -49,18 +49,33 @@ function fetchOrefCity($fromDate, $toDate, $cityName) {
         CURLOPT_SSL_VERIFYHOST => 2,
         CURLOPT_FOLLOWLOCATION => true,
     ]);
-    $body = curl_exec($ch);
+    $body    = curl_exec($ch);
+    $errno   = curl_errno($ch);
+    $errmsg  = curl_error($ch);
+    $httpCode = curl_getinfo($ch, CURLINFO_HTTP_CODE);
     curl_close($ch);
+
+    if ($debug !== null) {
+        $debug[] = ['url' => $url, 'http' => $httpCode, 'errno' => $errno, 'err' => $errmsg, 'body_len' => strlen($body ?: ''), 'body_preview' => substr($body ?: '', 0, 200)];
+    }
 
     if ($body === false || trim($body) === '' || trim($body) === 'null') return [];
     $records = json_decode($body, true);
     return is_array($records) ? $records : [];
 }
 
+$debugMode = isset($_GET['debug']);
+$debugLog  = $debugMode ? [] : null;
+
 // Try full city name first; fall back to base name if empty
-$records = fetchOrefCity($fromDate, $toDate, $city);
+$records = fetchOrefCity($fromDate, $toDate, $city, $debugLog);
 if (count($records) === 0 && $baseCity !== $city) {
-    $records = fetchOrefCity($fromDate, $toDate, $baseCity);
+    $records = fetchOrefCity($fromDate, $toDate, $baseCity, $debugLog);
+}
+
+if ($debugMode) {
+    echo json_encode(['debug' => $debugLog, 'fromDate' => $fromDate, 'toDate' => $toDate, 'city' => $city, 'baseCity' => $baseCity, 'recordCount' => count($records)]);
+    exit;
 }
 
 $alertCount        = 0;
