@@ -382,6 +382,97 @@ async function fetchRedalertTotals(apiKey) {
   return totals;
 }
 
+// Fetch a single Redalert window → { cityName → count }
+async function fetchRedalertWindow(apiKey, startDate, endDate, label) {
+  const totals = {};
+  const LIMIT = 500;
+  let offset = 0;
+  let pageTotal = null;
+  try {
+    while (true) {
+      const url = `https://redalert.orielhaim.com/api/stats/cities?startDate=${startDate}&endDate=${endDate}&limit=${LIMIT}&offset=${offset}`;
+      const res = await fetch(url, {
+        headers: { 'Authorization': `Bearer ${apiKey}`, 'Accept': 'application/json', 'User-Agent': 'locality-fetcher/1.0' },
+      });
+      if (!res.ok) throw new Error(`HTTP ${res.status}`);
+      const json = await res.json();
+      const rows = json.data ?? [];
+      if (pageTotal === null) pageTotal = json.pagination?.total ?? rows.length;
+      for (const row of rows) {
+        const name = row.city ?? row.name;
+        if (name) {
+          totals[name] = (totals[name] ?? 0) + (row.count ?? 1);
+          if (row.cityZone && !cityZoneMap[name]) cityZoneMap[name] = row.cityZone;
+        }
+      }
+      offset += rows.length;
+      process.stdout.write(`\r   [${label}] Fetched ${offset} / ${pageTotal ?? '?'} cities`);
+      if (rows.length < LIMIT || offset >= (pageTotal ?? Infinity)) break;
+      await new Promise(r => setTimeout(r, 200));
+    }
+    process.stdout.write('\n');
+  } catch (e) {
+    console.warn(`   ⚠ redalert [${label}] failed: ${e.message}`);
+  }
+  return totals;
+}
+
+// ── Counts-only update (CI mode — Oref blocked) ───────────────────────────────
+// Reads existing localities.json, refreshes alertCount (24h) + alertCountTotal (30d)
+// from Redalert, renormalizes, and writes back. No geocoding or Oref calls needed.
+
+async function updateCountsOnly(apiKey) {
+  if (!existsSync(OUT_FILE)) {
+    console.error('❌ No existing localities.json found — run locally first to generate it.');
+    process.exit(1);
+  }
+  const localities = JSON.parse(readFileSync(OUT_FILE, 'utf8'));
+  console.log(`📦 Loaded ${localities.length} existing localities`);
+
+  if (!apiKey) {
+    console.warn('⚠  REDALERT_API_KEY not set — cannot update counts. Exiting without changes.');
+    return;
+  }
+
+  const now    = new Date().toISOString();
+  const ago24h = new Date(Date.now() -      24 * 3600 * 1000).toISOString();
+  const ago30d = new Date(Date.now() - 30 * 24 * 3600 * 1000).toISOString();
+
+  console.log('📡 Fetching Redalert counts (24h + 30d)…');
+  const [totals24h, totals30d] = await Promise.all([
+    fetchRedalertWindow(apiKey, ago24h, now, '24h'),
+    fetchRedalertWindow(apiKey, ago30d, now, '30d'),
+  ]);
+
+  const findKey = (map, name) => {
+    if (map[name] !== undefined) return name;
+    return Object.keys(map).find(k => {
+      const [longer, shorter] = name.length >= k.length ? [name, k] : [k, name];
+      if (shorter.length < 5) return false;
+      if (shorter.length / longer.length < 0.7) return false;
+      return longer.includes(shorter);
+    }) ?? null;
+  };
+
+  let updated = 0;
+  for (const loc of localities) {
+    const key30d = findKey(totals30d, loc.nameHe);
+    const key24h = findKey(totals24h, loc.nameHe);
+    if (key30d) { loc.alertCountTotal = totals30d[key30d]; updated++; }
+    if (key24h) { loc.alertCount = totals24h[key24h]; }
+  }
+
+  const maxTotal = Math.max(1, ...localities.map(l => l.alertCountTotal ?? 0));
+  for (const loc of localities) {
+    loc.alertCountNormalized = Math.round(((loc.alertCountTotal ?? 0) / maxTotal) * 1000) / 1000;
+  }
+
+  writeFileSync(OUT_FILE, JSON.stringify(localities, null, 2));
+  const herzliya = localities.filter(l => l.nameHe?.includes('הרצליה'));
+  console.log(`✅ Counts-only update complete (${updated} localities updated, max30d=${maxTotal})`);
+  console.log(`   Herzliya: ${herzliya.map(l => `${l.nameHe} r=${l.alertCount} n=${l.notificationCount} total=${l.alertCountTotal}`).join(', ')}`);
+}
+
 // Build rolling 30-day sums from cache: { cityName → { rockets, notifications } }
 function sumAlertsCache(cache) {
   const sums = {};
@@ -410,8 +501,18 @@ async function main() {
   const cachedDays = Object.keys(alertsCache.days).length;
   console.log(`📦 Alerts cache has ${cachedDays} day(s) of history`);
 
-  // Fetch Oref locality list first (needed for city names to query per-city alerts)
-  const orefLocalities = await fetchOrefLocalities();
+  // Fetch Oref locality list — if blocked (403, e.g. GitHub Actions), fall back to counts-only mode
+  let orefLocalities;
+  try {
+    orefLocalities = await fetchOrefLocalities();
+  } catch (e) {
+    if (e.message.includes('403')) {
+      console.warn('⚠  Oref returned 403 — running in counts-only mode (CI environment)');
+      await updateCountsOnly(process.env.REDALERT_API_KEY);
+      return;
+    }
+    throw e;
+  }
   const cityNames = orefLocalities.map(loc => loc.label_he || loc.label);
 
   // Fetch oref per-city alerts → group by date → update cache (replace each date, never double-count)
