@@ -1,8 +1,8 @@
-name: Refresh Alert Data (Daily)
+name: Refresh Alert Data (Hourly)
 
 on:
   schedule:
-    - cron: '0 5 * * *'   # 5:00 UTC = 7:00 AM Israel time every day
+    - cron: '0 * * * *'   # every hour
   workflow_dispatch:       # allow manual trigger
 
 jobs:
