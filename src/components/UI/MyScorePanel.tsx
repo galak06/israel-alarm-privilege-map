@@ -16,7 +16,7 @@ interface Props {
 }
 
 const SHELTER_OPTIONS: ShelterType[] = ['mamad', 'shelter', 'stairwell', 'public'];
-const FAMILY_OPTIONS: FamilyStatus[] = ['married_with_children', 'married', 'relationship', 'single', 'divorced', 'divorced_with_children'];
+const FAMILY_OPTIONS: FamilyStatus[] = ['divorced_with_children', 'divorced', 'single', 'married_with_children', 'relationship', 'married'];
 const MAX_RESULTS = 8;
 
 // Fix 1: defined outside component — not recreated on every render
@@ -215,9 +215,8 @@ export default function MyScorePanel({ language, cities, selectedCity: externalC
     if (!liveAlerts) return city;
     return {
       ...city,
-      ...(liveAlerts.alertCount            !== undefined && { alertCount:            liveAlerts.alertCount }),
-      ...(liveAlerts.alertCountTotal      !== undefined && { alertCountTotal:      liveAlerts.alertCountTotal }),
-      ...(liveAlerts.alertCountNormalized !== undefined && { alertCountNormalized: liveAlerts.alertCountNormalized }),
+      ...(liveAlerts.alertCount        !== undefined && { alertCount:        liveAlerts.alertCount }),
+      ...(liveAlerts.notificationCount !== undefined && { notificationCount: liveAlerts.notificationCount }),
     };
   }, [city, liveAlerts]);
 

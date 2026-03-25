@@ -20,6 +20,7 @@ interface LocalityRecord {
   notificationCount?: number;
   alertCountTotal?: number;
   alertCountNormalized?: number;
+  minGapHours?: number;
 }
 
 function isValidRecord(r: LocalityRecord): boolean {
@@ -45,6 +46,7 @@ function toCity(r: LocalityRecord): City {
     notificationCount: r.notificationCount ?? 0,
     alertCountTotal: r.alertCountTotal ?? r.alertCount ?? 0,
     alertCountNormalized: r.alertCountNormalized ?? 0,
+    minGapHours: r.minGapHours,
   };
 }
 

@@ -23,3 +23,7 @@ dist-ssr
 *.sln
 *.sw?
 .vercel
+
+# Claude and temp files
+.claude/
+live-localities.json

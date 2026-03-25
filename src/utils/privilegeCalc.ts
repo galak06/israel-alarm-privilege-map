@@ -18,13 +18,15 @@ const SHELTER_WEIGHT: Record<ShelterType, number> = {
 };
 
 // Family status score (0–10): personal factor only
+// Children reduce the score — they slow shelter response, require carrying/guiding,
+// and increase the number of people you are responsible for protecting.
 const FAMILY_SCORE: Record<FamilyStatus, number> = {
-  divorced_with_children:  0,  // sole caretaker of dependents, most vulnerable
-  divorced:                3,  // legally complex, occasional childcare
+  divorced_with_children:  0,  // sole caretaker + kids: most vulnerable
+  divorced:                3,  // alone, no dependents but legally complex
   single:                  5,  // only yourself to protect, neutral
-  relationship:            7,  // partner support
-  married:                 8,  // stable partnership, shared responsibility
-  married_with_children:  10,  // partner + children: full support system
+  married_with_children:   6,  // partner helps, but kids add burden and slow response
+  relationship:            7,  // partner support, no dependents
+  married:                10,  // stable partnership, no dependents: most privileged
 };
 
 // Location score (0–10): proximity to emergency services, hospitals, infrastructure.
@@ -56,7 +58,8 @@ const LOCATION_SCORE: Record<City['region'], number> = {
 // Normalize notification count: 20 notifications/month = max burden
 const MAX_NOTIF = 20;
 
-// Average gap normalization: 72 hours between alarms = full score (≈ one alarm every 3 days)
+// Gap normalization: 72h minimum gap between alarms = full score (≈ one calm day between each alarm)
+// Uses actual minimum gap from 30d history when available; falls back to count-based estimate.
 const MAX_GAP_HOURS = 72;
 
 // Shelter vulnerability to advance-warning burden (mamad = can shelter in place, no burden)
@@ -77,8 +80,8 @@ export function calcPrivilegeScorePersonal(
   const shelterScore  = Math.round((SHELTER_WEIGHT[shelter] * 20) * 10) / 10;
   const notifPenalty  = Math.min(1, city.notificationCount / MAX_NOTIF) * NOTIF_SHELTER_VULN[shelter] * 12;
   const safetyScore   = Math.max(0, Math.round(((1 - city.alertCountNormalized) * 30 - notifPenalty) * 10) / 10);
-  const avgGapHours   = (30 * 24) / Math.max(1, city.alertCountTotal);
-  const gapScore      = Math.round(Math.min(30, (avgGapHours / MAX_GAP_HOURS) * 30) * 10) / 10;
+  const gapHours      = city.minGapHours ?? (30 * 24) / Math.max(1, city.alertCountTotal);
+  const gapScore      = Math.round(Math.min(30, (gapHours / MAX_GAP_HOURS) * 30) * 10) / 10;
   const locationScore = LOCATION_SCORE[city.region] ?? 5;
   const familyScore   = FAMILY_SCORE[familyStatus];
   const total = Math.round(
@@ -101,8 +104,8 @@ export function calcPrivilegeScore(city: City): PrivilegeScore {
   // Notification burden: weighted by fraction of residents without a mamad
   const notifPenalty  = Math.min(1, city.notificationCount / MAX_NOTIF) * (1 - mamad) * 12;
   const safetyScore   = Math.max(0, Math.round(((1 - city.alertCountNormalized) * 30 - notifPenalty) * 10) / 10);
-  const avgGapHours   = (30 * 24) / Math.max(1, city.alertCountTotal);
-  const gapScore      = Math.round(Math.min(30, (avgGapHours / MAX_GAP_HOURS) * 30) * 10) / 10;
+  const gapHours      = city.minGapHours ?? (30 * 24) / Math.max(1, city.alertCountTotal);
+  const gapScore      = Math.round(Math.min(30, (gapHours / MAX_GAP_HOURS) * 30) * 10) / 10;
   const locationScore = LOCATION_SCORE[city.region] ?? 5;
 
   const total = Math.round(

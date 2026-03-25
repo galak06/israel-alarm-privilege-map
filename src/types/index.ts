@@ -21,10 +21,11 @@ export interface City {
   population?: number;
   region: 'north' | 'center' | 'south' | 'jerusalem';
   threatSources: ThreatSource[];
-  alertCount: number;            // Rocket alarms only — tzevaadom threat=0, 30-day rolling cache
-  notificationCount: number;     // Advance warnings — tzevaadom threat=5, 30-day rolling cache
-  alertCountTotal: number;       // All alert types — redalert 30-day total (for score normalization)
+  alertCount: number;            // Real alarms 24h (missiles/aircraft/infiltration — live fetch)
+  notificationCount: number;     // Advance warnings 24h (newsFlash — live fetch)
+  alertCountTotal: number;       // Real alarms 30d (baked in localities.json from history)
   alertCountNormalized: number;  // 0–1 normalized from alertCountTotal
+  minGapHours?: number;          // Minimum gap between consecutive real alarms in 30d (undefined = ≤1 alarm)
 }
 
 export interface PrivilegeScore {

@@ -1,34 +1,34 @@
 /**
- * Per-city live alert cache.
+ * Per-city live 24h alert cache — Redalert only (CORS-compatible).
  *
- * - 24h alertCount / notificationCount → Pikud HaOref history API (accurate, no auth)
- * - 30d alertCountTotal / alertCountNormalized → Redalert /stats/cities (bulk, auth required)
+ * Fetches /api/stats/history for the last 24h and aggregates per city:
+ *   - alertCount       → real alarms (missiles / aircraft / infiltration / earthquake)
+ *   - notificationCount → advance warnings (newsFlash)
  *
- * Results are stored in localStorage.
+ * 30d totals (alertCountTotal, alertCountNormalized, minGapHours) are baked into
+ * localities.json by the hourly server-side script and do not need a browser fetch.
+ *
+ * Results are stored in localStorage with a 1h TTL.
  * API key injected at build time via VITE_REDALERT_API_KEY.
  */
 
-const REDALERT_CACHE_KEY   = 'redalert_v3';
-const REDALERT_TTL_MS      = 24 * 60 * 60 * 1000;   // refresh daily
-const FETCH_TIMEOUT        = 8_000;
+const CACHE_KEY    = 'redalert_v4';
+const TTL_MS       = 60 * 60 * 1000;   // 1h — refresh each hour
+const FETCH_TIMEOUT = 8_000;
+
+const REAL_TYPES  = new Set(['missiles', 'hostileAircraftIntrusion', 'terroristInfiltration', 'earthQuake']);
+const NOTIF_TYPES = new Set(['newsFlash']);
 
 export interface LiveAlerts {
-  alertCount?:           number;  // real alarms 24h (missiles/aircraft/infiltration/etc.)
-  notificationCount?:    number;  // newsFlash 24h
-  alertCountTotal?:      number;  // all types 30d  (Redalert /stats/cities)
-  alertCountNormalized?: number;  // 0-1 vs dataset max (Redalert)
-  fetchedAt:             number;
+  alertCount?:        number;  // real alarms last 24h
+  notificationCount?: number;  // advance warnings last 24h
+  fetchedAt:          number;
 }
 
-interface RedalertRow {
-  city:      string;
-  count30d:  number;
-  count24h:  number;
-}
+interface CityEntry { alarms: number; notifs: number }
 
-interface RedalertCache {
-  rows:      RedalertRow[];
-  maxCount:  number;   // max of count30d across all cities
+interface AlertCache {
+  cities:    Record<string, CityEntry>;
   fetchedAt: number;
 }
 
@@ -46,110 +46,85 @@ function lsWrite(key: string, v: unknown) {
   try { localStorage.setItem(key, JSON.stringify(v)); } catch { /* quota */ }
 }
 
-// ── Per-city 24h split ────────────────────────────────────────────────────────
-// NOTE: Pikud HaOref history API (alerts-history.oref.org.il) does not send
-// Access-Control-Allow-Origin, so browser fetches are blocked by CORS policy.
-// The alarm/notification split therefore comes from localities.json (updated by
-// the fetch-localities script). Live 24h total uses Redalert bulk /stats/cities.
+// ── 24h history fetch ─────────────────────────────────────────────────────────
 
-// ── Redalert bulk fetch (/stats/cities) ───────────────────────────────────────
-
-async function fetchWindow(apiKey: string, startDate: string, endDate: string): Promise<Map<string, number>> {
-  const result = new Map<string, number>();
+async function fetch24hHistory(apiKey: string): Promise<AlertCache | null> {
+  const now    = new Date().toISOString();
+  const ago24h = new Date(Date.now() - 24 * 3600 * 1000).toISOString();
+  const cities: Record<string, CityEntry> = {};
   let offset = 0;
-  const LIMIT = 500;
-
-  while (true) {
-    const url = `https://redalert.orielhaim.com/api/stats/cities?startDate=${startDate}&endDate=${endDate}&limit=${LIMIT}&offset=${offset}`;
-    const res = await withTimeout(
-      fetch(url, { headers: { Authorization: `Bearer ${apiKey}`, Accept: 'application/json' } }),
-      FETCH_TIMEOUT,
-    );
-    if (!res?.ok) break;
-    const json = await res.json();
-    const page: Array<{ city?: string; name?: string; count?: number }> = json.data ?? [];
-    for (const r of page) {
-      const city = r.city ?? r.name;
-      if (city) result.set(city, (result.get(city) ?? 0) + (r.count ?? 0));
-    }
-    offset += page.length;
-    if (page.length < LIMIT || offset >= (json.pagination?.total ?? Infinity)) break;
-  }
-  return result;
-}
-
-async function fetchRedalert(): Promise<RedalertCache | null> {
-  const key = import.meta.env.VITE_REDALERT_API_KEY as string | undefined;
-  if (!key) return null;
-
-  const now     = new Date().toISOString();
-  const ago24h  = new Date(Date.now() -      24 * 3600 * 1000).toISOString();
-  const ago30d  = new Date(Date.now() - 30 * 24 * 3600 * 1000).toISOString();
 
   try {
-    const [map24h, map30d] = await Promise.all([
-      fetchWindow(key, ago24h, now),
-      fetchWindow(key, ago30d, now),
-    ]);
+    while (true) {
+      const url = `https://redalert.orielhaim.com/api/stats/history?startDate=${ago24h}&endDate=${now}&limit=100&offset=${offset}`;
+      const res = await withTimeout(
+        fetch(url, { headers: { Authorization: `Bearer ${apiKey}`, Accept: 'application/json' } }),
+        FETCH_TIMEOUT,
+      );
+      if (!res?.ok) break;
+      const json = await res.json();
+      const records: Array<{ type: string; cities: Array<{ name: string }> }> = json.data ?? [];
 
-    if (map30d.size === 0) return null;
+      for (const record of records) {
+        const isReal  = REAL_TYPES.has(record.type);
+        const isNotif = NOTIF_TYPES.has(record.type);
+        if (!isReal && !isNotif) continue;
+        for (const city of record.cities ?? []) {
+          const name = city.name;
+          if (!cities[name]) cities[name] = { alarms: 0, notifs: 0 };
+          if (isReal)  cities[name].alarms++;
+          else         cities[name].notifs++;
+        }
+      }
 
-    const rows: RedalertRow[] = [];
-    map30d.forEach((count30d, city) => {
-      rows.push({ city, count30d, count24h: map24h.get(city) ?? 0 });
-    });
-    // also add cities with 24h alerts but no 30d entry (edge case)
-    map24h.forEach((count24h, city) => {
-      if (!map30d.has(city)) rows.push({ city, count30d: 0, count24h });
-    });
-
-    const maxCount = Math.max(1, ...rows.map((r) => r.count30d));
-    return { rows, maxCount, fetchedAt: Date.now() };
+      offset += records.length;
+      if (!json.pagination?.hasMore) break;
+    }
   } catch {
     return null;
   }
+
+  return { cities, fetchedAt: Date.now() };
 }
 
-function readCache(): RedalertCache | null {
-  const c = lsRead<RedalertCache>(REDALERT_CACHE_KEY);
-  return c && Date.now() - c.fetchedAt < REDALERT_TTL_MS ? c : null;
+function readCache(): AlertCache | null {
+  const c = lsRead<AlertCache>(CACHE_KEY);
+  return c && Date.now() - c.fetchedAt < TTL_MS ? c : null;
 }
 
-function findCity(rows: RedalertRow[], nameHe: string): RedalertRow | undefined {
-  const exact = rows.find((r) => r.city === nameHe);
-  if (exact) return exact;
+function findCity(cities: Record<string, CityEntry>, nameHe: string): CityEntry | undefined {
+  if (cities[nameHe]) return cities[nameHe];
   const base = nameHe.split(/[\s\-–]/)[0].trim();
-  return rows.find((r) =>
-    r.city.startsWith(base) || base.startsWith(r.city.split(/[\s\-–]/)[0].trim())
+  const key = Object.keys(cities).find((k) =>
+    k.startsWith(base) || base.startsWith(k.split(/[\s\-–]/)[0].trim())
   );
+  return key ? cities[key] : undefined;
 }
 
 // ── Public API ────────────────────────────────────────────────────────────────
 
 export async function getLiveAlerts(nameHe: string): Promise<LiveAlerts | null> {
-  // Fetch bulk stats from Redalert: 24h total + 30d total (both all-types combined)
-  // Oref history API is blocked by CORS in the browser — alarm/notification split
-  // comes from localities.json (city.alertCount / city.notificationCount).
-  let redalertCache = readCache();
-  if (!redalertCache) {
-    const fresh = await fetchRedalert();
-    if (fresh) { redalertCache = fresh; lsWrite(REDALERT_CACHE_KEY, fresh); }
+  const apiKey = import.meta.env.VITE_REDALERT_API_KEY as string | undefined;
+  if (!apiKey) return null;
+
+  let cache = readCache();
+  if (!cache) {
+    const fresh = await fetch24hHistory(apiKey);
+    if (fresh) { cache = fresh; lsWrite(CACHE_KEY, fresh); }
   }
 
-  if (!redalertCache) return null;
-  const row = findCity(redalertCache.rows, nameHe);
-  if (!row) return null;
+  if (!cache) return null;
+  const entry = findCity(cache.cities, nameHe);
 
   return {
-    alertCount:           row.count24h,   // all alert types combined, last 24h
-    alertCountTotal:      row.count30d,
-    alertCountNormalized: row.count30d / redalertCache.maxCount,
-    fetchedAt:            Date.now(),
+    alertCount:        entry?.alarms ?? 0,
+    notificationCount: entry?.notifs  ?? 0,
+    fetchedAt:         cache.fetchedAt,
   };
 }
 
 export function cacheAgeMinutes(): number | null {
-  const c = lsRead<RedalertCache>(REDALERT_CACHE_KEY);
-  if (!c || Date.now() - c.fetchedAt > REDALERT_TTL_MS) return null;
+  const c = lsRead<AlertCache>(CACHE_KEY);
+  if (!c || Date.now() - c.fetchedAt > TTL_MS) return null;
   return Math.floor((Date.now() - c.fetchedAt) / 60_000);
 }

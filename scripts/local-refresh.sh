@@ -1,6 +1,6 @@
 #!/bin/bash
-# Hourly data refresh — run from local machine (bypasses Oref IP blocks)
-# Fetches fresh alert data, commits, and pushes → triggers GitHub Actions deploy
+# Hourly data refresh — run from local machine
+# Fetches fresh Redalert counts, commits, and pushes → triggers GitHub Actions deploy
 
 set -e
 cd "$(dirname "$0")/.."
@@ -12,7 +12,7 @@ echo "$(date): Starting local refresh..."
 
 node scripts/fetch-localities.mjs
 
-git add public/localities.json scripts/alerts-cache.json
+git add public/localities.json
 if git diff --staged --quiet; then
   echo "$(date): No changes — skipping commit"
 else
