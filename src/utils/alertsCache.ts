@@ -9,15 +9,25 @@
  * API key injected at build time via VITE_REDALERT_API_KEY.
  */
 
-const REDALERT_CACHE_KEY = 'redalert_v3';
-const TTL_MS             = 24 * 60 * 60 * 1000;
-const FETCH_TIMEOUT      = 8_000;
+const REDALERT_CACHE_KEY    = 'redalert_v3';
+const REDALERT_CITY_PREFIX  = 'redalert_city_v1_';
+const TTL_MS                = 24 * 60 * 60 * 1000;
+const FETCH_TIMEOUT         = 8_000;
+
+const ALARM_TYPES = new Set(['missiles', 'hostileAircraftIntrusion', 'terroristInfiltration', 'radiologicalEvent', 'hazardousMaterials', 'tsunami', 'earthQuake']);
 
 export interface LiveAlerts {
-  alertCount?:           number;  // all types 24h  (Redalert)
-  alertCountTotal?:      number;  // all types 30d  (Redalert)
+  alertCount?:           number;  // real alarms 24h (missiles/aircraft/infiltration/etc.)
+  notificationCount?:    number;  // newsFlash 24h
+  alertCountTotal?:      number;  // all types 30d  (Redalert /stats/cities)
   alertCountNormalized?: number;  // 0-1 vs dataset max (Redalert)
   fetchedAt:             number;
+}
+
+interface CityHistoryCache {
+  alertCount:        number;
+  notificationCount: number;
+  fetchedAt:         number;
 }
 
 interface RedalertRow {
@@ -46,7 +56,43 @@ function lsWrite(key: string, v: unknown) {
   try { localStorage.setItem(key, JSON.stringify(v)); } catch { /* quota */ }
 }
 
-// ── Redalert fetch ────────────────────────────────────────────────────────────
+// ── Per-city 24h split (history endpoint) ────────────────────────────────────
+
+function readCityCache(nameHe: string): CityHistoryCache | null {
+  const c = lsRead<CityHistoryCache>(REDALERT_CITY_PREFIX + nameHe);
+  return c && Date.now() - c.fetchedAt < TTL_MS ? c : null;
+}
+
+async function fetchCityHistory(apiKey: string, cityName: string): Promise<CityHistoryCache | null> {
+  const now    = new Date().toISOString();
+  const ago24h = new Date(Date.now() - 24 * 3600 * 1000).toISOString();
+  const LIMIT  = 100;
+  let offset   = 0;
+  let alarms   = 0;
+  let newsFlashCount = 0;
+
+  try {
+    while (true) {
+      const url = `https://redalert.orielhaim.com/api/stats/history?cityName=${encodeURIComponent(cityName)}&startDate=${ago24h}&endDate=${now}&limit=${LIMIT}&offset=${offset}`;
+      const res = await withTimeout(
+        fetch(url, { headers: { Authorization: `Bearer ${apiKey}`, Accept: 'application/json' } }),
+        FETCH_TIMEOUT,
+      );
+      if (!res?.ok) return null;
+      const json = await res.json();
+      const page: Array<{ type?: string }> = json.data ?? [];
+      for (const event of page) {
+        if (event.type === 'newsFlash') newsFlashCount++;
+        else if (event.type && ALARM_TYPES.has(event.type)) alarms++;
+      }
+      offset += page.length;
+      if (page.length < LIMIT || offset >= (json.pagination?.total ?? Infinity)) break;
+    }
+    return { alertCount: alarms, notificationCount: newsFlashCount, fetchedAt: Date.now() };
+  } catch { return null; }
+}
+
+// ── Redalert bulk fetch (/stats/cities) ───────────────────────────────────────
 
 async function fetchWindow(apiKey: string, startDate: string, endDate: string): Promise<Map<string, number>> {
   const result = new Map<string, number>();
@@ -121,24 +167,40 @@ function findCity(rows: RedalertRow[], nameHe: string): RedalertRow | undefined 
 // ── Public API ────────────────────────────────────────────────────────────────
 
 export async function getLiveAlerts(nameHe: string): Promise<LiveAlerts | null> {
-  let redalertCache = readCache();
+  const apiKey = import.meta.env.VITE_REDALERT_API_KEY as string | undefined;
 
-  if (!redalertCache) {
-    const fresh = await fetchRedalert();
-    if (fresh) { redalertCache = fresh; lsWrite(REDALERT_CACHE_KEY, fresh); }
-  }
+  // Fetch bulk 30d stats and per-city 24h split in parallel
+  let redalertCache = readCache();
+  const cityHistoryCached = readCityCache(nameHe);
+
+  const [freshBulk, freshHistory] = await Promise.all([
+    redalertCache       ? Promise.resolve(null) : fetchRedalert(),
+    cityHistoryCached   ? Promise.resolve(null) : (apiKey ? fetchCityHistory(apiKey, nameHe) : Promise.resolve(null)),
+  ]);
+
+  if (freshBulk)    { redalertCache = freshBulk; lsWrite(REDALERT_CACHE_KEY, freshBulk); }
+  const cityHistory = cityHistoryCached ?? freshHistory;
+  if (freshHistory) lsWrite(REDALERT_CITY_PREFIX + nameHe, freshHistory);
 
   if (!redalertCache) return null;
-
   const row = findCity(redalertCache.rows, nameHe);
   if (!row) return null;
 
-  return {
-    alertCount:           row.count24h,
+  const result: LiveAlerts = {
     alertCountTotal:      row.count30d,
     alertCountNormalized: row.count30d / redalertCache.maxCount,
     fetchedAt:            Date.now(),
   };
+
+  if (cityHistory) {
+    result.alertCount        = cityHistory.alertCount;
+    result.notificationCount = cityHistory.notificationCount;
+  } else {
+    // fallback: use bulk 24h count (all types combined)
+    result.alertCount = row.count24h;
+  }
+
+  return result;
 }
 
 export function cacheAgeMinutes(): number | null {
