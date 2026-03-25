@@ -168,6 +168,8 @@ function findCity(rows: RedalertRow[], nameHe: string): RedalertRow | undefined 
 
 export async function getLiveAlerts(nameHe: string): Promise<LiveAlerts | null> {
   const apiKey = import.meta.env.VITE_REDALERT_API_KEY as string | undefined;
+  // Strip district suffix (e.g. "הרצליה - מרכז וגליל ים" → "הרצליה")
+  const baseName = nameHe.split(/\s+[-–]\s+/)[0].trim();
 
   // Fetch bulk 30d stats and per-city 24h split in parallel
   let redalertCache = readCache();
@@ -175,7 +177,7 @@ export async function getLiveAlerts(nameHe: string): Promise<LiveAlerts | null> 
 
   const [freshBulk, freshHistory] = await Promise.all([
     redalertCache       ? Promise.resolve(null) : fetchRedalert(),
-    cityHistoryCached   ? Promise.resolve(null) : (apiKey ? fetchCityHistory(apiKey, nameHe) : Promise.resolve(null)),
+    cityHistoryCached   ? Promise.resolve(null) : (apiKey ? fetchCityHistory(apiKey, baseName) : Promise.resolve(null)),
   ]);
 
   if (freshBulk)    { redalertCache = freshBulk; lsWrite(REDALERT_CACHE_KEY, freshBulk); }
