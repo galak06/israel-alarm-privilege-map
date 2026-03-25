@@ -1,6 +1,11 @@
 name: Build & Deploy to FTP
 
 on:
+  push:
+    branches: [main]
+    paths:
+      - 'public/localities.json'
+      - 'src/**'
   release:
     types: [published]
   workflow_dispatch:
