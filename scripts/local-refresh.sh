@@ -1,6 +1,6 @@
 #!/bin/bash
 # Hourly data refresh — run from local machine
-# Fetches fresh Redalert counts, commits, and pushes → triggers GitHub Actions deploy
+# Fetches fresh Redalert counts, commits, and pushes → manually refresh data
 
 set -e
 cd "$(dirname "$0")/.."
