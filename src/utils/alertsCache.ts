@@ -22,10 +22,27 @@ const NOTIF_TYPES = new Set(['newsFlash']);
 export interface LiveAlerts {
   alertCount?:        number;  // real alarms last 24h
   notificationCount?: number;  // advance warnings last 24h
+  typeCounts: {
+    missiles: number;
+    hostileAircraftIntrusion: number;
+    terroristInfiltration: number;
+    earthQuake: number;
+    newsFlash: number;
+  };
   fetchedAt:          number;
 }
 
-interface CityEntry { alarms: number; notifs: number }
+interface CityEntry {
+  alarms: number;
+  notifs: number;
+  types: {
+    missiles: number;
+    hostileAircraftIntrusion: number;
+    terroristInfiltration: number;
+    earthQuake: number;
+    newsFlash: number;
+  };
+}
 
 interface AlertCache {
   cities:    Record<string, CityEntry>;
@@ -66,14 +83,26 @@ async function fetch24hHistory(apiKey: string): Promise<AlertCache | null> {
       const records: Array<{ type: string; cities: Array<{ name: string }> }> = json.data ?? [];
 
       for (const record of records) {
-        const isReal  = REAL_TYPES.has(record.type);
-        const isNotif = NOTIF_TYPES.has(record.type);
+        const type = record.type;
+        const isReal  = REAL_TYPES.has(type);
+        const isNotif = NOTIF_TYPES.has(type);
         if (!isReal && !isNotif) continue;
+
         for (const city of record.cities ?? []) {
           const name = city.name;
-          if (!cities[name]) cities[name] = { alarms: 0, notifs: 0 };
+          if (!cities[name]) {
+            cities[name] = {
+              alarms: 0,
+              notifs: 0,
+              types: { missiles: 0, hostileAircraftIntrusion: 0, terroristInfiltration: 0, earthQuake: 0, newsFlash: 0 }
+            };
+          }
           if (isReal)  cities[name].alarms++;
           else         cities[name].notifs++;
+
+          if (type in cities[name].types) {
+            cities[name].types[type as keyof CityEntry['types']]++;
+          }
         }
       }
 
@@ -119,6 +148,7 @@ export async function getLiveAlerts(nameHe: string): Promise<LiveAlerts | null> 
   return {
     alertCount:        entry?.alarms ?? 0,
     notificationCount: entry?.notifs  ?? 0,
+    typeCounts:        entry?.types   ?? { missiles: 0, hostileAircraftIntrusion: 0, terroristInfiltration: 0, earthQuake: 0, newsFlash: 0 },
     fetchedAt:         cache.fetchedAt,
   };
 }

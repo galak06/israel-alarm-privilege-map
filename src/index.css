@@ -227,6 +227,37 @@ body {
   font-weight: 400;
 }
 
+/* Detailed alert counts */
+.alert-details {
+  margin-top: 4px;
+  padding: 8px 10px;
+  background: #fff3e0;
+  border-radius: 6px;
+  border: 1px solid #ffe0b2;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.alert-detail-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 0.78rem;
+  color: #5d4037;
+}
+
+.alert-detail-icon {
+  margin-inline-end: 6px;
+  font-size: 1.1em;
+}
+
+.type-missiles { color: #d32f2f; }
+.type-aircraft { color: #f57c00; }
+.type-infiltration { color: #b71c1c; }
+.type-earthquake { color: #7b1fa2; }
+.type-newsflash { color: #ef6c00; }
+
 /* Shelter breakdown */
 .shelter-section {
   margin: 14px 0;

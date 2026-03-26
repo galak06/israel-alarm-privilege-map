@@ -78,7 +78,42 @@ export default function CityInfoPanel({ city, language }: Props) {
             </span>
           </div>
 
-          {isLive && notifCount > 0 && (
+          {isLive && liveAlerts && (
+            <div className="alert-details">
+              {liveAlerts.typeCounts.missiles > 0 && (
+                <div className="alert-detail-item">
+                  <span><span className="alert-detail-icon">🚀</span> {t.cityInfo.alertTypes.missiles}</span>
+                  <span className="stat-value type-missiles">{liveAlerts.typeCounts.missiles}</span>
+                </div>
+              )}
+              {liveAlerts.typeCounts.hostileAircraftIntrusion > 0 && (
+                <div className="alert-detail-item">
+                  <span><span className="alert-detail-icon">🛩️</span> {t.cityInfo.alertTypes.hostileAircraftIntrusion}</span>
+                  <span className="stat-value type-aircraft">{liveAlerts.typeCounts.hostileAircraftIntrusion}</span>
+                </div>
+              )}
+              {liveAlerts.typeCounts.terroristInfiltration > 0 && (
+                <div className="alert-detail-item">
+                  <span><span className="alert-detail-icon">🔫</span> {t.cityInfo.alertTypes.terroristInfiltration}</span>
+                  <span className="stat-value type-infiltration">{liveAlerts.typeCounts.terroristInfiltration}</span>
+                </div>
+              )}
+              {liveAlerts.typeCounts.earthQuake > 0 && (
+                <div className="alert-detail-item">
+                  <span><span className="alert-detail-icon">🫨</span> {t.cityInfo.alertTypes.earthQuake}</span>
+                  <span className="stat-value type-earthquake">{liveAlerts.typeCounts.earthQuake}</span>
+                </div>
+              )}
+              {liveAlerts.typeCounts.newsFlash > 0 && (
+                <div className="alert-detail-item">
+                  <span><span className="alert-detail-icon">🔔</span> {t.cityInfo.alertTypes.newsFlash}</span>
+                  <span className="stat-value type-newsflash">{liveAlerts.typeCounts.newsFlash}</span>
+                </div>
+              )}
+            </div>
+          )}
+
+          {!isLive && notifCount > 0 && (
             <div className="city-stat">
               <span className="stat-label">🔔 {t.cityInfo.notificationCount}</span>
               <span className="stat-value" style={{ color: '#f57c00' }}>

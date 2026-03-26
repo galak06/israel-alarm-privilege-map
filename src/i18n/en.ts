@@ -48,6 +48,13 @@ export const en = {
       hezbollah: 'Hezbollah',
       iran: 'Iran',
     },
+    alertTypes: {
+      missiles: 'Missiles & Rockets',
+      hostileAircraftIntrusion: 'Hostile Aircraft Intrusion',
+      terroristInfiltration: 'Terrorist Infiltration',
+      earthQuake: 'Earthquake',
+      newsFlash: 'Advance Warning',
+    }
   },
   threatFilter: {
     label: 'Filter by Threat',
