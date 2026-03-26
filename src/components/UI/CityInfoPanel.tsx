@@ -20,8 +20,8 @@ export default function CityInfoPanel({ city, language }: Props) {
     getLiveAlerts(city.nameHe).then(setLiveAlerts);
   }, [city?.id]);
 
-  const alertCount      = liveAlerts?.alertCount        ?? city?.alertCount      ?? 0;
-  const notifCount      = liveAlerts?.notificationCount ?? 0;
+  const alertCount      = liveAlerts?.alertCount        ?? city?.alertCount        ?? 0;
+  const notifCount      = liveAlerts?.notificationCount ?? city?.notificationCount ?? 0;
   const alertCountTotal = city?.alertCountTotal ?? 0;
   const isLive          = liveAlerts !== null;
 
