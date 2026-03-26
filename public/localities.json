@@ -17567,10 +17567,10 @@
     ],
     "areaname": "Lower Galilee",
     "orefId": "1372",
-    "alertCountTotal": 39,
+    "alertCountTotal": 40,
     "notificationCount": 84,
     "minGapHours": 0.08,
-    "alertCountNormalized": 0.305
+    "alertCountNormalized": 0.313
   },
   {
     "id": "oref-1297",
@@ -17999,10 +17999,10 @@
     ],
     "areaname": "Lower Galilee",
     "orefId": "1330",
-    "alertCountTotal": 38,
+    "alertCountTotal": 39,
     "notificationCount": 85,
     "minGapHours": 0.08,
-    "alertCountNormalized": 0.297
+    "alertCountNormalized": 0.305
   },
   {
     "id": "oref-1235",
@@ -18311,10 +18311,10 @@
     ],
     "areaname": "Lower Galilee",
     "orefId": "1358",
-    "alertCountTotal": 41,
+    "alertCountTotal": 42,
     "notificationCount": 84,
     "minGapHours": 0.08,
-    "alertCountNormalized": 0.32
+    "alertCountNormalized": 0.328
   },
   {
     "id": "oref-1378",
@@ -18359,10 +18359,10 @@
     ],
     "areaname": "Lower Galilee",
     "orefId": "1323",
-    "alertCountTotal": 40,
+    "alertCountTotal": 41,
     "notificationCount": 86,
     "minGapHours": 0.07,
-    "alertCountNormalized": 0.313
+    "alertCountNormalized": 0.32
   },
   {
     "id": "oref-1353",
@@ -18959,10 +18959,10 @@
     ],
     "areaname": "Lower Galilee",
     "orefId": "1298",
-    "alertCountTotal": 38,
+    "alertCountTotal": 39,
     "notificationCount": 86,
     "minGapHours": 0.08,
-    "alertCountNormalized": 0.297
+    "alertCountNormalized": 0.305
   },
   {
     "id": "oref-1296",
@@ -19007,10 +19007,10 @@
     ],
     "areaname": "Lower Galilee",
     "orefId": "1357",
-    "alertCountTotal": 41,
+    "alertCountTotal": 42,
     "notificationCount": 84,
     "minGapHours": 0.08,
-    "alertCountNormalized": 0.32
+    "alertCountNormalized": 0.328
   },
   {
     "id": "oref-1390",
@@ -26447,10 +26447,10 @@
     ],
     "areaname": "Upper Galilee",
     "orefId": "1445",
-    "alertCountTotal": 34,
+    "alertCountTotal": 35,
     "notificationCount": 86,
     "minGapHours": 0.02,
-    "alertCountNormalized": 0.266
+    "alertCountNormalized": 0.273
   },
   {
     "id": "oref-1454",
@@ -26519,10 +26519,10 @@
     ],
     "areaname": "Upper Galilee",
     "orefId": "1422",
-    "alertCountTotal": 35,
+    "alertCountTotal": 36,
     "notificationCount": 85,
     "minGapHours": 0.08,
-    "alertCountNormalized": 0.273
+    "alertCountNormalized": 0.281
   },
   {
     "id": "oref-1528",
@@ -26831,10 +26831,10 @@
     ],
     "areaname": "Upper Galilee",
     "orefId": "1466",
-    "alertCountTotal": 34,
+    "alertCountTotal": 35,
     "notificationCount": 87,
     "minGapHours": 0.02,
-    "alertCountNormalized": 0.266
+    "alertCountNormalized": 0.273
   },
   {
     "id": "oref-1455",
@@ -26975,10 +26975,10 @@
     ],
     "areaname": "Upper Galilee",
     "orefId": "1506",
-    "alertCountTotal": 42,
+    "alertCountTotal": 43,
     "notificationCount": 89,
     "minGapHours": 0,
-    "alertCountNormalized": 0.328
+    "alertCountNormalized": 0.336
   },
   {
     "id": "oref-2228",
@@ -27143,10 +27143,10 @@
     ],
     "areaname": "Upper Galilee",
     "orefId": "1410",
-    "alertCountTotal": 35,
+    "alertCountTotal": 36,
     "notificationCount": 84,
     "minGapHours": 0.02,
-    "alertCountNormalized": 0.273
+    "alertCountNormalized": 0.281
   },
   {
     "id": "oref-1457",
@@ -27455,10 +27455,10 @@
     ],
     "areaname": "Upper Galilee",
     "orefId": "1517",
-    "alertCountTotal": 37,
+    "alertCountTotal": 38,
     "notificationCount": 88,
     "minGapHours": 0.02,
-    "alertCountNormalized": 0.289
+    "alertCountNormalized": 0.297
   },
   {
     "id": "oref-1425",
@@ -27599,10 +27599,10 @@
     ],
     "areaname": "Upper Galilee",
     "orefId": "1539",
-    "alertCountTotal": 34,
+    "alertCountTotal": 35,
     "notificationCount": 88,
     "minGapHours": 0.02,
-    "alertCountNormalized": 0.266
+    "alertCountNormalized": 0.273
   },
   {
     "id": "oref-1443",
@@ -27815,10 +27815,10 @@
     ],
     "areaname": "Upper Galilee",
     "orefId": "1486",
-    "alertCountTotal": 38,
+    "alertCountTotal": 39,
     "notificationCount": 88,
     "minGapHours": 0.02,
-    "alertCountNormalized": 0.297
+    "alertCountNormalized": 0.305
   },
   {
     "id": "oref-2005",
@@ -27887,10 +27887,10 @@
     ],
     "areaname": "Upper Galilee",
     "orefId": "2006",
-    "alertCountTotal": 36,
+    "alertCountTotal": 37,
     "notificationCount": 87,
     "minGapHours": 0.02,
-    "alertCountNormalized": 0.281
+    "alertCountNormalized": 0.289
   },
   {
     "id": "oref-1537",
@@ -28127,10 +28127,10 @@
     ],
     "areaname": "Upper Galilee",
     "orefId": "1487",
-    "alertCountTotal": 31,
+    "alertCountTotal": 32,
     "notificationCount": 86,
     "minGapHours": 0.02,
-    "alertCountNormalized": 0.242
+    "alertCountNormalized": 0.25
   },
   {
     "id": "oref-1441",
