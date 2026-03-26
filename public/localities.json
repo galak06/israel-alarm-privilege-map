@@ -4145,10 +4145,10 @@
     ],
     "areaname": "Confrontation Line",
     "orefId": "1633",
-    "alertCountTotal": 38,
+    "alertCountTotal": 39,
     "notificationCount": 94,
     "minGapHours": 0.18,
-    "alertCountNormalized": 0.286
+    "alertCountNormalized": 0.293
   },
   {
     "id": "oref-1593",
@@ -4169,10 +4169,10 @@
     ],
     "areaname": "Confrontation Line",
     "orefId": "1593",
-    "alertCountTotal": 104,
+    "alertCountTotal": 105,
     "notificationCount": 104,
     "minGapHours": 0,
-    "alertCountNormalized": 0.782
+    "alertCountNormalized": 0.789
   },
   {
     "id": "oref-1564",
@@ -4265,10 +4265,10 @@
     ],
     "areaname": "Confrontation Line",
     "orefId": "1640",
-    "alertCountTotal": 69,
+    "alertCountTotal": 70,
     "notificationCount": 100,
     "minGapHours": 0.02,
-    "alertCountNormalized": 0.519
+    "alertCountNormalized": 0.526
   },
   {
     "id": "oref-1520",
@@ -4457,10 +4457,10 @@
     ],
     "areaname": "Confrontation Line",
     "orefId": "1574",
-    "alertCountTotal": 67,
+    "alertCountTotal": 68,
     "notificationCount": 90,
     "minGapHours": 0.02,
-    "alertCountNormalized": 0.504
+    "alertCountNormalized": 0.511
   },
   {
     "id": "oref-1571",
@@ -4481,10 +4481,10 @@
     ],
     "areaname": "Confrontation Line",
     "orefId": "1571",
-    "alertCountTotal": 66,
+    "alertCountTotal": 67,
     "notificationCount": 95,
     "minGapHours": 0.03,
-    "alertCountNormalized": 0.496
+    "alertCountNormalized": 0.504
   },
   {
     "id": "oref-1533",
@@ -4697,10 +4697,10 @@
     ],
     "areaname": "Confrontation Line",
     "orefId": "1565",
-    "alertCountTotal": 62,
+    "alertCountTotal": 63,
     "notificationCount": 92,
     "minGapHours": 0.03,
-    "alertCountNormalized": 0.466
+    "alertCountNormalized": 0.474
   },
   {
     "id": "oref-1572",
@@ -4721,10 +4721,10 @@
     ],
     "areaname": "Confrontation Line",
     "orefId": "1572",
-    "alertCountTotal": 59,
+    "alertCountTotal": 60,
     "notificationCount": 90,
     "minGapHours": 0.03,
-    "alertCountNormalized": 0.444
+    "alertCountNormalized": 0.451
   },
   {
     "id": "oref-1649",
@@ -4889,10 +4889,10 @@
     ],
     "areaname": "Confrontation Line",
     "orefId": "1592",
-    "alertCountTotal": 76,
+    "alertCountTotal": 77,
     "notificationCount": 99,
     "minGapHours": 0.01,
-    "alertCountNormalized": 0.571
+    "alertCountNormalized": 0.579
   },
   {
     "id": "oref-1617",
@@ -4985,10 +4985,10 @@
     ],
     "areaname": "Confrontation Line",
     "orefId": "1631",
-    "alertCountTotal": 36,
+    "alertCountTotal": 37,
     "notificationCount": 92,
     "minGapHours": 0.14,
-    "alertCountNormalized": 0.271
+    "alertCountNormalized": 0.278
   },
   {
     "id": "oref-1657",
@@ -5009,10 +5009,10 @@
     ],
     "areaname": "Confrontation Line",
     "orefId": "1657",
-    "alertCountTotal": 90,
+    "alertCountTotal": 91,
     "notificationCount": 99,
     "minGapHours": 0,
-    "alertCountNormalized": 0.677
+    "alertCountNormalized": 0.684
   },
   {
     "id": "oref-1638",
@@ -5081,10 +5081,10 @@
     ],
     "areaname": "Confrontation Line",
     "orefId": "1662",
-    "alertCountTotal": 78,
+    "alertCountTotal": 79,
     "notificationCount": 105,
     "minGapHours": 0,
-    "alertCountNormalized": 0.586
+    "alertCountNormalized": 0.594
   },
   {
     "id": "oref-1659",
@@ -5129,10 +5129,10 @@
     ],
     "areaname": "Confrontation Line",
     "orefId": "1637",
-    "alertCountTotal": 124,
+    "alertCountTotal": 125,
     "notificationCount": 112,
     "minGapHours": 0,
-    "alertCountNormalized": 0.932
+    "alertCountNormalized": 0.94
   },
   {
     "id": "oref-1625",
@@ -5801,10 +5801,10 @@
     ],
     "areaname": "Confrontation Line",
     "orefId": "1634",
-    "alertCountTotal": 41,
+    "alertCountTotal": 42,
     "notificationCount": 95,
     "minGapHours": 0.12,
-    "alertCountNormalized": 0.308
+    "alertCountNormalized": 0.316
   },
   {
     "id": "oref-1627",
@@ -5921,10 +5921,10 @@
     ],
     "areaname": "Confrontation Line",
     "orefId": "1595",
-    "alertCountTotal": 73,
+    "alertCountTotal": 74,
     "notificationCount": 93,
     "minGapHours": 0,
-    "alertCountNormalized": 0.549
+    "alertCountNormalized": 0.556
   },
   {
     "id": "oref-1596",
@@ -5993,10 +5993,10 @@
     ],
     "areaname": "Confrontation Line",
     "orefId": "1652",
-    "alertCountTotal": 84,
+    "alertCountTotal": 85,
     "notificationCount": 98,
     "minGapHours": 0,
-    "alertCountNormalized": 0.632
+    "alertCountNormalized": 0.639
   },
   {
     "id": "oref-1535",
@@ -6113,10 +6113,10 @@
     ],
     "areaname": "Confrontation Line",
     "orefId": "1603",
-    "alertCountTotal": 75,
+    "alertCountTotal": 76,
     "notificationCount": 94,
     "minGapHours": 0,
-    "alertCountNormalized": 0.564
+    "alertCountNormalized": 0.571
   },
   {
     "id": "oref-1549",
