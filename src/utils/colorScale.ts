@@ -10,9 +10,12 @@ export function colorForSeconds(seconds: number): string {
 }
 
 export function colorForPrivilege(score: number): string {
-  // Map 0–100 to the same red→green ramp
-  const seconds = (score / 100) * 180;
-  return colorForSeconds(seconds);
+  // Privilege score thresholds (aligned with privilegeLegendEntries)
+  if (score < 20) return '#d32f2f'; // Very Low
+  if (score < 40) return '#f57c00'; // Low
+  if (score < 60) return '#fdd835'; // Medium
+  if (score < 80) return '#8bc34a'; // High
+  return '#1b5e20'; // Very High
 }
 
 export const legendEntries = [
