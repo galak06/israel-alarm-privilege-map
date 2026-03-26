@@ -3,6 +3,8 @@ import L from 'leaflet';
 import type { City, ColorMode, Language } from '../../types';
 import { colorForSeconds, colorForPrivilege } from '../../utils/colorScale';
 import { calcPrivilegeScore } from '../../utils/privilegeCalc';
+import { en } from '../../i18n/en';
+import { he } from '../../i18n/he';
 
 interface Props {
   city: City;
@@ -62,6 +64,7 @@ function makeIcon(color: string, isSelected: boolean, label: string, zoom: numbe
 }
 
 export default function CityMarker({ city, colorMode, language, zoom, isSelected, onClick }: Props) {
+  const t = language === 'he' ? he : en;
   const score = calcPrivilegeScore(city);
   const color =
     colorMode === 'time'
@@ -79,7 +82,11 @@ export default function CityMarker({ city, colorMode, language, zoom, isSelected
     >
       <Tooltip>
         <strong>{name}</strong><br />
-        {city.alarmSeconds}s
+        {colorMode === 'time' ? (
+          <>{city.alarmSeconds}s</>
+        ) : (
+          <>{score.total.toFixed(1)} — {t.cityInfo.privilegeLabels[score.label]}</>
+        )}
       </Tooltip>
     </Marker>
   );
