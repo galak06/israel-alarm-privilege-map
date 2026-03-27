@@ -4265,10 +4265,10 @@
     ],
     "areaname": "Confrontation Line",
     "orefId": "1640",
-    "alertCountTotal": 70,
+    "alertCountTotal": 71,
     "notificationCount": 100,
     "minGapHours": 0.02,
-    "alertCountNormalized": 0.522
+    "alertCountNormalized": 0.53
   },
   {
     "id": "oref-1520",
@@ -5129,10 +5129,10 @@
     ],
     "areaname": "Confrontation Line",
     "orefId": "1637",
-    "alertCountTotal": 126,
+    "alertCountTotal": 127,
     "notificationCount": 112,
     "minGapHours": 0,
-    "alertCountNormalized": 0.94
+    "alertCountNormalized": 0.948
   },
   {
     "id": "oref-1625",
@@ -5345,10 +5345,10 @@
     ],
     "areaname": "Confrontation Line",
     "orefId": "1642",
-    "alertCountTotal": 106,
+    "alertCountTotal": 107,
     "notificationCount": 116,
     "minGapHours": 0.01,
-    "alertCountNormalized": 0.791
+    "alertCountNormalized": 0.799
   },
   {
     "id": "oref-1558",
