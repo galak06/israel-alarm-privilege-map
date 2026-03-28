@@ -83,9 +83,15 @@ async function fetch24hHistory(apiKey: string): Promise<AlertCache | null> {
       const json = await res.json();
       const records: Array<{ type: string; timestamp: string; cities: Array<{ name: string }> }> = json.data ?? [];
 
+      if (records.length === 0) break;
+
       for (const record of records) {
-        // Double-check timestamp client-side
-        if (new Date(record.timestamp).getTime() < ago24hMs) continue;
+        // Normalize timestamp: replace space with T for better cross-browser parsing if needed
+        const tsStr = record.timestamp.includes('T') ? record.timestamp : record.timestamp.replace(' ', 'T');
+        const tsMs = new Date(tsStr).getTime();
+        
+        // If parsing fails (NaN) or it's older than 24h, skip
+        if (isNaN(tsMs) || tsMs < ago24hMs) continue;
 
         const type = record.type;
         const isReal  = REAL_TYPES.has(type);
@@ -94,6 +100,7 @@ async function fetch24hHistory(apiKey: string): Promise<AlertCache | null> {
 
         for (const city of record.cities ?? []) {
           const name = city.name;
+          if (!name) continue;
           if (!cities[name]) {
             cities[name] = {
               alarms: 0,
@@ -111,10 +118,13 @@ async function fetch24hHistory(apiKey: string): Promise<AlertCache | null> {
       }
 
       offset += records.length;
-      if (!json.pagination?.hasMore) break;
-      // Stop if we've reached records older than 24h (since data is likely sorted desc)
-      const lastRecord = records[records.length - 1];
-      if (lastRecord && new Date(lastRecord.timestamp).getTime() < ago24hMs) break;
+      if (!json.pagination?.hasMore || offset >= 1000) break;
+
+      // Stop if the last record on this page is already older than 24h (data is sorted desc)
+      const lastRec = records[records.length - 1];
+      const lastTsStr = lastRec.timestamp.includes('T') ? lastRec.timestamp : lastRec.timestamp.replace(' ', 'T');
+      const lastTsMs = new Date(lastTsStr).getTime();
+      if (!isNaN(lastTsMs) && lastTsMs < ago24hMs) break;
     }
   } catch {
     return null;
