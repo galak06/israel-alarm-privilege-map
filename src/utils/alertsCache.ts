@@ -150,8 +150,9 @@ function findCity(cities: Record<string, CityEntry>, nameHe: string): CityEntry 
 // ── Public API ────────────────────────────────────────────────────────────────
 
 export async function getLiveAlerts(nameHe: string): Promise<LiveAlerts | null> {
-  const apiKey = (typeof import.meta.env !== 'undefined' && import.meta.env.VITE_REDALERT_API_KEY) 
-    || process.env.VITE_REDALERT_API_KEY;
+  // Use import.meta.env (Vite) or a fallback that doesn't rely on 'process' directly in TS
+  const env = (import.meta as any).env;
+  const apiKey = env?.VITE_REDALERT_API_KEY;
   
   if (!apiKey) {
     console.warn('⚠️ getLiveAlerts: VITE_REDALERT_API_KEY is missing.');
