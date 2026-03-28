@@ -4394,11 +4394,11 @@
     "nameEn": "Abirim",
     "lat": 33.0386467,
     "lng": 35.2871399,
-    "alarmSeconds": 0,
+    "alarmSeconds": 15,
     "shelterDistribution": {
-      "mamad": 0.15,
+      "mamad": 0.2,
       "stairwell": 0.4,
-      "public": 0.45
+      "public": 0.4
     },
     "region": "north",
     "threatSources": [
@@ -4420,11 +4420,11 @@
     "nameEn": "Alkosh",
     "lat": 33.0341637,
     "lng": 35.3241745,
-    "alarmSeconds": 0,
+    "alarmSeconds": 15,
     "shelterDistribution": {
-      "mamad": 0.15,
+      "mamad": 0.2,
       "stairwell": 0.4,
-      "public": 0.45
+      "public": 0.4
     },
     "region": "north",
     "threatSources": [
@@ -4446,11 +4446,11 @@
     "nameEn": "Alma",
     "lat": 33.0521283,
     "lng": 35.4988072,
-    "alarmSeconds": 0,
+    "alarmSeconds": 15,
     "shelterDistribution": {
-      "mamad": 0.15,
+      "mamad": 0.2,
       "stairwell": 0.4,
-      "public": 0.45
+      "public": 0.4
     },
     "region": "north",
     "threatSources": [
@@ -4498,11 +4498,11 @@
     "nameEn": "Arab al-Aramshe",
     "lat": 33.0885693,
     "lng": 35.2265036,
-    "alarmSeconds": 0,
+    "alarmSeconds": 15,
     "shelterDistribution": {
-      "mamad": 0.15,
+      "mamad": 0.2,
       "stairwell": 0.4,
-      "public": 0.45
+      "public": 0.4
     },
     "region": "north",
     "threatSources": [
@@ -4524,11 +4524,11 @@
     "nameEn": "Avdon",
     "lat": 33.0479451,
     "lng": 35.1794373,
-    "alarmSeconds": 0,
+    "alarmSeconds": 15,
     "shelterDistribution": {
-      "mamad": 0.15,
+      "mamad": 0.2,
       "stairwell": 0.4,
-      "public": 0.45
+      "public": 0.4
     },
     "region": "north",
     "threatSources": [
@@ -4576,11 +4576,11 @@
     "nameEn": "Baram",
     "lat": 33.0590837,
     "lng": 35.433945,
-    "alarmSeconds": 0,
+    "alarmSeconds": 15,
     "shelterDistribution": {
-      "mamad": 0.15,
+      "mamad": 0.2,
       "stairwell": 0.4,
-      "public": 0.45
+      "public": 0.4
     },
     "region": "north",
     "threatSources": [
@@ -4602,11 +4602,11 @@
     "nameEn": "Beit Hillel",
     "lat": 33.2083012,
     "lng": 35.6069281,
-    "alarmSeconds": 0,
+    "alarmSeconds": 15,
     "shelterDistribution": {
-      "mamad": 0.15,
+      "mamad": 0.2,
       "stairwell": 0.4,
-      "public": 0.45
+      "public": 0.4
     },
     "region": "north",
     "threatSources": [
@@ -4628,11 +4628,11 @@
     "nameEn": "Ben Ami",
     "lat": 33.0042191,
     "lng": 35.1241783,
-    "alarmSeconds": 0,
+    "alarmSeconds": 30,
     "shelterDistribution": {
-      "mamad": 0.15,
+      "mamad": 0.3,
       "stairwell": 0.4,
-      "public": 0.45
+      "public": 0.3
     },
     "region": "north",
     "threatSources": [
@@ -4654,11 +4654,11 @@
     "nameEn": "Betzet",
     "lat": 33.0708449,
     "lng": 35.136107,
-    "alarmSeconds": 0,
+    "alarmSeconds": 15,
     "shelterDistribution": {
-      "mamad": 0.15,
+      "mamad": 0.2,
       "stairwell": 0.4,
-      "public": 0.45
+      "public": 0.4
     },
     "region": "north",
     "threatSources": [
@@ -4706,11 +4706,11 @@
     "nameEn": "Cabri",
     "lat": 33.0214987,
     "lng": 35.1485013,
-    "alarmSeconds": 0,
+    "alarmSeconds": 30,
     "shelterDistribution": {
-      "mamad": 0.15,
+      "mamad": 0.3,
       "stairwell": 0.4,
-      "public": 0.45
+      "public": 0.3
     },
     "region": "north",
     "threatSources": [
@@ -4732,11 +4732,11 @@
     "nameEn": "Dafna",
     "lat": 33.2303715,
     "lng": 35.6392634,
-    "alarmSeconds": 0,
+    "alarmSeconds": 15,
     "shelterDistribution": {
-      "mamad": 0.15,
+      "mamad": 0.2,
       "stairwell": 0.4,
-      "public": 0.45
+      "public": 0.4
     },
     "region": "north",
     "threatSources": [
@@ -4758,11 +4758,11 @@
     "nameEn": "Dalton",
     "lat": 33.0166712,
     "lng": 35.4891906,
-    "alarmSeconds": 0,
+    "alarmSeconds": 15,
     "shelterDistribution": {
-      "mamad": 0.15,
+      "mamad": 0.2,
       "stairwell": 0.4,
-      "public": 0.45
+      "public": 0.4
     },
     "region": "north",
     "threatSources": [
@@ -4784,11 +4784,11 @@
     "nameEn": "Dishon",
     "lat": 33.0813243,
     "lng": 35.5175202,
-    "alarmSeconds": 0,
+    "alarmSeconds": 15,
     "shelterDistribution": {
-      "mamad": 0.15,
+      "mamad": 0.2,
       "stairwell": 0.4,
-      "public": 0.45
+      "public": 0.4
     },
     "region": "north",
     "threatSources": [
@@ -4810,11 +4810,11 @@
     "nameEn": "Dovev",
     "lat": 33.0524574,
     "lng": 35.4074874,
-    "alarmSeconds": 0,
+    "alarmSeconds": 15,
     "shelterDistribution": {
-      "mamad": 0.15,
+      "mamad": 0.2,
       "stairwell": 0.4,
-      "public": 0.45
+      "public": 0.4
     },
     "region": "north",
     "threatSources": [
@@ -4836,11 +4836,11 @@
     "nameEn": "Eilon",
     "lat": 33.0633456,
     "lng": 35.2197473,
-    "alarmSeconds": 0,
+    "alarmSeconds": 15,
     "shelterDistribution": {
-      "mamad": 0.15,
+      "mamad": 0.2,
       "stairwell": 0.4,
-      "public": 0.45
+      "public": 0.4
     },
     "region": "north",
     "threatSources": [
@@ -4862,11 +4862,11 @@
     "nameEn": "Ein Yacov",
     "lat": 33.0095478,
     "lng": 35.2292923,
-    "alarmSeconds": 15,
+    "alarmSeconds": 30,
     "shelterDistribution": {
-      "mamad": 0.2,
+      "mamad": 0.3,
       "stairwell": 0.4,
-      "public": 0.4
+      "public": 0.3
     },
     "region": "north",
     "threatSources": [
@@ -4888,11 +4888,11 @@
     "nameEn": "Even Menachem",
     "lat": 33.0736105,
     "lng": 35.2941382,
-    "alarmSeconds": 0,
+    "alarmSeconds": 15,
     "shelterDistribution": {
-      "mamad": 0.15,
+      "mamad": 0.2,
       "stairwell": 0.4,
-      "public": 0.45
+      "public": 0.4
     },
     "region": "north",
     "threatSources": [
@@ -4914,11 +4914,11 @@
     "nameEn": "Evron",
     "lat": 32.9926009,
     "lng": 35.1002025,
-    "alarmSeconds": 15,
+    "alarmSeconds": 30,
     "shelterDistribution": {
-      "mamad": 0.2,
+      "mamad": 0.3,
       "stairwell": 0.4,
-      "public": 0.4
+      "public": 0.3
     },
     "region": "north",
     "threatSources": [
@@ -4940,11 +4940,11 @@
     "nameEn": "Fassuta",
     "lat": 33.0484375,
     "lng": 35.3100248,
-    "alarmSeconds": 0,
+    "alarmSeconds": 15,
     "shelterDistribution": {
-      "mamad": 0.15,
+      "mamad": 0.2,
       "stairwell": 0.4,
-      "public": 0.45
+      "public": 0.4
     },
     "region": "north",
     "threatSources": [
@@ -4966,11 +4966,11 @@
     "nameEn": "Ga'aton",
     "lat": 33.0057124,
     "lng": 35.2137501,
-    "alarmSeconds": 15,
+    "alarmSeconds": 30,
     "shelterDistribution": {
-      "mamad": 0.2,
+      "mamad": 0.3,
       "stairwell": 0.4,
-      "public": 0.4
+      "public": 0.3
     },
     "region": "north",
     "threatSources": [
@@ -4992,11 +4992,11 @@
     "nameEn": "Gesher HaZiv",
     "lat": 33.0394679,
     "lng": 35.1109814,
-    "alarmSeconds": 0,
+    "alarmSeconds": 30,
     "shelterDistribution": {
-      "mamad": 0.15,
+      "mamad": 0.3,
       "stairwell": 0.4,
-      "public": 0.45
+      "public": 0.3
     },
     "region": "north",
     "threatSources": [
@@ -5018,11 +5018,11 @@
     "nameEn": "Ghajar",
     "lat": 33.2721727,
     "lng": 35.6239112,
-    "alarmSeconds": 0,
+    "alarmSeconds": 15,
     "shelterDistribution": {
-      "mamad": 0.15,
+      "mamad": 0.2,
       "stairwell": 0.4,
-      "public": 0.45
+      "public": 0.4
     },
     "region": "north",
     "threatSources": [
@@ -5070,11 +5070,11 @@
     "nameEn": "Goren",
     "lat": 33.0563927,
     "lng": 35.2369919,
-    "alarmSeconds": 0,
+    "alarmSeconds": 15,
     "shelterDistribution": {
-      "mamad": 0.15,
+      "mamad": 0.2,
       "stairwell": 0.4,
-      "public": 0.45
+      "public": 0.4
     },
     "region": "north",
     "threatSources": [
@@ -5096,11 +5096,11 @@
     "nameEn": "Gornot HaGalil",
     "lat": 33.0595371,
     "lng": 35.2496455,
-    "alarmSeconds": 0,
+    "alarmSeconds": 15,
     "shelterDistribution": {
-      "mamad": 0.15,
+      "mamad": 0.2,
       "stairwell": 0.4,
-      "public": 0.45
+      "public": 0.4
     },
     "region": "north",
     "threatSources": [
@@ -5122,11 +5122,11 @@
     "nameEn": "HaGoshrim",
     "lat": 33.2211258,
     "lng": 35.6230745,
-    "alarmSeconds": 0,
+    "alarmSeconds": 15,
     "shelterDistribution": {
-      "mamad": 0.15,
+      "mamad": 0.2,
       "stairwell": 0.4,
-      "public": 0.45
+      "public": 0.4
     },
     "region": "north",
     "threatSources": [
@@ -5148,11 +5148,11 @@
     "nameEn": "Hanita",
     "lat": 33.0874108,
     "lng": 35.1733471,
-    "alarmSeconds": 0,
+    "alarmSeconds": 15,
     "shelterDistribution": {
-      "mamad": 0.15,
+      "mamad": 0.2,
       "stairwell": 0.4,
-      "public": 0.45
+      "public": 0.4
     },
     "region": "north",
     "threatSources": [
@@ -5174,11 +5174,11 @@
     "nameEn": "Hila",
     "lat": 32.8098037,
     "lng": 35.0700465,
-    "alarmSeconds": 0,
+    "alarmSeconds": 15,
     "shelterDistribution": {
-      "mamad": 0.15,
+      "mamad": 0.2,
       "stairwell": 0.4,
-      "public": 0.45
+      "public": 0.4
     },
     "region": "north",
     "threatSources": [
@@ -5252,11 +5252,11 @@
     "nameEn": "Hurfeish",
     "lat": 33.01737,
     "lng": 35.3469551,
-    "alarmSeconds": 0,
+    "alarmSeconds": 15,
     "shelterDistribution": {
-      "mamad": 0.15,
+      "mamad": 0.2,
       "stairwell": 0.4,
-      "public": 0.45
+      "public": 0.4
     },
     "region": "north",
     "threatSources": [
@@ -5278,11 +5278,11 @@
     "nameEn": "Idmit",
     "lat": 33.0795856,
     "lng": 35.2102543,
-    "alarmSeconds": 0,
+    "alarmSeconds": 15,
     "shelterDistribution": {
-      "mamad": 0.15,
+      "mamad": 0.2,
       "stairwell": 0.4,
-      "public": 0.45
+      "public": 0.4
     },
     "region": "north",
     "threatSources": [
@@ -5304,11 +5304,11 @@
     "nameEn": "Iftach",
     "lat": 33.1286135,
     "lng": 35.5519473,
-    "alarmSeconds": 0,
+    "alarmSeconds": 15,
     "shelterDistribution": {
-      "mamad": 0.15,
+      "mamad": 0.2,
       "stairwell": 0.4,
-      "public": 0.45
+      "public": 0.4
     },
     "region": "north",
     "threatSources": [
@@ -5330,11 +5330,11 @@
     "nameEn": "Jish (Gush Halav)",
     "lat": 33.016635,
     "lng": 35.445524,
-    "alarmSeconds": 0,
+    "alarmSeconds": 15,
     "shelterDistribution": {
-      "mamad": 0.15,
+      "mamad": 0.2,
       "stairwell": 0.4,
-      "public": 0.45
+      "public": 0.4
     },
     "region": "north",
     "threatSources": [
@@ -5356,11 +5356,11 @@
     "nameEn": "Kerem Ben Zimra",
     "lat": 33.0388862,
     "lng": 35.468049,
-    "alarmSeconds": 0,
+    "alarmSeconds": 15,
     "shelterDistribution": {
-      "mamad": 0.15,
+      "mamad": 0.2,
       "stairwell": 0.4,
-      "public": 0.45
+      "public": 0.4
     },
     "region": "north",
     "threatSources": [
@@ -5382,11 +5382,11 @@
     "nameEn": "Kfar Blum",
     "lat": 33.1723656,
     "lng": 35.6101218,
-    "alarmSeconds": 0,
+    "alarmSeconds": 15,
     "shelterDistribution": {
-      "mamad": 0.15,
+      "mamad": 0.2,
       "stairwell": 0.4,
-      "public": 0.45
+      "public": 0.4
     },
     "region": "north",
     "threatSources": [
@@ -5408,11 +5408,11 @@
     "nameEn": "Kfar Giladi",
     "lat": 33.2417843,
     "lng": 35.5749608,
-    "alarmSeconds": 0,
+    "alarmSeconds": 15,
     "shelterDistribution": {
-      "mamad": 0.15,
+      "mamad": 0.2,
       "stairwell": 0.4,
-      "public": 0.45
+      "public": 0.4
     },
     "region": "north",
     "threatSources": [
@@ -5460,11 +5460,11 @@
     "nameEn": "Kfar Vradim",
     "lat": 32.9972507,
     "lng": 35.2725342,
-    "alarmSeconds": 15,
+    "alarmSeconds": 30,
     "shelterDistribution": {
-      "mamad": 0.2,
+      "mamad": 0.3,
       "stairwell": 0.4,
-      "public": 0.4
+      "public": 0.3
     },
     "region": "north",
     "threatSources": [
@@ -5486,11 +5486,11 @@
     "nameEn": "Kfar Yuval",
     "lat": 33.2474176,
     "lng": 35.5974916,
-    "alarmSeconds": 0,
+    "alarmSeconds": 15,
     "shelterDistribution": {
-      "mamad": 0.15,
+      "mamad": 0.2,
       "stairwell": 0.4,
-      "public": 0.45
+      "public": 0.4
     },
     "region": "north",
     "threatSources": [
@@ -5512,11 +5512,11 @@
     "nameEn": "Kibutz Dan",
     "lat": 33.235979,
     "lng": 35.652671,
-    "alarmSeconds": 0,
+    "alarmSeconds": 15,
     "shelterDistribution": {
-      "mamad": 0.15,
+      "mamad": 0.2,
       "stairwell": 0.4,
-      "public": 0.45
+      "public": 0.4
     },
     "region": "north",
     "threatSources": [
@@ -5538,11 +5538,11 @@
     "nameEn": "Kiryat Shmona",
     "lat": 33.2121315,
     "lng": 35.5715923,
-    "alarmSeconds": 0,
+    "alarmSeconds": 15,
     "shelterDistribution": {
-      "mamad": 0.15,
+      "mamad": 0.2,
       "stairwell": 0.4,
-      "public": 0.45
+      "public": 0.4
     },
     "region": "north",
     "threatSources": [
@@ -5590,11 +5590,11 @@
     "nameEn": "Lehman",
     "lat": 33.0595032,
     "lng": 35.1130278,
-    "alarmSeconds": 0,
+    "alarmSeconds": 15,
     "shelterDistribution": {
-      "mamad": 0.15,
+      "mamad": 0.2,
       "stairwell": 0.4,
-      "public": 0.45
+      "public": 0.4
     },
     "region": "north",
     "threatSources": [
@@ -5616,11 +5616,11 @@
     "nameEn": "Ma'a lot Tarshicha",
     "lat": 33.0157394,
     "lng": 35.2759666,
-    "alarmSeconds": 0,
+    "alarmSeconds": 30,
     "shelterDistribution": {
-      "mamad": 0.15,
+      "mamad": 0.3,
       "stairwell": 0.4,
-      "public": 0.45
+      "public": 0.3
     },
     "region": "north",
     "threatSources": [
@@ -5642,11 +5642,11 @@
     "nameEn": "Ma'ayan Baruch",
     "lat": 33.2397998,
     "lng": 35.6078756,
-    "alarmSeconds": 0,
+    "alarmSeconds": 15,
     "shelterDistribution": {
-      "mamad": 0.15,
+      "mamad": 0.2,
       "stairwell": 0.4,
-      "public": 0.45
+      "public": 0.4
     },
     "region": "north",
     "threatSources": [
@@ -5655,12 +5655,12 @@
     ],
     "areaname": "Confrontation Line",
     "orefId": "1658",
-    "alertCountTotal": 59,
+    "alertCountTotal": 60,
     "notificationCountTotal": 102,
     "alertCount": 0,
     "notificationCount": 0,
     "minGapHours": 0.03,
-    "alertCountNormalized": 0.434
+    "alertCountNormalized": 0.441
   },
   {
     "id": "oref-1608",
@@ -5668,11 +5668,11 @@
     "nameEn": "Malkia",
     "lat": 33.0992486,
     "lng": 35.5116985,
-    "alarmSeconds": 0,
+    "alarmSeconds": 15,
     "shelterDistribution": {
-      "mamad": 0.15,
+      "mamad": 0.2,
       "stairwell": 0.4,
-      "public": 0.45
+      "public": 0.4
     },
     "region": "north",
     "threatSources": [
@@ -5694,11 +5694,11 @@
     "nameEn": "Manara",
     "lat": 33.195939,
     "lng": 35.5446083,
-    "alarmSeconds": 0,
+    "alarmSeconds": 15,
     "shelterDistribution": {
-      "mamad": 0.15,
+      "mamad": 0.2,
       "stairwell": 0.4,
-      "public": 0.45
+      "public": 0.4
     },
     "region": "north",
     "threatSources": [
@@ -5720,11 +5720,11 @@
     "nameEn": "Manot",
     "lat": 33.0383637,
     "lng": 35.1946918,
-    "alarmSeconds": 0,
+    "alarmSeconds": 30,
     "shelterDistribution": {
-      "mamad": 0.15,
+      "mamad": 0.3,
       "stairwell": 0.4,
-      "public": 0.45
+      "public": 0.3
     },
     "region": "north",
     "threatSources": [
@@ -5746,11 +5746,11 @@
     "nameEn": "Maona",
     "lat": 33.0167071,
     "lng": 35.2597388,
-    "alarmSeconds": 0,
+    "alarmSeconds": 30,
     "shelterDistribution": {
-      "mamad": 0.15,
+      "mamad": 0.3,
       "stairwell": 0.4,
-      "public": 0.45
+      "public": 0.3
     },
     "region": "north",
     "threatSources": [
@@ -5772,11 +5772,11 @@
     "nameEn": "Margaliot",
     "lat": 33.2148047,
     "lng": 35.5444859,
-    "alarmSeconds": 0,
+    "alarmSeconds": 15,
     "shelterDistribution": {
-      "mamad": 0.15,
+      "mamad": 0.2,
       "stairwell": 0.4,
-      "public": 0.45
+      "public": 0.4
     },
     "region": "north",
     "threatSources": [
@@ -5798,11 +5798,11 @@
     "nameEn": "Matat",
     "lat": 33.0415441,
     "lng": 35.3598303,
-    "alarmSeconds": 0,
+    "alarmSeconds": 15,
     "shelterDistribution": {
-      "mamad": 0.15,
+      "mamad": 0.2,
       "stairwell": 0.4,
-      "public": 0.45
+      "public": 0.4
     },
     "region": "north",
     "threatSources": [
@@ -5824,11 +5824,11 @@
     "nameEn": "Metulla",
     "lat": 33.2799815,
     "lng": 35.5779451,
-    "alarmSeconds": 0,
+    "alarmSeconds": 15,
     "shelterDistribution": {
-      "mamad": 0.15,
+      "mamad": 0.2,
       "stairwell": 0.4,
-      "public": 0.45
+      "public": 0.4
     },
     "region": "north",
     "threatSources": [
@@ -5850,11 +5850,11 @@
     "nameEn": "Metzuba",
     "lat": 33.0629442,
     "lng": 35.1570974,
-    "alarmSeconds": 0,
+    "alarmSeconds": 15,
     "shelterDistribution": {
-      "mamad": 0.15,
+      "mamad": 0.2,
       "stairwell": 0.4,
-      "public": 0.45
+      "public": 0.4
     },
     "region": "north",
     "threatSources": [
@@ -5876,11 +5876,11 @@
     "nameEn": "Mi'ilya",
     "lat": 33.0280627,
     "lng": 35.25833,
-    "alarmSeconds": 0,
+    "alarmSeconds": 15,
     "shelterDistribution": {
-      "mamad": 0.15,
+      "mamad": 0.2,
       "stairwell": 0.4,
-      "public": 0.45
+      "public": 0.4
     },
     "region": "north",
     "threatSources": [
@@ -5902,11 +5902,11 @@
     "nameEn": "Misgav Am",
     "lat": 33.2477885,
     "lng": 35.5486672,
-    "alarmSeconds": 0,
+    "alarmSeconds": 15,
     "shelterDistribution": {
-      "mamad": 0.15,
+      "mamad": 0.2,
       "stairwell": 0.4,
-      "public": 0.45
+      "public": 0.4
     },
     "region": "north",
     "threatSources": [
@@ -5928,11 +5928,11 @@
     "nameEn": "Nahariya",
     "lat": 33.006306,
     "lng": 35.0945579,
-    "alarmSeconds": 15,
+    "alarmSeconds": 30,
     "shelterDistribution": {
-      "mamad": 0.2,
+      "mamad": 0.3,
       "stairwell": 0.4,
-      "public": 0.4
+      "public": 0.3
     },
     "region": "north",
     "threatSources": [
@@ -5980,11 +5980,11 @@
     "nameEn": "Neot Mordechai",
     "lat": 33.160576,
     "lng": 35.5965774,
-    "alarmSeconds": 0,
+    "alarmSeconds": 15,
     "shelterDistribution": {
-      "mamad": 0.15,
+      "mamad": 0.2,
       "stairwell": 0.4,
-      "public": 0.45
+      "public": 0.4
     },
     "region": "north",
     "threatSources": [
@@ -6006,11 +6006,11 @@
     "nameEn": "Netua",
     "lat": 33.0649415,
     "lng": 35.3233116,
-    "alarmSeconds": 0,
+    "alarmSeconds": 15,
     "shelterDistribution": {
-      "mamad": 0.15,
+      "mamad": 0.2,
       "stairwell": 0.4,
-      "public": 0.45
+      "public": 0.4
     },
     "region": "north",
     "threatSources": [
@@ -6032,11 +6032,11 @@
     "nameEn": "Neveh Ziv",
     "lat": 33.0275858,
     "lng": 35.1834948,
-    "alarmSeconds": 0,
+    "alarmSeconds": 30,
     "shelterDistribution": {
-      "mamad": 0.15,
+      "mamad": 0.3,
       "stairwell": 0.4,
-      "public": 0.45
+      "public": 0.3
     },
     "region": "north",
     "threatSources": [
@@ -6110,11 +6110,11 @@
     "nameEn": "Ramot Naftali",
     "lat": 33.1022971,
     "lng": 35.5531168,
-    "alarmSeconds": 0,
+    "alarmSeconds": 15,
     "shelterDistribution": {
-      "mamad": 0.15,
+      "mamad": 0.2,
       "stairwell": 0.4,
-      "public": 0.45
+      "public": 0.4
     },
     "region": "north",
     "threatSources": [
@@ -6136,11 +6136,11 @@
     "nameEn": "Rehaniya",
     "lat": 33.0482032,
     "lng": 35.4872846,
-    "alarmSeconds": 0,
+    "alarmSeconds": 15,
     "shelterDistribution": {
-      "mamad": 0.15,
+      "mamad": 0.2,
       "stairwell": 0.4,
-      "public": 0.45
+      "public": 0.4
     },
     "region": "north",
     "threatSources": [
@@ -6162,11 +6162,11 @@
     "nameEn": "Rosh HaNikra",
     "lat": 33.0944176,
     "lng": 35.1038666,
-    "alarmSeconds": 0,
+    "alarmSeconds": 15,
     "shelterDistribution": {
-      "mamad": 0.15,
+      "mamad": 0.2,
       "stairwell": 0.4,
-      "public": 0.45
+      "public": 0.4
     },
     "region": "north",
     "threatSources": [
@@ -6188,11 +6188,11 @@
     "nameEn": "Sa'ar",
     "lat": 33.0293646,
     "lng": 35.1093238,
-    "alarmSeconds": 0,
+    "alarmSeconds": 30,
     "shelterDistribution": {
-      "mamad": 0.15,
+      "mamad": 0.3,
       "stairwell": 0.4,
-      "public": 0.45
+      "public": 0.3
     },
     "region": "north",
     "threatSources": [
@@ -6214,11 +6214,11 @@
     "nameEn": "Sassa",
     "lat": 33.026907,
     "lng": 35.39499,
-    "alarmSeconds": 0,
+    "alarmSeconds": 15,
     "shelterDistribution": {
-      "mamad": 0.15,
+      "mamad": 0.2,
       "stairwell": 0.4,
-      "public": 0.45
+      "public": 0.4
     },
     "region": "north",
     "threatSources": [
@@ -6266,11 +6266,11 @@
     "nameEn": "Sdeh Nechemia",
     "lat": 33.1869061,
     "lng": 35.6245075,
-    "alarmSeconds": 0,
+    "alarmSeconds": 15,
     "shelterDistribution": {
-      "mamad": 0.15,
+      "mamad": 0.2,
       "stairwell": 0.4,
-      "public": 0.45
+      "public": 0.4
     },
     "region": "north",
     "threatSources": [
@@ -6344,11 +6344,11 @@
     "nameEn": "Shear Yeshuv",
     "lat": 33.2272088,
     "lng": 35.6463364,
-    "alarmSeconds": 0,
+    "alarmSeconds": 15,
     "shelterDistribution": {
-      "mamad": 0.15,
+      "mamad": 0.2,
       "stairwell": 0.4,
-      "public": 0.45
+      "public": 0.4
     },
     "region": "north",
     "threatSources": [
@@ -6370,11 +6370,11 @@
     "nameEn": "Shlomi",
     "lat": 33.0760504,
     "lng": 35.1485842,
-    "alarmSeconds": 0,
+    "alarmSeconds": 15,
     "shelterDistribution": {
-      "mamad": 0.15,
+      "mamad": 0.2,
       "stairwell": 0.4,
-      "public": 0.45
+      "public": 0.4
     },
     "region": "north",
     "threatSources": [
@@ -6396,11 +6396,11 @@
     "nameEn": "Shomera",
     "lat": 33.0818094,
     "lng": 35.2841818,
-    "alarmSeconds": 0,
+    "alarmSeconds": 15,
     "shelterDistribution": {
-      "mamad": 0.15,
+      "mamad": 0.2,
       "stairwell": 0.4,
-      "public": 0.45
+      "public": 0.4
     },
     "region": "north",
     "threatSources": [
@@ -6422,11 +6422,11 @@
     "nameEn": "Shtula",
     "lat": 33.084763,
     "lng": 35.3143141,
-    "alarmSeconds": 0,
+    "alarmSeconds": 15,
     "shelterDistribution": {
-      "mamad": 0.15,
+      "mamad": 0.2,
       "stairwell": 0.4,
-      "public": 0.45
+      "public": 0.4
     },
     "region": "north",
     "threatSources": [
@@ -6448,11 +6448,11 @@
     "nameEn": "Snir",
     "lat": 33.2410034,
     "lng": 35.6781947,
-    "alarmSeconds": 0,
+    "alarmSeconds": 15,
     "shelterDistribution": {
-      "mamad": 0.15,
+      "mamad": 0.2,
       "stairwell": 0.4,
-      "public": 0.45
+      "public": 0.4
     },
     "region": "north",
     "threatSources": [
@@ -6500,11 +6500,11 @@
     "nameEn": "Tzuriel",
     "lat": 33.0059947,
     "lng": 35.3141186,
-    "alarmSeconds": 0,
+    "alarmSeconds": 15,
     "shelterDistribution": {
-      "mamad": 0.15,
+      "mamad": 0.2,
       "stairwell": 0.4,
-      "public": 0.45
+      "public": 0.4
     },
     "region": "north",
     "threatSources": [
@@ -6526,11 +6526,11 @@
     "nameEn": "Ya'ara",
     "lat": 33.0674207,
     "lng": 35.1858477,
-    "alarmSeconds": 0,
+    "alarmSeconds": 15,
     "shelterDistribution": {
-      "mamad": 0.15,
+      "mamad": 0.2,
       "stairwell": 0.4,
-      "public": 0.45
+      "public": 0.4
     },
     "region": "north",
     "threatSources": [
@@ -6552,11 +6552,11 @@
     "nameEn": "Yechiam",
     "lat": 32.9967146,
     "lng": 35.2204512,
-    "alarmSeconds": 15,
+    "alarmSeconds": 30,
     "shelterDistribution": {
-      "mamad": 0.2,
+      "mamad": 0.3,
       "stairwell": 0.4,
-      "public": 0.4
+      "public": 0.3
     },
     "region": "north",
     "threatSources": [
@@ -6578,11 +6578,11 @@
     "nameEn": "Yir'on",
     "lat": 33.0777838,
     "lng": 35.455753,
-    "alarmSeconds": 0,
+    "alarmSeconds": 15,
     "shelterDistribution": {
-      "mamad": 0.15,
+      "mamad": 0.2,
       "stairwell": 0.4,
-      "public": 0.45
+      "public": 0.4
     },
     "region": "north",
     "threatSources": [
@@ -6604,11 +6604,11 @@
     "nameEn": "Zarit",
     "lat": 33.0996431,
     "lng": 35.2886449,
-    "alarmSeconds": 0,
+    "alarmSeconds": 15,
     "shelterDistribution": {
-      "mamad": 0.15,
+      "mamad": 0.2,
       "stairwell": 0.4,
-      "public": 0.45
+      "public": 0.4
     },
     "region": "north",
     "threatSources": [
@@ -6630,11 +6630,11 @@
     "nameEn": "Zivon",
     "lat": 33.0259411,
     "lng": 35.4165978,
-    "alarmSeconds": 0,
+    "alarmSeconds": 15,
     "shelterDistribution": {
-      "mamad": 0.15,
+      "mamad": 0.2,
       "stairwell": 0.4,
-      "public": 0.45
+      "public": 0.4
     },
     "region": "north",
     "threatSources": [
@@ -8304,12 +8304,12 @@
     ],
     "areaname": "Eilat",
     "orefId": "4",
-    "alertCountTotal": 22,
+    "alertCountTotal": 23,
     "notificationCountTotal": 20,
     "alertCount": 0,
     "notificationCount": 0,
     "minGapHours": 0,
-    "alertCountNormalized": 0.162
+    "alertCountNormalized": 0.169
   },
   {
     "id": "oref-9",
@@ -8329,12 +8329,12 @@
     ],
     "areaname": "Eilat",
     "orefId": "9",
-    "alertCountTotal": 19,
+    "alertCountTotal": 20,
     "notificationCountTotal": 17,
     "alertCount": 0,
     "notificationCount": 0,
     "minGapHours": 0,
-    "alertCountNormalized": 0.14
+    "alertCountNormalized": 0.147
   },
   {
     "id": "oref-10",
@@ -8354,12 +8354,12 @@
     ],
     "areaname": "Eilat",
     "orefId": "10",
-    "alertCountTotal": 18,
+    "alertCountTotal": 19,
     "notificationCountTotal": 17,
     "alertCount": 0,
     "notificationCount": 0,
     "minGapHours": 0,
-    "alertCountNormalized": 0.132
+    "alertCountNormalized": 0.14
   },
   {
     "id": "oref-219",
