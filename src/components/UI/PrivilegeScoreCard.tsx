@@ -27,21 +27,21 @@ export default function PrivilegeScoreCard({ city, language }: Props) {
       <div className="score-breakdown">
         <div className="score-row">
           <span>{t.cityInfo.timeScore}</span>
-          <span>{score.timeScore.toFixed(1)}/40</span>
+          <span>{score.timeScore.toFixed(1)}/20</span>
         </div>
         <div className="score-row">
           <span>{t.cityInfo.shelterScore}</span>
-          <span>{score.shelterScore.toFixed(1)}/40</span>
+          <span>{score.shelterScore.toFixed(1)}/20</span>
         </div>
         {ALERTS_ENABLED && (
           <>
             <div className="score-row">
               <span>{t.cityInfo.safetyScore}</span>
-              <span>{score.safetyScore.toFixed(1)}/10</span>
+              <span>{score.safetyScore.toFixed(1)}/30</span>
             </div>
             <div className="score-row">
               <span>{t.cityInfo.gapScore}</span>
-              <span>{score.gapScore.toFixed(1)}/10</span>
+              <span>{score.gapScore.toFixed(1)}/30</span>
             </div>
           </>
         )}

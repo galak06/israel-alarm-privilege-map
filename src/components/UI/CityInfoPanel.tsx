@@ -15,15 +15,22 @@ export default function CityInfoPanel({ city, language }: Props) {
   const [liveAlerts, setLiveAlerts] = useState<LiveAlerts | null>(null);
 
   useEffect(() => {
-    if (!city) { setLiveAlerts(null); return; }
-    setLiveAlerts(null);
-    getLiveAlerts(city.nameHe).then(setLiveAlerts);
+    if (!city) {
+      setLiveAlerts(null);
+      return;
+    }
+    const name = city.nameHe;
+    getLiveAlerts(name).then((alerts) => {
+      setLiveAlerts(alerts);
+    });
   }, [city?.id]);
 
   const alertCount      = liveAlerts?.alertCount        ?? city?.alertCount        ?? 0;
   const notifCount      = liveAlerts?.notificationCount ?? city?.notificationCount ?? 0;
   const alertCountTotal = city?.alertCountTotal ?? 0;
   const isLive          = liveAlerts !== null;
+  const hasDetails      = (liveAlerts && Object.values(liveAlerts.typeCounts).some(count => count > 0)) ||
+    (!liveAlerts && city && (city.alertCountTotal > 0 || (city.notificationCountTotal ?? 0) > 0));
 
   if (!city) {
     return (
@@ -78,36 +85,40 @@ export default function CityInfoPanel({ city, language }: Props) {
             </span>
           </div>
 
-          {isLive && liveAlerts && (
+          {hasDetails && (
             <div className="alert-details">
-              {liveAlerts.typeCounts.missiles > 0 && (
+              {(liveAlerts ? liveAlerts.typeCounts.missiles > 0 : city.alertCountTotal > 0) && (
                 <div className="alert-detail-item">
                   <span><span className="alert-detail-icon">🚀</span> {t.cityInfo.alertTypes.missiles}</span>
-                  <span className="stat-value type-missiles">{liveAlerts.typeCounts.missiles}</span>
+                  <span className="stat-value type-missiles">
+                    {liveAlerts ? liveAlerts.typeCounts.missiles : city.alertCountTotal}
+                  </span>
                 </div>
               )}
-              {liveAlerts.typeCounts.hostileAircraftIntrusion > 0 && (
+              {liveAlerts && liveAlerts.typeCounts.hostileAircraftIntrusion > 0 && (
                 <div className="alert-detail-item">
                   <span><span className="alert-detail-icon">🛩️</span> {t.cityInfo.alertTypes.hostileAircraftIntrusion}</span>
                   <span className="stat-value type-aircraft">{liveAlerts.typeCounts.hostileAircraftIntrusion}</span>
                 </div>
               )}
-              {liveAlerts.typeCounts.terroristInfiltration > 0 && (
+              {liveAlerts && liveAlerts.typeCounts.terroristInfiltration > 0 && (
                 <div className="alert-detail-item">
                   <span><span className="alert-detail-icon">🔫</span> {t.cityInfo.alertTypes.terroristInfiltration}</span>
                   <span className="stat-value type-infiltration">{liveAlerts.typeCounts.terroristInfiltration}</span>
                 </div>
               )}
-              {liveAlerts.typeCounts.earthQuake > 0 && (
+              {liveAlerts && liveAlerts.typeCounts.earthQuake > 0 && (
                 <div className="alert-detail-item">
                   <span><span className="alert-detail-icon">🫨</span> {t.cityInfo.alertTypes.earthQuake}</span>
                   <span className="stat-value type-earthquake">{liveAlerts.typeCounts.earthQuake}</span>
                 </div>
               )}
-              {liveAlerts.typeCounts.newsFlash > 0 && (
+              {(liveAlerts ? liveAlerts.typeCounts.newsFlash > 0 : (city.notificationCountTotal ?? 0) > 0) && (
                 <div className="alert-detail-item">
                   <span><span className="alert-detail-icon">🔔</span> {t.cityInfo.alertTypes.newsFlash}</span>
-                  <span className="stat-value type-newsflash">{liveAlerts.typeCounts.newsFlash}</span>
+                  <span className="stat-value type-newsflash">
+                    {liveAlerts ? liveAlerts.typeCounts.newsFlash : city.notificationCountTotal}
+                  </span>
                 </div>
               )}
             </div>

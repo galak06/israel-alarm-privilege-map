@@ -55,9 +55,12 @@ function CityAutocomplete({
   useEffect(() => {
     if (!initialCity) return;
     const name = language === 'he' ? initialCity.nameHe : initialCity.nameEn;
-    setQuery(name);
-    setSelectedName(name);
-  }, [initialCity?.id]);
+    // Use timeout to avoid synchronous state update cascade
+    setTimeout(() => {
+      setQuery(name);
+      setSelectedName(name);
+    }, 0);
+  }, [initialCity?.id, initialCity, language]);
   const inputRef = useRef<HTMLInputElement>(null);
   const listRef = useRef<HTMLUListElement>(null);
 
@@ -184,28 +187,31 @@ function CityAutocomplete({
   );
 }
 
-export default function MyScorePanel({ language, cities, selectedCity: externalCity, onCitySelect }: Props) {
+export default function MyScorePanel({ language, cities, selectedCity: city, onCitySelect }: Props) {
   const t = language === 'he' ? he : en;
-  const [city, setCity] = useState<City | null>(externalCity ?? null);
   const [shelter, setShelter] = useState<ShelterType>('stairwell');
   const [familyStatus, setFamilyStatus] = useState<FamilyStatus>('single');
   const [liveAlerts, setLiveAlerts] = useState<LiveAlerts | null>(null);
   const [alertsLoading, setAlertsLoading] = useState(false);
   const fetchSeqRef = useRef(0);
 
-  // Sync when App restores a city on refresh (externalCity arrives after cities load)
+  // Fetch live alerts whenever the selected city changes
   useEffect(() => {
-    if (!externalCity || city?.id === externalCity.id) return;
+    if (!city) {
+      setLiveAlerts(null);
+      setAlertsLoading(false);
+      return;
+    }
     const seq = ++fetchSeqRef.current;
-    setCity(externalCity);
     setLiveAlerts(null);
     setAlertsLoading(true);
-    getLiveAlerts(externalCity.nameHe).then((alerts) => {
+    getLiveAlerts(city.nameHe).then((alerts) => {
       if (fetchSeqRef.current !== seq) return;
       setLiveAlerts(alerts);
       setAlertsLoading(false);
     });
-  }, [externalCity?.id]);
+  }, [city?.id]);
+
   const shelterSelectId = useId();
   const familySelectId = useId();
 
@@ -224,16 +230,7 @@ export default function MyScorePanel({ language, cities, selectedCity: externalC
   const cityAvg = enrichedCity ? calcPrivilegeScore(enrichedCity) : null;
 
   const handleSelect = useCallback((selected: City) => {
-    const seq = ++fetchSeqRef.current;
-    setCity(selected);
-    setLiveAlerts(null);
-    setAlertsLoading(true);
     onCitySelect(selected);
-    getLiveAlerts(selected.nameHe).then((alerts) => {
-      if (fetchSeqRef.current !== seq) return; // stale — a newer city was selected
-      setLiveAlerts(alerts);
-      setAlertsLoading(false);
-    });
   }, [onCitySelect]);
 
   return (
@@ -244,7 +241,7 @@ export default function MyScorePanel({ language, cities, selectedCity: externalC
         cities={cities}
         language={language}
         placeholder={t.myScore.searchPlaceholder}
-        initialCity={externalCity}
+        initialCity={city}
         onSelect={handleSelect}
       />
 
@@ -255,7 +252,7 @@ export default function MyScorePanel({ language, cities, selectedCity: externalC
             id={shelterSelectId}
             className="choice-select"
             value={shelter}
-            onChange={(e) => { setShelter(e.target.value as ShelterType); if (city) trackShelterSelect(e.target.value as ShelterType, city.id); }}
+            onChange={(e) => { setShelter(e.target.value as ShelterType); trackShelterSelect(e.target.value as ShelterType, city.id); }}
           >
             {SHELTER_OPTIONS.map((opt) => (
               <option key={opt} value={opt}>{t.myScore[opt]}</option>
@@ -285,7 +282,7 @@ export default function MyScorePanel({ language, cities, selectedCity: externalC
             </div>
           )}
 
-          {!alertsLoading && personal !== null && cityAvg !== null && (
+          {personal !== null && cityAvg !== null && (
             <div className="personal-result">
               <div
                 className="personal-score-circle"
@@ -298,38 +295,38 @@ export default function MyScorePanel({ language, cities, selectedCity: externalC
               </div>
               <div className="personal-compare">
                 <span>{t.myScore.compareNote}:</span>
-                <span className="compare-avg" style={{ color: colorForPrivilege(cityAvg.total) }}>
+                <span className="compare-avg" style={{ color: colorForPrivilege((cityAvg.total / (ALERTS_ENABLED ? 110 : 90)) * 100) }}>
                   {cityAvg.total.toFixed(1)}
                 </span>
               </div>
               <div className="personal-breakdown">
                 <div className="personal-row">
                   <span>{t.cityInfo.timeScore}</span>
-                  <span>{personal.timeScore.toFixed(1)} / 20</span>
+                  <span dir="ltr">{personal.timeScore.toFixed(1)} / 20</span>
                 </div>
                 <div className="personal-row">
                   <span>{t.cityInfo.shelterScore}</span>
-                  <span>{personal.shelterScore.toFixed(1)} / 20</span>
+                  <span dir="ltr">{personal.shelterScore.toFixed(1)} / 20</span>
                 </div>
                 {ALERTS_ENABLED && (
                   <>
                     <div className="personal-row">
                       <span>{t.cityInfo.safetyScore}</span>
-                      <span>{personal.safetyScore.toFixed(1)} / 30</span>
+                      <span dir="ltr">{personal.safetyScore.toFixed(1)} / 30</span>
                     </div>
                     <div className="personal-row">
                       <span>{t.cityInfo.gapScore}</span>
-                      <span>{personal.gapScore.toFixed(1)} / 30</span>
+                      <span dir="ltr">{personal.gapScore.toFixed(1)} / 30</span>
                     </div>
                   </>
                 )}
                 <div className="personal-row">
                   <span>{t.cityInfo.locationScore}</span>
-                  <span>{personal.locationScore.toFixed(0)} / 10</span>
+                  <span dir="ltr">{personal.locationScore.toFixed(0)} / 10</span>
                 </div>
                 <div className="personal-row">
                   <span>{t.cityInfo.familyScore}</span>
-                  <span>{personal.familyScore.toFixed(0)} / 10</span>
+                  <span dir="ltr">{personal.familyScore.toFixed(0)} / 10</span>
                 </div>
               </div>
             </div>

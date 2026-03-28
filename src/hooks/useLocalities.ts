@@ -19,6 +19,7 @@ interface LocalityRecord {
   alertCount?: number;
   notificationCount?: number;
   alertCountTotal?: number;
+  notificationCountTotal?: number;
   alertCountNormalized?: number;
   minGapHours?: number;
 }
@@ -42,9 +43,10 @@ function toCity(r: LocalityRecord): City {
     shelterDistribution: r.shelterDistribution,
     region: r.region,
     threatSources: r.threatSources,
-    alertCount: r.alertCount ?? 0,
-    notificationCount: r.notificationCount ?? 0,
+    alertCount: 0,
+    notificationCount: 0,
     alertCountTotal: r.alertCountTotal ?? r.alertCount ?? 0,
+    notificationCountTotal: r.notificationCountTotal ?? r.notificationCount ?? 0,
     alertCountNormalized: r.alertCountNormalized ?? 0,
     minGapHours: r.minGapHours,
   };

@@ -37,7 +37,13 @@ export default function App() {
       const savedId = localStorage.getItem(LAST_CITY_KEY);
       if (!savedId) return;
       const city = cities.find((c) => c.id === savedId);
-      if (city) { setSelectedCity(city); setDrawerOpen(true); }
+      if (city) {
+        // Use timeout to avoid synchronous state update cascade
+        setTimeout(() => {
+          setSelectedCity(city);
+          setDrawerOpen(true);
+        }, 0);
+      }
     } catch { /* localStorage unavailable */ }
   }, [loaded, cities]);
 

@@ -24,16 +24,17 @@ export interface City {
   alertCount: number;            // Real alarms 24h (missiles/aircraft/infiltration — live fetch)
   notificationCount: number;     // Advance warnings 24h (newsFlash — live fetch)
   alertCountTotal: number;       // Real alarms 30d (baked in localities.json from history)
+  notificationCountTotal?: number; // Advance warnings 30d (baked in localities.json from history)
   alertCountNormalized: number;  // 0–1 normalized from alertCountTotal
   minGapHours?: number;          // Minimum gap between consecutive real alarms in 30d (undefined = ≤1 alarm)
 }
 
 export interface PrivilegeScore {
   total: number;         // 0–120 personal / 0–110 city (with ALERTS_ENABLED)
-  timeScore: number;     // 0–40
-  shelterScore: number;  // 0–40
-  safetyScore: number;   // 0–10 (inverse of last-30d alert frequency)
-  gapScore: number;      // 0–10 (fraction of alarm-free days in last 30d)
+  timeScore: number;     // 0–20 (warning time adequacy)
+  shelterScore: number;  // 0–20 (shelter quality)
+  safetyScore: number;   // 0–30 (inverse of last-30d alert frequency + notification burden)
+  gapScore: number;      // 0–30 (average hours between alarms and rest time)
   locationScore: number; // 0–10 (city region: infrastructure & support resources)
   familyScore: number;   // 0–10 (family status factor, personal only)
   label: 'very-low' | 'low' | 'medium' | 'high' | 'very-high';

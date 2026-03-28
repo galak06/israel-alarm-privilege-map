@@ -410,7 +410,9 @@ async function main() {
       areaname: loc.areaname,
       orefId: loc.id,
       alertCountTotal: history?.alarms ?? 0,
-      notificationCount: history?.notifs ?? 0,
+      notificationCountTotal: history?.notifs ?? 0,
+      alertCount: 0,
+      notificationCount: 0,
       minGapHours: history?.minGapHours,
     });
   }

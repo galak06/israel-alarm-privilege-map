@@ -15,7 +15,7 @@ export const cities: City[] = [
     population: 70000,
     region: 'south',
     alertCount: 0, alertCountNormalized: 0,
-      alertCountTotal: 0, notificationCount: 0, threatSources: ['hamas'],
+      alertCountTotal: 0, notificationCount: 0, notificationCountTotal: 0, threatSources: ['hamas'],
   },
   {
     id: 'sderot',
@@ -28,7 +28,7 @@ export const cities: City[] = [
     population: 35000,
     region: 'south',
     alertCount: 0, alertCountNormalized: 0,
-      alertCountTotal: 0, notificationCount: 0, threatSources: ['hamas'],
+      alertCountTotal: 0, notificationCount: 0, notificationCountTotal: 0, threatSources: ['hamas'],
   },
   {
     id: 'kiryat-shmona',
@@ -80,7 +80,7 @@ export const cities: City[] = [
     population: 150000,
     region: 'south',
     alertCount: 0, alertCountNormalized: 0,
-      alertCountTotal: 0, notificationCount: 0, threatSources: ['hamas'],
+      alertCountTotal: 0, notificationCount: 0, notificationCountTotal: 0, threatSources: ['hamas'],
   },
   {
     id: 'haifa',
