@@ -150,22 +150,44 @@ function findCity(cities: Record<string, CityEntry>, nameHe: string): CityEntry 
 // ── Public API ────────────────────────────────────────────────────────────────
 
 export async function getLiveAlerts(nameHe: string): Promise<LiveAlerts | null> {
-  const apiKey = import.meta.env.VITE_REDALERT_API_KEY as string | undefined;
-  if (!apiKey) return null;
+  const apiKey = (typeof import.meta.env !== 'undefined' && import.meta.env.VITE_REDALERT_API_KEY) 
+    || process.env.VITE_REDALERT_API_KEY;
+  
+  if (!apiKey) {
+    console.warn('⚠️ getLiveAlerts: VITE_REDALERT_API_KEY is missing.');
+    return null;
+  }
 
   let cache = readCache();
   if (!cache) {
+    console.log('📡 Fetching fresh 24h history from Redalert API...');
     const fresh = await fetch24hHistory(apiKey);
-    if (fresh) { cache = fresh; lsWrite(CACHE_KEY, fresh); }
+    if (fresh) { 
+      cache = fresh; 
+      lsWrite(CACHE_KEY, fresh);
+      console.log(`✅ Cached alerts for ${Object.keys(fresh.cities).length} cities.`);
+    } else {
+      console.error('❌ Failed to fetch 24h history (timeout or API error).');
+    }
   }
 
   if (!cache) return null;
   const entry = findCity(cache.cities, nameHe);
 
+  if (!entry) {
+    // Return empty results instead of null to indicate we successfully checked but found nothing
+    return {
+      alertCount: 0,
+      notificationCount: 0,
+      typeCounts: { missiles: 0, hostileAircraftIntrusion: 0, terroristInfiltration: 0, earthQuake: 0, newsFlash: 0 },
+      fetchedAt: cache.fetchedAt,
+    };
+  }
+
   return {
-    alertCount:        entry?.alarms ?? 0,
-    notificationCount: entry?.notifs  ?? 0,
-    typeCounts:        entry?.types   ?? { missiles: 0, hostileAircraftIntrusion: 0, terroristInfiltration: 0, earthQuake: 0, newsFlash: 0 },
+    alertCount:        entry.alarms,
+    notificationCount: entry.notifs,
+    typeCounts:        entry.types,
     fetchedAt:         cache.fetchedAt,
   };
 }
