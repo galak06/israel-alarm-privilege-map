@@ -5915,12 +5915,12 @@
     ],
     "areaname": "Confrontation Line",
     "orefId": "1661",
-    "alertCountTotal": 128,
+    "alertCountTotal": 129,
     "notificationCountTotal": 110,
     "alertCount": 0,
     "notificationCount": 0,
     "minGapHours": 0,
-    "alertCountNormalized": 0.941
+    "alertCountNormalized": 0.949
   },
   {
     "id": "oref-1499",
@@ -28723,12 +28723,12 @@
     ],
     "areaname": "Upper Galilee",
     "orefId": "1528",
-    "alertCountTotal": 42,
+    "alertCountTotal": 43,
     "notificationCountTotal": 88,
     "alertCount": 0,
     "notificationCount": 0,
     "minGapHours": 0,
-    "alertCountNormalized": 0.309
+    "alertCountNormalized": 0.316
   },
   {
     "id": "oref-1552",
@@ -29191,12 +29191,12 @@
     ],
     "areaname": "Upper Galilee",
     "orefId": "1506",
-    "alertCountTotal": 43,
+    "alertCountTotal": 44,
     "notificationCountTotal": 89,
     "alertCount": 0,
     "notificationCount": 0,
     "minGapHours": 0,
-    "alertCountNormalized": 0.316
+    "alertCountNormalized": 0.324
   },
   {
     "id": "oref-2228",
