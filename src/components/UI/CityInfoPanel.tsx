@@ -30,7 +30,6 @@ export default function CityInfoPanel({ city, language }: Props) {
   const notifCount      = liveAlerts?.notificationCount ?? city?.notificationCount ?? 0;
   const alertCountTotal = city?.alertCountTotal ?? 0;
   const isLive          = liveAlerts !== null;
-  const hasDetails      = liveAlerts && Object.values(liveAlerts.typeCounts).some(count => count > 0);
 
   if (!city) {
     return (
