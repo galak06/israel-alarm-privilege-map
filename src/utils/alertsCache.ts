@@ -68,6 +68,7 @@ function lsWrite(key: string, v: unknown) {
 async function fetch24hHistory(apiKey: string): Promise<AlertCache | null> {
   const now    = new Date().toISOString();
   const ago24h = new Date(Date.now() - 24 * 3600 * 1000).toISOString();
+  const ago24hMs = Date.now() - 24 * 3600 * 1000;
   const cities: Record<string, CityEntry> = {};
   let offset = 0;
 
@@ -80,9 +81,12 @@ async function fetch24hHistory(apiKey: string): Promise<AlertCache | null> {
       );
       if (!res?.ok) break;
       const json = await res.json();
-      const records: Array<{ type: string; cities: Array<{ name: string }> }> = json.data ?? [];
+      const records: Array<{ type: string; timestamp: string; cities: Array<{ name: string }> }> = json.data ?? [];
 
       for (const record of records) {
+        // Double-check timestamp client-side
+        if (new Date(record.timestamp).getTime() < ago24hMs) continue;
+
         const type = record.type;
         const isReal  = REAL_TYPES.has(type);
         const isNotif = NOTIF_TYPES.has(type);
@@ -108,6 +112,9 @@ async function fetch24hHistory(apiKey: string): Promise<AlertCache | null> {
 
       offset += records.length;
       if (!json.pagination?.hasMore) break;
+      // Stop if we've reached records older than 24h (since data is likely sorted desc)
+      const lastRecord = records[records.length - 1];
+      if (lastRecord && new Date(lastRecord.timestamp).getTime() < ago24hMs) break;
     }
   } catch {
     return null;
