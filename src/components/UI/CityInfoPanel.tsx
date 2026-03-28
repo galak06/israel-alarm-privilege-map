@@ -16,14 +16,15 @@ export default function CityInfoPanel({ city, language }: Props) {
 
   useEffect(() => {
     if (!city) {
-      setLiveAlerts(null);
+      setTimeout(() => setLiveAlerts(null), 0);
       return;
     }
     const name = city.nameHe;
     getLiveAlerts(name).then((alerts) => {
       setLiveAlerts(alerts);
     });
-  }, [city?.id]);
+  }, [city?.id, city]);
+
 
   const alertCount      = liveAlerts?.alertCount        ?? city?.alertCount        ?? 0;
   const notifCount      = liveAlerts?.notificationCount ?? city?.notificationCount ?? 0;

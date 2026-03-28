@@ -198,19 +198,23 @@ export default function MyScorePanel({ language, cities, selectedCity: city, onC
   // Fetch live alerts whenever the selected city changes
   useEffect(() => {
     if (!city) {
-      setLiveAlerts(null);
-      setAlertsLoading(false);
+      setTimeout(() => {
+        setLiveAlerts(null);
+        setAlertsLoading(false);
+      }, 0);
       return;
     }
     const seq = ++fetchSeqRef.current;
-    setLiveAlerts(null);
-    setAlertsLoading(true);
+    setTimeout(() => {
+      setLiveAlerts(null);
+      setAlertsLoading(true);
+    }, 0);
     getLiveAlerts(city.nameHe).then((alerts) => {
       if (fetchSeqRef.current !== seq) return;
       setLiveAlerts(alerts);
       setAlertsLoading(false);
     });
-  }, [city?.id]);
+  }, [city?.id, city]);
 
   const shelterSelectId = useId();
   const familySelectId = useId();

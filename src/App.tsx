@@ -32,7 +32,7 @@ export default function App() {
 
   // Restore last selected city after cities load
   useEffect(() => {
-    if (!loaded || cities.length === 0 || selectedCity) return;
+    if (!loaded) return;
     try {
       const savedId = localStorage.getItem(LAST_CITY_KEY);
       if (!savedId) return;
@@ -45,7 +45,8 @@ export default function App() {
         }, 0);
       }
     } catch { /* localStorage unavailable */ }
-  }, [loaded, cities]);
+  }, [loaded, cities, selectedCity]);
+
 
   const toggleLanguage = () => {
     const next = language === 'he' ? 'en' : 'he';

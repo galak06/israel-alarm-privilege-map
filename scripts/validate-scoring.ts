@@ -1,5 +1,5 @@
 import { calcPrivilegeScore, calcPrivilegeScorePersonal } from '../src/utils/privilegeCalc';
-import { City, ShelterType, FamilyStatus } from '../src/types';
+import { City } from '../src/types';
 
 const mockCity = (overrides: Partial<City> = {}): City => ({
   id: 'test',
