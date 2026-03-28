@@ -10,6 +10,8 @@ const MIN_TIME_NEEDED: Record<ShelterType, number> = {
   public:    90,   // exit building + reach public shelter
 };
 
+const GOLD_STANDARD_TIME = 90; // Seconds — maximum privilege (Center/Tel Aviv)
+
 const SHELTER_WEIGHT: Record<ShelterType, number> = {
   mamad:     1.0,  // in-apartment safe room
   shelter:   0.75, // dedicated building shelter room (leave apartment, stay in building)
@@ -39,19 +41,19 @@ const LOCATION_SCORE: Record<City['region'], number> = {
 };
 
 // Scoring breakdown (Total 120 Personal / 110 City):
-//   timeScore     0–20   warning time adequacy (relative to shelter type)
+//   timeScore     0–20   warning time adequacy + absolute factor
 //   shelterScore  0–20   shelter quality and accessibility
 //   safetyScore   0–30   last-30d alert frequency + notification burden
-//                         Notification burden: advance warnings require physically going to an
-//                         external shelter. People without a mamad must leave every time.
 //   gapScore      0–30   average hours between alarm events + clumping (barrage) penalty.
-//                         Measures quality of rest and predictability.
 //   locationScore 0–10   city region infrastructure & support resources
 //   familyScore   0–10   personal family situation (support vs. dependents)
 
 // Normalize notification count
 const MAX_NOTIF_24H = 15;
 const MAX_NOTIF_30D = 120;
+
+// Safety Score Saturation: 30 alerts in 30 days is "0 privilege" (extreme disruption)
+const SAFETY_SATURATION = 30;
 
 // Gap normalization: 24h average gap between alarms = full score
 const MAX_GAP_HOURS = 24;
@@ -69,8 +71,8 @@ function calculateGapScore(alertCountTotal: number, minGapHours?: number): numbe
   if (alertCountTotal === 0) return 30;
 
   const avgGapHours = (30 * 24) / alertCountTotal;
-  // Use square root for a less harsh drop-off: sqrt(avg / max) * 30
-  let score = Math.min(1, Math.sqrt(avgGapHours / MAX_GAP_HOURS)) * 30;
+  // Linear drop-off: 24h gap = 30 pts, 12h gap = 15 pts, etc.
+  let score = Math.min(1, avgGapHours / MAX_GAP_HOURS) * 30;
 
   // Penalize for clumping (barrages) if we have at least 2 alarms
   if (alertCountTotal > 1 && minGapHours !== undefined && minGapHours !== null) {
@@ -87,8 +89,11 @@ export function calcPrivilegeScorePersonal(
   shelter: ShelterType,
   familyStatus: FamilyStatus,
 ): PrivilegeScore {
-  const timeAdequacy  = Math.min(1, city.alarmSeconds / MIN_TIME_NEEDED[shelter]);
-  const timeScore     = Math.round(timeAdequacy * 20 * 10) / 10;
+  // Time Score (20 pts): 40% Adequacy (Can reach shelter), 60% Absolute (How much time exists)
+  const adequacy  = Math.min(1, city.alarmSeconds / MIN_TIME_NEEDED[shelter]);
+  const absoluteFactor = Math.min(1, city.alarmSeconds / GOLD_STANDARD_TIME);
+  const timeScore = Math.round((adequacy * 0.4 + absoluteFactor * 0.6) * 20 * 10) / 10;
+  
   const shelterScore  = Math.round((SHELTER_WEIGHT[shelter] * 20) * 10) / 10;
 
   // Notification burden: 24h (live) and 30d (baked) components (max 10 points total penalty)
@@ -96,9 +101,8 @@ export function calcPrivilegeScorePersonal(
   const notifPenalty30d = Math.min(1, (city.notificationCountTotal ?? 0) / MAX_NOTIF_30D) * NOTIF_SHELTER_VULN[shelter] * 5;
   const notifPenalty = notifPenalty24h + notifPenalty30d;
 
-  // safetyScore (0-30): Use square root for alertCountNormalized to make it less harsh.
-  // (1 - sqrt(norm)) * 30
-  const baseSafety = (1 - Math.sqrt(city.alertCountNormalized)) * 30;
+  // safetyScore (0-30): Use absolute saturation (30 alerts = 0 score) instead of relative-to-max.
+  const baseSafety = Math.max(0, 1 - (city.alertCountTotal / SAFETY_SATURATION)) * 30;
   const safetyScore = Math.max(0, Math.round((baseSafety - notifPenalty) * 10) / 10);
   
   const gapScore      = calculateGapScore(city.alertCountTotal, city.minGapHours);
@@ -122,7 +126,11 @@ export function calcPrivilegeScore(city: City): PrivilegeScore {
     + bldgShelter * MIN_TIME_NEEDED.shelter
     + pub * MIN_TIME_NEEDED.public;
     
-  const timeScore    = Math.round(Math.min(1, city.alarmSeconds / weightedMinTime) * 20 * 10) / 10;
+  // Time Score (20 pts): 40% Adequacy, 60% Absolute
+  const adequacy = Math.min(1, city.alarmSeconds / weightedMinTime);
+  const absoluteFactor = Math.min(1, city.alarmSeconds / GOLD_STANDARD_TIME);
+  const timeScore = Math.round((adequacy * 0.4 + absoluteFactor * 0.6) * 20 * 10) / 10;
+
   const shelterScore = Math.round(((mamad * 1.0 + stairwell * SHELTER_WEIGHT.stairwell + bldgShelter * SHELTER_WEIGHT.shelter) * 20) * 10) / 10;
 
   // Notification burden (max 10 points total penalty)
@@ -130,7 +138,7 @@ export function calcPrivilegeScore(city: City): PrivilegeScore {
   const notifPenalty30d = Math.min(1, (city.notificationCountTotal ?? 0) / MAX_NOTIF_30D) * (1 - mamad) * 5;
   const notifPenalty = notifPenalty24h + notifPenalty30d;
 
-  const baseSafety = (1 - Math.sqrt(city.alertCountNormalized)) * 30;
+  const baseSafety = Math.max(0, 1 - (city.alertCountTotal / SAFETY_SATURATION)) * 30;
   const safetyScore = Math.max(0, Math.round((baseSafety - notifPenalty) * 10) / 10);
   
   const gapScore      = calculateGapScore(city.alertCountTotal, city.minGapHours);
