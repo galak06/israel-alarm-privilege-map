@@ -29,10 +29,11 @@ export const en = {
     gapScore: 'Alert gap score',
     locationScore: 'City location score',
     familyScore: 'Family status score',
-    alertCount: 'Alarms (last 24h)',
-    notificationCount: 'Advance Warnings (last 24h)',
+    alertCount: 'Alarms',
+    notificationCount: 'Advance Warnings',
     alertCountTotal: 'Total alerts (last 30 days)',
-    alertCountSuffix: 'times',
+    alertCountSuffix: 'last 24H hours',
+    alertCountTotalSuffix: 'times',
     total: 'Total',
     privilegeLabels: {
       'very-low': 'Very Low',
@@ -49,11 +50,11 @@ export const en = {
       iran: 'Iran',
     },
     alertTypes: {
-      missiles: 'Missiles & Rockets',
+      missiles: 'value for alarm',
       hostileAircraftIntrusion: 'Hostile Aircraft Intrusion',
       terroristInfiltration: 'Terrorist Infiltration',
       earthQuake: 'Earthquake',
-      newsFlash: 'Advance Warning',
+      newsFlash: 'alerts',
     }
   },
   threatFilter: {

@@ -29,10 +29,11 @@ export const he = {
     gapScore: 'ניקוד פערים בין אזעקות',
     locationScore: 'ניקוד מיקום עיר',
     familyScore: 'ניקוד מצב משפחתי',
-    alertCount: 'אזעקות ב-24 שעות האחרונות',
-    notificationCount: 'התרעות מוקדמות ב-24 שעות האחרונות',
+    alertCount: 'אזעקות',
+    notificationCount: 'התרעות מוקדמות',
     alertCountTotal: 'סה"כ אזעקות ב-30 יום אחרון',
-    alertCountSuffix: 'פעמים',
+    alertCountSuffix: 'ב-24 שעות האחרונות',
+    alertCountTotalSuffix: 'פעמים',
     total: 'סה"כ',
     privilegeLabels: {
       'very-low': 'נמוך מאוד',
@@ -49,11 +50,11 @@ export const he = {
       iran: 'איראן',
     },
     alertTypes: {
-      missiles: 'ירי רקטות וטילים',
+      missiles: 'ערך לאזעקות',
       hostileAircraftIntrusion: 'חדירת כלי טיס עוין',
       terroristInfiltration: 'חדירת מחבלים',
       earthQuake: 'רעידת אדמה',
-      newsFlash: 'התרעה מוקדמת',
+      newsFlash: 'התרעות',
     }
   },
   threatFilter: {

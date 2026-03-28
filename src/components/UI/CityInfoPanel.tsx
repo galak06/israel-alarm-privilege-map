@@ -79,20 +79,18 @@ export default function CityInfoPanel({ city, language }: Props) {
           <div className="city-stat alert-count-stat">
             <span className="stat-label">🚨 {t.cityInfo.alertCount}</span>
             <span className="stat-value alert-count-value">
-              {(isLive || alertCount > 0) ? alertCount.toLocaleString() : '—'}
-              {(isLive || alertCount > 0) && <span className="unit"> {t.cityInfo.alertCountSuffix}</span>}
+              {alertCount.toLocaleString()}
+              <span className="unit"> {t.cityInfo.alertCountSuffix}</span>
               {isLive && <span className="live-badge">live</span>}
             </span>
           </div>
 
-          {isLive && hasDetails && (
+          {isLive && (
             <div className="alert-details">
-              {liveAlerts.typeCounts.missiles > 0 && (
-                <div className="alert-detail-item">
-                  <span><span className="alert-detail-icon">🚀</span> {t.cityInfo.alertTypes.missiles}</span>
-                  <span className="stat-value type-missiles">{liveAlerts.typeCounts.missiles}</span>
-                </div>
-              )}
+              <div className="alert-detail-item">
+                <span><span className="alert-detail-icon">🚀</span> {t.cityInfo.alertTypes.missiles}</span>
+                <span className="stat-value type-missiles">{liveAlerts.typeCounts.missiles}</span>
+              </div>
               {liveAlerts.typeCounts.hostileAircraftIntrusion > 0 && (
                 <div className="alert-detail-item">
                   <span><span className="alert-detail-icon">🛩️</span> {t.cityInfo.alertTypes.hostileAircraftIntrusion}</span>
@@ -111,12 +109,10 @@ export default function CityInfoPanel({ city, language }: Props) {
                   <span className="stat-value type-earthquake">{liveAlerts.typeCounts.earthQuake}</span>
                 </div>
               )}
-              {liveAlerts.typeCounts.newsFlash > 0 && (
-                <div className="alert-detail-item">
-                  <span><span className="alert-detail-icon">🔔</span> {t.cityInfo.alertTypes.newsFlash}</span>
-                  <span className="stat-value type-newsflash">{liveAlerts.typeCounts.newsFlash}</span>
-                </div>
-              )}
+              <div className="alert-detail-item">
+                <span><span className="alert-detail-icon">🔔</span> {t.cityInfo.alertTypes.newsFlash}</span>
+                <span className="stat-value type-newsflash">{liveAlerts.typeCounts.newsFlash}</span>
+              </div>
             </div>
           )}
 
@@ -134,7 +130,7 @@ export default function CityInfoPanel({ city, language }: Props) {
             <span className="stat-label">📊 {t.cityInfo.alertCountTotal}</span>
             <span className="stat-value">
               {alertCountTotal > 0 ? alertCountTotal.toLocaleString() : '—'}
-              {alertCountTotal > 0 && <span className="unit"> {t.cityInfo.alertCountSuffix}</span>}
+              {alertCountTotal > 0 && <span className="unit"> {t.cityInfo.alertCountTotalSuffix}</span>}
             </span>
           </div>
         </>
