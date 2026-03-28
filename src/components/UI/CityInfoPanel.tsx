@@ -1,9 +1,10 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useMemo } from 'react';
 import type { City, Language, ThreatSource } from '../../types';
 import { en } from '../../i18n/en';
 import { he } from '../../i18n/he';
 import { ALERTS_ENABLED } from '../../utils/featureFlags';
 import { getLiveAlerts, type LiveAlerts } from '../../utils/alertsCache';
+import PrivilegeScoreCard from './PrivilegeScoreCard';
 
 interface Props {
   city: City | null;
@@ -31,6 +32,17 @@ export default function CityInfoPanel({ city, language }: Props) {
   const alertCountTotal = city?.alertCountTotal ?? 0;
   const isLive          = liveAlerts !== null;
 
+  // Merge static city data with live alert data for the score card
+  const enrichedCity = useMemo<City | null>(() => {
+    if (!city) return null;
+    if (!liveAlerts) return city;
+    return {
+      ...city,
+      alertCount,
+      notificationCount: notifCount,
+    };
+  }, [city, liveAlerts, alertCount, notifCount]);
+
   if (!city) {
     return (
       <div className="city-panel city-panel-empty">
@@ -50,6 +62,8 @@ export default function CityInfoPanel({ city, language }: Props) {
     <div className="city-panel">
       <h2 className="city-name">{name}</h2>
       <p className="city-both-names">{bothNames}</p>
+
+      {enrichedCity && <PrivilegeScoreCard city={enrichedCity} language={language} />}
 
       <div className="city-stat">
         <span className="stat-label">{t.cityInfo.region}</span>
