@@ -8304,12 +8304,12 @@
     ],
     "areaname": "Eilat",
     "orefId": "4",
-    "alertCountTotal": 23,
+    "alertCountTotal": 25,
     "notificationCountTotal": 20,
     "alertCount": 0,
     "notificationCount": 0,
     "minGapHours": 0,
-    "alertCountNormalized": 0.169
+    "alertCountNormalized": 0.184
   },
   {
     "id": "oref-9",
@@ -8329,12 +8329,12 @@
     ],
     "areaname": "Eilat",
     "orefId": "9",
-    "alertCountTotal": 20,
+    "alertCountTotal": 21,
     "notificationCountTotal": 17,
     "alertCount": 0,
     "notificationCount": 0,
     "minGapHours": 0,
-    "alertCountNormalized": 0.147
+    "alertCountNormalized": 0.154
   },
   {
     "id": "oref-10",
@@ -8354,12 +8354,12 @@
     ],
     "areaname": "Eilat",
     "orefId": "10",
-    "alertCountTotal": 19,
+    "alertCountTotal": 20,
     "notificationCountTotal": 17,
     "alertCount": 0,
     "notificationCount": 0,
     "minGapHours": 0,
-    "alertCountNormalized": 0.14
+    "alertCountNormalized": 0.147
   },
   {
     "id": "oref-219",
