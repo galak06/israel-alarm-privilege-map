@@ -300,7 +300,7 @@ export default function MyScorePanel({ language, cities, selectedCity: city, onC
               <div className="personal-compare">
                 <span>{t.myScore.compareNote}:</span>
                 <span className="compare-avg" style={{ color: colorForPrivilege((cityAvg.total / (ALERTS_ENABLED ? 110 : 90)) * 100) }}>
-                  {cityAvg.total.toFixed(1)}
+                  {(cityAvg.total * (ALERTS_ENABLED ? 120 : 100) / (ALERTS_ENABLED ? 110 : 90)).toFixed(1)}
                 </span>
               </div>
               <div className="personal-breakdown">
