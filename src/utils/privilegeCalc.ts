@@ -52,11 +52,33 @@ const LOCATION_SCORE: Record<City['region'], number> = {
 const MAX_NOTIF_24H = 15;
 const MAX_NOTIF_30D = 120;
 
-// Safety Score Saturation: 30 alerts in 30 days is "0 privilege" (extreme disruption)
-const SAFETY_SATURATION = 30;
+// Safety saturation: alerts-in-30d at which safety score reaches 0.
+// Mamad users step in/out in seconds — far less disruption per alert than stairwell/public.
+const SAFETY_SATURATION_BY_SHELTER: Record<ShelterType, number> = {
+  mamad:     120,  // in-unit safe room: minimal per-alert disruption
+  shelter:    60,  // leave apt, stay in building: moderate burden
+  stairwell:  30,  // leave apt, limited protection: baseline
+  public:     15,  // exit building: maximum burden, saturates fastest
+};
 
-// Gap normalization: 24h average gap between alarms = full score
-const MAX_GAP_HOURS = 24;
+// Gap normalization: avg gap (hours) at which gap score is maximised.
+// Lower threshold = more resilient to frequent alerts.
+const MAX_GAP_HOURS_BY_SHELTER: Record<ShelterType, number> = {
+  mamad:      6,  // short gaps are fine — step back in/out effortlessly
+  shelter:   12,
+  stairwell: 24,  // baseline
+  public:    48,  // needs very long rest periods between disruptions
+};
+
+// Max clumping penalty (pts) for rapid-fire barrages (minGap < 1h).
+// Mamad users barely notice a barrage; public shelter users bear full impact.
+const MAX_CLUMPING_BY_SHELTER: Record<ShelterType, number> = {
+  mamad:     2,
+  shelter:   4,
+  stairwell: 5,  // baseline
+  public:    5,
+};
+
 const MIN_GAP_THRESHOLD = 1; // Hours. Anything below this is considered a "barrage" burden.
 
 // Shelter vulnerability to advance-warning burden (mamad = can shelter in place, no burden)
@@ -67,20 +89,23 @@ const NOTIF_SHELTER_VULN: Record<ShelterType, number> = {
   public:    1.0,  // must go outside — maximum burden
 };
 
-function calculateGapScore(alertCountTotal: number, minGapHours?: number): number {
+function calculateGapScore(
+  alertCountTotal: number,
+  maxGapHours: number,
+  minGapHours?: number,
+  maxClumping: number = 5,
+): number {
   if (alertCountTotal === 0) return 30;
 
   const avgGapHours = (30 * 24) / alertCountTotal;
-  // Linear drop-off: 24h gap = 30 pts, 12h gap = 15 pts, etc.
-  let score = Math.min(1, avgGapHours / MAX_GAP_HOURS) * 30;
+  let score = Math.min(1, avgGapHours / maxGapHours) * 30;
 
   // Penalize for clumping (barrages) if we have at least 2 alarms
   if (alertCountTotal > 1 && minGapHours !== undefined && minGapHours !== null) {
-    // If min gap is less than 1 hour, subtract up to 5 points
-    const clumpingPenalty = Math.max(0, 1 - (minGapHours / MIN_GAP_THRESHOLD)) * 5;
+    const clumpingPenalty = Math.max(0, 1 - (minGapHours / MIN_GAP_THRESHOLD)) * maxClumping;
     score = Math.max(0, score - clumpingPenalty);
   }
-  
+
   return Math.round(score * 10) / 10;
 }
 
@@ -101,11 +126,16 @@ export function calcPrivilegeScorePersonal(
   const notifPenalty30d = Math.min(1, (city.notificationCountTotal ?? 0) / MAX_NOTIF_30D) * NOTIF_SHELTER_VULN[shelter] * 5;
   const notifPenalty = notifPenalty24h + notifPenalty30d;
 
-  // safetyScore (0-30): Use absolute saturation (30 alerts = 0 score) instead of relative-to-max.
-  const baseSafety = Math.max(0, 1 - (city.alertCountTotal / SAFETY_SATURATION)) * 30;
+  // safetyScore (0-30): shelter-specific saturation — mamad users tolerate far more alerts
+  const baseSafety = Math.max(0, 1 - (city.alertCountTotal / SAFETY_SATURATION_BY_SHELTER[shelter])) * 30;
   const safetyScore = Math.max(0, Math.round((baseSafety - notifPenalty) * 10) / 10);
-  
-  const gapScore      = calculateGapScore(city.alertCountTotal, city.minGapHours);
+
+  const gapScore = calculateGapScore(
+    city.alertCountTotal,
+    MAX_GAP_HOURS_BY_SHELTER[shelter],
+    city.minGapHours,
+    MAX_CLUMPING_BY_SHELTER[shelter],
+  );
 
   const locationScore = LOCATION_SCORE[city.region] ?? 5;
   const familyScore   = FAMILY_SCORE[familyStatus];
@@ -138,10 +168,31 @@ export function calcPrivilegeScore(city: City): PrivilegeScore {
   const notifPenalty30d = Math.min(1, (city.notificationCountTotal ?? 0) / MAX_NOTIF_30D) * (1 - mamad) * 5;
   const notifPenalty = notifPenalty24h + notifPenalty30d;
 
-  const baseSafety = Math.max(0, 1 - (city.alertCountTotal / SAFETY_SATURATION)) * 30;
+  // Weighted safety saturation and gap thresholds based on shelter distribution
+  const weightedSaturation = mamad * SAFETY_SATURATION_BY_SHELTER.mamad
+    + stairwell * SAFETY_SATURATION_BY_SHELTER.stairwell
+    + bldgShelter * SAFETY_SATURATION_BY_SHELTER.shelter
+    + pub * SAFETY_SATURATION_BY_SHELTER.public;
+
+  const weightedMaxGap = mamad * MAX_GAP_HOURS_BY_SHELTER.mamad
+    + stairwell * MAX_GAP_HOURS_BY_SHELTER.stairwell
+    + bldgShelter * MAX_GAP_HOURS_BY_SHELTER.shelter
+    + pub * MAX_GAP_HOURS_BY_SHELTER.public;
+
+  const weightedMaxClumping = mamad * MAX_CLUMPING_BY_SHELTER.mamad
+    + stairwell * MAX_CLUMPING_BY_SHELTER.stairwell
+    + bldgShelter * MAX_CLUMPING_BY_SHELTER.shelter
+    + pub * MAX_CLUMPING_BY_SHELTER.public;
+
+  const baseSafety = Math.max(0, 1 - (city.alertCountTotal / weightedSaturation)) * 30;
   const safetyScore = Math.max(0, Math.round((baseSafety - notifPenalty) * 10) / 10);
-  
-  const gapScore      = calculateGapScore(city.alertCountTotal, city.minGapHours);
+
+  const gapScore = calculateGapScore(
+    city.alertCountTotal,
+    weightedMaxGap,
+    city.minGapHours,
+    weightedMaxClumping,
+  );
 
   const locationScore = LOCATION_SCORE[city.region] ?? 5;
 
