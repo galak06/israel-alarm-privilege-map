@@ -4433,12 +4433,12 @@
     ],
     "areaname": "Confrontation Line",
     "orefId": "1547",
-    "alertCountTotal": 41,
+    "alertCountTotal": 42,
     "notificationCountTotal": 87,
     "alertCount": 0,
     "notificationCount": 0,
     "minGapHours": 0.02,
-    "alertCountNormalized": 0.301
+    "alertCountNormalized": 0.309
   },
   {
     "id": "oref-1576",
@@ -4797,12 +4797,12 @@
     ],
     "areaname": "Confrontation Line",
     "orefId": "1599",
-    "alertCountTotal": 48,
+    "alertCountTotal": 49,
     "notificationCountTotal": 87,
     "alertCount": 0,
     "notificationCount": 0,
     "minGapHours": 0.02,
-    "alertCountNormalized": 0.353
+    "alertCountNormalized": 0.36
   },
   {
     "id": "oref-1574",
@@ -4953,12 +4953,12 @@
     ],
     "areaname": "Confrontation Line",
     "orefId": "1566",
-    "alertCountTotal": 56,
+    "alertCountTotal": 57,
     "notificationCountTotal": 91,
     "alertCount": 0,
     "notificationCount": 0,
     "minGapHours": 0,
-    "alertCountNormalized": 0.412
+    "alertCountNormalized": 0.419
   },
   {
     "id": "oref-1522",
@@ -5265,12 +5265,12 @@
     ],
     "areaname": "Confrontation Line",
     "orefId": "1536",
-    "alertCountTotal": 44,
+    "alertCountTotal": 45,
     "notificationCountTotal": 85,
     "alertCount": 0,
     "notificationCount": 0,
     "minGapHours": 0.01,
-    "alertCountNormalized": 0.324
+    "alertCountNormalized": 0.331
   },
   {
     "id": "oref-1592",
@@ -5681,12 +5681,12 @@
     ],
     "areaname": "Confrontation Line",
     "orefId": "1608",
-    "alertCountTotal": 78,
+    "alertCountTotal": 79,
     "notificationCountTotal": 96,
     "alertCount": 0,
     "notificationCount": 0,
     "minGapHours": 0,
-    "alertCountNormalized": 0.574
+    "alertCountNormalized": 0.581
   },
   {
     "id": "oref-1636",
@@ -5811,12 +5811,12 @@
     ],
     "areaname": "Confrontation Line",
     "orefId": "1558",
-    "alertCountTotal": 42,
+    "alertCountTotal": 43,
     "notificationCountTotal": 84,
     "alertCount": 0,
     "notificationCount": 0,
     "minGapHours": 0.02,
-    "alertCountNormalized": 0.309
+    "alertCountNormalized": 0.316
   },
   {
     "id": "oref-1669",
@@ -6019,12 +6019,12 @@
     ],
     "areaname": "Confrontation Line",
     "orefId": "1585",
-    "alertCountTotal": 53,
+    "alertCountTotal": 54,
     "notificationCountTotal": 89,
     "alertCount": 0,
     "notificationCount": 0,
     "minGapHours": 0,
-    "alertCountNormalized": 0.39
+    "alertCountNormalized": 0.397
   },
   {
     "id": "oref-1546",
@@ -6435,12 +6435,12 @@
     ],
     "areaname": "Confrontation Line",
     "orefId": "1596",
-    "alertCountTotal": 90,
+    "alertCountTotal": 91,
     "notificationCountTotal": 104,
     "alertCount": 0,
     "notificationCount": 0,
     "minGapHours": 0,
-    "alertCountNormalized": 0.662
+    "alertCountNormalized": 0.669
   },
   {
     "id": "oref-1660",
@@ -19341,12 +19341,12 @@
     ],
     "areaname": "Lower Galilee",
     "orefId": "1427",
-    "alertCountTotal": 51,
+    "alertCountTotal": 52,
     "notificationCountTotal": 86,
     "alertCount": 0,
     "notificationCount": 0,
     "minGapHours": 0.02,
-    "alertCountNormalized": 0.375
+    "alertCountNormalized": 0.382
   },
   {
     "id": "oref-5427",
@@ -19367,12 +19367,12 @@
     ],
     "areaname": "Lower Galilee",
     "orefId": "5427",
-    "alertCountTotal": 51,
+    "alertCountTotal": 52,
     "notificationCountTotal": 86,
     "alertCount": 0,
     "notificationCount": 0,
     "minGapHours": 0.02,
-    "alertCountNormalized": 0.375
+    "alertCountNormalized": 0.382
   },
   {
     "id": "oref-1354",
@@ -19939,12 +19939,12 @@
     ],
     "areaname": "Lower Galilee",
     "orefId": "1436",
-    "alertCountTotal": 47,
+    "alertCountTotal": 48,
     "notificationCountTotal": 85,
     "alertCount": 0,
     "notificationCount": 0,
     "minGapHours": 0.02,
-    "alertCountNormalized": 0.346
+    "alertCountNormalized": 0.353
   },
   {
     "id": "oref-1348",
@@ -20147,12 +20147,12 @@
     ],
     "areaname": "Lower Galilee",
     "orefId": "1428",
-    "alertCountTotal": 49,
+    "alertCountTotal": 50,
     "notificationCountTotal": 85,
     "alertCount": 0,
     "notificationCount": 0,
     "minGapHours": 0.02,
-    "alertCountNormalized": 0.36
+    "alertCountNormalized": 0.368
   },
   {
     "id": "oref-1382",
@@ -30049,12 +30049,12 @@
     ],
     "areaname": "Upper Galilee",
     "orefId": "1452",
-    "alertCountTotal": 44,
+    "alertCountTotal": 45,
     "notificationCountTotal": 86,
     "alertCount": 0,
     "notificationCount": 0,
     "minGapHours": 0.02,
-    "alertCountNormalized": 0.324
+    "alertCountNormalized": 0.331
   },
   {
     "id": "oref-1479",
