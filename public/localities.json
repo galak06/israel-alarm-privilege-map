@@ -43,7 +43,7 @@
     "areaname": "Arava",
     "orefId": "49",
     "alertCountTotal": 4,
-    "notificationCountTotal": 87,
+    "notificationCountTotal": 88,
     "alertCount": 0,
     "notificationCount": 0,
     "minGapHours": 63.42,
@@ -118,7 +118,7 @@
     "areaname": "Arava",
     "orefId": "46",
     "alertCountTotal": 4,
-    "notificationCountTotal": 87,
+    "notificationCountTotal": 88,
     "alertCount": 0,
     "notificationCount": 0,
     "minGapHours": 63.42,
@@ -143,7 +143,7 @@
     "areaname": "Arava",
     "orefId": "50",
     "alertCountTotal": 4,
-    "notificationCountTotal": 87,
+    "notificationCountTotal": 88,
     "alertCount": 0,
     "notificationCount": 0,
     "minGapHours": 63.42,
@@ -3861,12 +3861,12 @@
     ],
     "areaname": "Center Negev",
     "orefId": "124",
-    "alertCountTotal": 65,
-    "notificationCountTotal": 80,
+    "alertCountTotal": 66,
+    "notificationCountTotal": 81,
     "alertCount": 0,
     "notificationCount": 0,
     "minGapHours": 0.02,
-    "alertCountNormalized": 0.478
+    "alertCountNormalized": 0.485
   },
   {
     "id": "oref-1748",
@@ -3887,12 +3887,12 @@
     ],
     "areaname": "Center Negev",
     "orefId": "1748",
-    "alertCountTotal": 64,
-    "notificationCountTotal": 80,
+    "alertCountTotal": 65,
+    "notificationCountTotal": 81,
     "alertCount": 0,
     "notificationCount": 0,
     "minGapHours": 0.02,
-    "alertCountNormalized": 0.471
+    "alertCountNormalized": 0.478
   },
   {
     "id": "oref-1749",
@@ -3913,12 +3913,12 @@
     ],
     "areaname": "Center Negev",
     "orefId": "1749",
-    "alertCountTotal": 62,
-    "notificationCountTotal": 80,
+    "alertCountTotal": 63,
+    "notificationCountTotal": 81,
     "alertCount": 0,
     "notificationCount": 0,
     "minGapHours": 0.02,
-    "alertCountNormalized": 0.456
+    "alertCountNormalized": 0.463
   },
   {
     "id": "oref-141",
@@ -3939,12 +3939,12 @@
     ],
     "areaname": "Center Negev",
     "orefId": "141",
-    "alertCountTotal": 63,
-    "notificationCountTotal": 80,
+    "alertCountTotal": 64,
+    "notificationCountTotal": 81,
     "alertCount": 0,
     "notificationCount": 0,
     "minGapHours": 0.02,
-    "alertCountNormalized": 0.463
+    "alertCountNormalized": 0.471
   },
   {
     "id": "oref-227",
@@ -3966,7 +3966,7 @@
     "areaname": "Center Negev",
     "orefId": "227",
     "alertCountTotal": 17,
-    "notificationCountTotal": 80,
+    "notificationCountTotal": 81,
     "alertCount": 0,
     "notificationCount": 0,
     "minGapHours": 0.27,
@@ -3991,12 +3991,12 @@
     ],
     "areaname": "Center Negev",
     "orefId": "175",
-    "alertCountTotal": 52,
-    "notificationCountTotal": 80,
+    "alertCountTotal": 53,
+    "notificationCountTotal": 81,
     "alertCount": 0,
     "notificationCount": 0,
     "minGapHours": 0.02,
-    "alertCountNormalized": 0.382
+    "alertCountNormalized": 0.39
   },
   {
     "id": "oref-1752",
@@ -4017,12 +4017,12 @@
     ],
     "areaname": "Center Negev",
     "orefId": "1752",
-    "alertCountTotal": 59,
-    "notificationCountTotal": 80,
+    "alertCountTotal": 60,
+    "notificationCountTotal": 81,
     "alertCount": 0,
     "notificationCount": 0,
     "minGapHours": 0.02,
-    "alertCountNormalized": 0.434
+    "alertCountNormalized": 0.441
   },
   {
     "id": "oref-210",
@@ -4043,12 +4043,12 @@
     ],
     "areaname": "Center Negev",
     "orefId": "210",
-    "alertCountTotal": 30,
-    "notificationCountTotal": 80,
+    "alertCountTotal": 31,
+    "notificationCountTotal": 81,
     "alertCount": 0,
     "notificationCount": 0,
     "minGapHours": 0.12,
-    "alertCountNormalized": 0.221
+    "alertCountNormalized": 0.228
   },
   {
     "id": "oref-181",
@@ -4069,12 +4069,12 @@
     ],
     "areaname": "Center Negev",
     "orefId": "181",
-    "alertCountTotal": 44,
-    "notificationCountTotal": 80,
+    "alertCountTotal": 45,
+    "notificationCountTotal": 81,
     "alertCount": 0,
     "notificationCount": 0,
     "minGapHours": 0.02,
-    "alertCountNormalized": 0.324
+    "alertCountNormalized": 0.331
   },
   {
     "id": "oref-139",
@@ -4095,12 +4095,12 @@
     ],
     "areaname": "Center Negev",
     "orefId": "139",
-    "alertCountTotal": 60,
-    "notificationCountTotal": 80,
+    "alertCountTotal": 61,
+    "notificationCountTotal": 81,
     "alertCount": 0,
     "notificationCount": 0,
     "minGapHours": 0.02,
-    "alertCountNormalized": 0.441
+    "alertCountNormalized": 0.449
   },
   {
     "id": "oref-176",
@@ -4121,12 +4121,12 @@
     ],
     "areaname": "Center Negev",
     "orefId": "176",
-    "alertCountTotal": 52,
-    "notificationCountTotal": 80,
+    "alertCountTotal": 53,
+    "notificationCountTotal": 81,
     "alertCount": 0,
     "notificationCount": 0,
     "minGapHours": 0.02,
-    "alertCountNormalized": 0.382
+    "alertCountNormalized": 0.39
   },
   {
     "id": "oref-197",
@@ -4147,12 +4147,12 @@
     ],
     "areaname": "Center Negev",
     "orefId": "197",
-    "alertCountTotal": 42,
-    "notificationCountTotal": 80,
+    "alertCountTotal": 43,
+    "notificationCountTotal": 81,
     "alertCount": 0,
     "notificationCount": 0,
     "minGapHours": 0.02,
-    "alertCountNormalized": 0.309
+    "alertCountNormalized": 0.316
   },
   {
     "id": "oref-153",
@@ -4173,12 +4173,12 @@
     ],
     "areaname": "Center Negev",
     "orefId": "153",
-    "alertCountTotal": 67,
-    "notificationCountTotal": 80,
+    "alertCountTotal": 68,
+    "notificationCountTotal": 81,
     "alertCount": 0,
     "notificationCount": 0,
     "minGapHours": 0.02,
-    "alertCountNormalized": 0.493
+    "alertCountNormalized": 0.5
   },
   {
     "id": "oref-185",
@@ -4199,12 +4199,12 @@
     ],
     "areaname": "Center Negev",
     "orefId": "185",
-    "alertCountTotal": 42,
-    "notificationCountTotal": 80,
+    "alertCountTotal": 43,
+    "notificationCountTotal": 81,
     "alertCount": 0,
     "notificationCount": 0,
     "minGapHours": 0.02,
-    "alertCountNormalized": 0.309
+    "alertCountNormalized": 0.316
   },
   {
     "id": "oref-184",
@@ -4225,12 +4225,12 @@
     ],
     "areaname": "Center Negev",
     "orefId": "184",
-    "alertCountTotal": 40,
-    "notificationCountTotal": 80,
+    "alertCountTotal": 41,
+    "notificationCountTotal": 81,
     "alertCount": 0,
     "notificationCount": 0,
     "minGapHours": 0.02,
-    "alertCountNormalized": 0.294
+    "alertCountNormalized": 0.301
   },
   {
     "id": "oref-125",
@@ -4251,12 +4251,12 @@
     ],
     "areaname": "Center Negev",
     "orefId": "125",
-    "alertCountTotal": 69,
-    "notificationCountTotal": 80,
+    "alertCountTotal": 70,
+    "notificationCountTotal": 81,
     "alertCount": 0,
     "notificationCount": 0,
     "minGapHours": 0.02,
-    "alertCountNormalized": 0.507
+    "alertCountNormalized": 0.515
   },
   {
     "id": "oref-147",
@@ -4277,12 +4277,12 @@
     ],
     "areaname": "Center Negev",
     "orefId": "147",
-    "alertCountTotal": 64,
-    "notificationCountTotal": 80,
+    "alertCountTotal": 65,
+    "notificationCountTotal": 81,
     "alertCount": 0,
     "notificationCount": 0,
     "minGapHours": 0.02,
-    "alertCountNormalized": 0.471
+    "alertCountNormalized": 0.478
   },
   {
     "id": "oref-191",
@@ -4303,12 +4303,12 @@
     ],
     "areaname": "Center Negev",
     "orefId": "191",
-    "alertCountTotal": 39,
-    "notificationCountTotal": 80,
+    "alertCountTotal": 40,
+    "notificationCountTotal": 81,
     "alertCount": 0,
     "notificationCount": 0,
     "minGapHours": 0.02,
-    "alertCountNormalized": 0.287
+    "alertCountNormalized": 0.294
   },
   {
     "id": "oref-216",
@@ -4355,12 +4355,12 @@
     ],
     "areaname": "Center Negev",
     "orefId": "208",
-    "alertCountTotal": 26,
-    "notificationCountTotal": 80,
+    "alertCountTotal": 27,
+    "notificationCountTotal": 81,
     "alertCount": 0,
     "notificationCount": 0,
     "minGapHours": 0.18,
-    "alertCountNormalized": 0.191
+    "alertCountNormalized": 0.199
   },
   {
     "id": "oref-179",
@@ -4381,12 +4381,12 @@
     ],
     "areaname": "Center Negev",
     "orefId": "179",
-    "alertCountTotal": 45,
-    "notificationCountTotal": 80,
+    "alertCountTotal": 46,
+    "notificationCountTotal": 81,
     "alertCount": 0,
     "notificationCount": 0,
     "minGapHours": 0.02,
-    "alertCountNormalized": 0.331
+    "alertCountNormalized": 0.338
   },
   {
     "id": "oref-1557",
@@ -5837,12 +5837,12 @@
     ],
     "areaname": "Confrontation Line",
     "orefId": "1669",
-    "alertCountTotal": 133,
+    "alertCountTotal": 134,
     "notificationCountTotal": 112,
     "alertCount": 0,
     "notificationCount": 0,
     "minGapHours": 0,
-    "alertCountNormalized": 0.978
+    "alertCountNormalized": 0.985
   },
   {
     "id": "oref-1570",
@@ -7182,7 +7182,7 @@
     "areaname": "Dead Sea",
     "orefId": "108",
     "alertCountTotal": 31,
-    "notificationCountTotal": 87,
+    "notificationCountTotal": 88,
     "alertCount": 0,
     "notificationCount": 0,
     "minGapHours": 0,
@@ -7208,7 +7208,7 @@
     "areaname": "Dead Sea",
     "orefId": "119",
     "alertCountTotal": 30,
-    "notificationCountTotal": 89,
+    "notificationCountTotal": 90,
     "alertCount": 0,
     "notificationCount": 0,
     "minGapHours": 0.03,
@@ -7234,7 +7234,7 @@
     "areaname": "Dead Sea",
     "orefId": "233",
     "alertCountTotal": 20,
-    "notificationCountTotal": 89,
+    "notificationCountTotal": 90,
     "alertCount": 0,
     "notificationCount": 0,
     "minGapHours": 0.3,
@@ -7260,7 +7260,7 @@
     "areaname": "Dead Sea",
     "orefId": "218",
     "alertCountTotal": 26,
-    "notificationCountTotal": 89,
+    "notificationCountTotal": 90,
     "alertCount": 0,
     "notificationCount": 0,
     "minGapHours": 0.29,
@@ -7286,7 +7286,7 @@
     "areaname": "Dead Sea",
     "orefId": "1775",
     "alertCountTotal": 7,
-    "notificationCountTotal": 86,
+    "notificationCountTotal": 87,
     "alertCount": 0,
     "notificationCount": 0,
     "minGapHours": 0.03,
@@ -7312,7 +7312,7 @@
     "areaname": "Dead Sea",
     "orefId": "170",
     "alertCountTotal": 31,
-    "notificationCountTotal": 89,
+    "notificationCountTotal": 90,
     "alertCount": 0,
     "notificationCount": 0,
     "minGapHours": 0.14,
@@ -7390,7 +7390,7 @@
     "areaname": "Dead Sea",
     "orefId": "1772",
     "alertCountTotal": 8,
-    "notificationCountTotal": 86,
+    "notificationCountTotal": 87,
     "alertCount": 0,
     "notificationCount": 0,
     "minGapHours": 0.03,
@@ -7416,7 +7416,7 @@
     "areaname": "Dead Sea",
     "orefId": "104",
     "alertCountTotal": 30,
-    "notificationCountTotal": 87,
+    "notificationCountTotal": 88,
     "alertCount": 0,
     "notificationCount": 0,
     "minGapHours": 0,
@@ -8381,7 +8381,7 @@
     "areaname": "Gaza Envelope",
     "orefId": "219",
     "alertCountTotal": 14,
-    "notificationCountTotal": 63,
+    "notificationCountTotal": 64,
     "alertCount": 0,
     "notificationCount": 0,
     "minGapHours": 1.18,
@@ -8406,12 +8406,12 @@
     ],
     "areaname": "Gaza Envelope",
     "orefId": "109",
-    "alertCountTotal": 21,
-    "notificationCountTotal": 63,
+    "alertCountTotal": 22,
+    "notificationCountTotal": 64,
     "alertCount": 0,
     "notificationCount": 0,
     "minGapHours": 0.12,
-    "alertCountNormalized": 0.154
+    "alertCountNormalized": 0.162
   },
   {
     "id": "oref-212",
@@ -8433,7 +8433,7 @@
     "areaname": "Gaza Envelope",
     "orefId": "212",
     "alertCountTotal": 18,
-    "notificationCountTotal": 63,
+    "notificationCountTotal": 64,
     "alertCount": 0,
     "notificationCount": 0,
     "minGapHours": 0.23,
@@ -8459,7 +8459,7 @@
     "areaname": "Gaza Envelope",
     "orefId": "95",
     "alertCountTotal": 20,
-    "notificationCountTotal": 63,
+    "notificationCountTotal": 64,
     "alertCount": 0,
     "notificationCount": 0,
     "minGapHours": 0.16,
@@ -8484,12 +8484,12 @@
     ],
     "areaname": "Gaza Envelope",
     "orefId": "110",
-    "alertCountTotal": 22,
-    "notificationCountTotal": 63,
+    "alertCountTotal": 23,
+    "notificationCountTotal": 64,
     "alertCount": 0,
     "notificationCount": 0,
     "minGapHours": 0.1,
-    "alertCountNormalized": 0.162
+    "alertCountNormalized": 0.169
   },
   {
     "id": "oref-151",
@@ -8510,12 +8510,12 @@
     ],
     "areaname": "Gaza Envelope",
     "orefId": "151",
-    "alertCountTotal": 24,
-    "notificationCountTotal": 63,
+    "alertCountTotal": 25,
+    "notificationCountTotal": 64,
     "alertCount": 0,
     "notificationCount": 0,
     "minGapHours": 0.02,
-    "alertCountNormalized": 0.176
+    "alertCountNormalized": 0.184
   },
   {
     "id": "oref-178",
@@ -8537,7 +8537,7 @@
     "areaname": "Gaza Envelope",
     "orefId": "178",
     "alertCountTotal": 20,
-    "notificationCountTotal": 63,
+    "notificationCountTotal": 64,
     "alertCount": 0,
     "notificationCount": 0,
     "minGapHours": 0.23,
@@ -8563,7 +8563,7 @@
     "areaname": "Gaza Envelope",
     "orefId": "263",
     "alertCountTotal": 10,
-    "notificationCountTotal": 64,
+    "notificationCountTotal": 65,
     "alertCount": 0,
     "notificationCount": 0,
     "minGapHours": 1.2,
@@ -8589,7 +8589,7 @@
     "areaname": "Gaza Envelope",
     "orefId": "1759",
     "alertCountTotal": 7,
-    "notificationCountTotal": 23,
+    "notificationCountTotal": 24,
     "alertCount": 0,
     "notificationCount": 0,
     "minGapHours": 1.2,
@@ -8615,7 +8615,7 @@
     "areaname": "Gaza Envelope",
     "orefId": "282",
     "alertCountTotal": 18,
-    "notificationCountTotal": 65,
+    "notificationCountTotal": 66,
     "alertCount": 0,
     "notificationCount": 0,
     "minGapHours": 0.03,
@@ -8640,12 +8640,12 @@
     ],
     "areaname": "Gaza Envelope",
     "orefId": "128",
-    "alertCountTotal": 18,
-    "notificationCountTotal": 63,
+    "alertCountTotal": 19,
+    "notificationCountTotal": 64,
     "alertCount": 0,
     "notificationCount": 0,
     "minGapHours": 0.12,
-    "alertCountNormalized": 0.132
+    "alertCountNormalized": 0.14
   },
   {
     "id": "oref-291",
@@ -8667,7 +8667,7 @@
     "areaname": "Gaza Envelope",
     "orefId": "291",
     "alertCountTotal": 17,
-    "notificationCountTotal": 66,
+    "notificationCountTotal": 67,
     "alertCount": 0,
     "notificationCount": 0,
     "minGapHours": 0.03,
@@ -8693,7 +8693,7 @@
     "areaname": "Gaza Envelope",
     "orefId": "127",
     "alertCountTotal": 18,
-    "notificationCountTotal": 63,
+    "notificationCountTotal": 64,
     "alertCount": 0,
     "notificationCount": 0,
     "minGapHours": 0.11,
@@ -8719,7 +8719,7 @@
     "areaname": "Gaza Envelope",
     "orefId": "239",
     "alertCountTotal": 12,
-    "notificationCountTotal": 63,
+    "notificationCountTotal": 64,
     "alertCount": 0,
     "notificationCount": 0,
     "minGapHours": 1.2,
@@ -8745,7 +8745,7 @@
     "areaname": "Gaza Envelope",
     "orefId": "188",
     "alertCountTotal": 17,
-    "notificationCountTotal": 63,
+    "notificationCountTotal": 64,
     "alertCount": 0,
     "notificationCount": 0,
     "minGapHours": 0.23,
@@ -8770,12 +8770,12 @@
     ],
     "areaname": "Gaza Envelope",
     "orefId": "154",
-    "alertCountTotal": 22,
-    "notificationCountTotal": 63,
+    "alertCountTotal": 23,
+    "notificationCountTotal": 64,
     "alertCount": 0,
     "notificationCount": 0,
     "minGapHours": 0.12,
-    "alertCountNormalized": 0.162
+    "alertCountNormalized": 0.169
   },
   {
     "id": "oref-244",
@@ -8797,7 +8797,7 @@
     "areaname": "Gaza Envelope",
     "orefId": "244",
     "alertCountTotal": 10,
-    "notificationCountTotal": 63,
+    "notificationCountTotal": 64,
     "alertCount": 0,
     "notificationCount": 0,
     "minGapHours": 1.2,
@@ -8822,12 +8822,12 @@
     ],
     "areaname": "Gaza Envelope",
     "orefId": "135",
-    "alertCountTotal": 14,
-    "notificationCountTotal": 23,
+    "alertCountTotal": 15,
+    "notificationCountTotal": 24,
     "alertCount": 0,
     "notificationCount": 0,
     "minGapHours": 0.02,
-    "alertCountNormalized": 0.103
+    "alertCountNormalized": 0.11
   },
   {
     "id": "oref-3135",
@@ -8848,12 +8848,12 @@
     ],
     "areaname": "Gaza Envelope",
     "orefId": "3135",
-    "alertCountTotal": 14,
-    "notificationCountTotal": 23,
+    "alertCountTotal": 15,
+    "notificationCountTotal": 24,
     "alertCount": 0,
     "notificationCount": 0,
     "minGapHours": 0.02,
-    "alertCountNormalized": 0.103
+    "alertCountNormalized": 0.11
   },
   {
     "id": "oref-4135",
@@ -8874,12 +8874,12 @@
     ],
     "areaname": "Gaza Envelope",
     "orefId": "4135",
-    "alertCountTotal": 14,
-    "notificationCountTotal": 23,
+    "alertCountTotal": 15,
+    "notificationCountTotal": 24,
     "alertCount": 0,
     "notificationCount": 0,
     "minGapHours": 0.02,
-    "alertCountNormalized": 0.103
+    "alertCountNormalized": 0.11
   },
   {
     "id": "oref-234",
@@ -8901,7 +8901,7 @@
     "areaname": "Gaza Envelope",
     "orefId": "234",
     "alertCountTotal": 11,
-    "notificationCountTotal": 63,
+    "notificationCountTotal": 64,
     "alertCount": 0,
     "notificationCount": 0,
     "minGapHours": 1.2,
@@ -8927,7 +8927,7 @@
     "areaname": "Gaza Envelope",
     "orefId": "99",
     "alertCountTotal": 21,
-    "notificationCountTotal": 63,
+    "notificationCountTotal": 64,
     "alertCount": 0,
     "notificationCount": 0,
     "minGapHours": 0.16,
@@ -8953,7 +8953,7 @@
     "areaname": "Gaza Envelope",
     "orefId": "272",
     "alertCountTotal": 12,
-    "notificationCountTotal": 67,
+    "notificationCountTotal": 68,
     "alertCount": 0,
     "notificationCount": 0,
     "minGapHours": 0.18,
@@ -8979,7 +8979,7 @@
     "areaname": "Gaza Envelope",
     "orefId": "3206",
     "alertCountTotal": 19,
-    "notificationCountTotal": 80,
+    "notificationCountTotal": 81,
     "alertCount": 0,
     "notificationCount": 0,
     "minGapHours": 1.18,
@@ -9005,7 +9005,7 @@
     "areaname": "Gaza Envelope",
     "orefId": "252",
     "alertCountTotal": 10,
-    "notificationCountTotal": 64,
+    "notificationCountTotal": 65,
     "alertCount": 0,
     "notificationCount": 0,
     "minGapHours": 1.2,
@@ -9030,12 +9030,12 @@
     ],
     "areaname": "Gaza Envelope",
     "orefId": "134",
-    "alertCountTotal": 20,
-    "notificationCountTotal": 63,
+    "alertCountTotal": 21,
+    "notificationCountTotal": 64,
     "alertCount": 0,
     "notificationCount": 0,
     "minGapHours": 0.12,
-    "alertCountNormalized": 0.147
+    "alertCountNormalized": 0.154
   },
   {
     "id": "oref-159",
@@ -9056,12 +9056,12 @@
     ],
     "areaname": "Gaza Envelope",
     "orefId": "159",
-    "alertCountTotal": 19,
-    "notificationCountTotal": 63,
+    "alertCountTotal": 20,
+    "notificationCountTotal": 64,
     "alertCount": 0,
     "notificationCount": 0,
     "minGapHours": 0.23,
-    "alertCountNormalized": 0.14
+    "alertCountNormalized": 0.147
   },
   {
     "id": "oref-171",
@@ -9082,12 +9082,12 @@
     ],
     "areaname": "Gaza Envelope",
     "orefId": "171",
-    "alertCountTotal": 19,
-    "notificationCountTotal": 63,
+    "alertCountTotal": 20,
+    "notificationCountTotal": 64,
     "alertCount": 0,
     "notificationCount": 0,
     "minGapHours": 0.23,
-    "alertCountNormalized": 0.14
+    "alertCountNormalized": 0.147
   },
   {
     "id": "oref-266",
@@ -9109,7 +9109,7 @@
     "areaname": "Gaza Envelope",
     "orefId": "266",
     "alertCountTotal": 13,
-    "notificationCountTotal": 64,
+    "notificationCountTotal": 65,
     "alertCount": 0,
     "notificationCount": 0,
     "minGapHours": 1.2,
@@ -9134,12 +9134,12 @@
     ],
     "areaname": "Gaza Envelope",
     "orefId": "120",
-    "alertCountTotal": 21,
-    "notificationCountTotal": 63,
+    "alertCountTotal": 22,
+    "notificationCountTotal": 64,
     "alertCount": 0,
     "notificationCount": 0,
     "minGapHours": 0.12,
-    "alertCountNormalized": 0.154
+    "alertCountNormalized": 0.162
   },
   {
     "id": "oref-194",
@@ -9161,7 +9161,7 @@
     "areaname": "Gaza Envelope",
     "orefId": "194",
     "alertCountTotal": 22,
-    "notificationCountTotal": 63,
+    "notificationCountTotal": 64,
     "alertCount": 0,
     "notificationCount": 0,
     "minGapHours": 0.23,
@@ -9187,7 +9187,7 @@
     "areaname": "Gaza Envelope",
     "orefId": "235",
     "alertCountTotal": 13,
-    "notificationCountTotal": 63,
+    "notificationCountTotal": 64,
     "alertCount": 0,
     "notificationCount": 0,
     "minGapHours": 1.2,
@@ -9212,12 +9212,12 @@
     ],
     "areaname": "Gaza Envelope",
     "orefId": "117",
-    "alertCountTotal": 21,
-    "notificationCountTotal": 63,
+    "alertCountTotal": 22,
+    "notificationCountTotal": 64,
     "alertCount": 0,
     "notificationCount": 0,
     "minGapHours": 0.12,
-    "alertCountNormalized": 0.154
+    "alertCountNormalized": 0.162
   },
   {
     "id": "oref-121",
@@ -9238,12 +9238,12 @@
     ],
     "areaname": "Gaza Envelope",
     "orefId": "121",
-    "alertCountTotal": 32,
-    "notificationCountTotal": 63,
+    "alertCountTotal": 33,
+    "notificationCountTotal": 64,
     "alertCount": 0,
     "notificationCount": 0,
     "minGapHours": 0.02,
-    "alertCountNormalized": 0.235
+    "alertCountNormalized": 0.243
   },
   {
     "id": "oref-248",
@@ -9265,7 +9265,7 @@
     "areaname": "Gaza Envelope",
     "orefId": "248",
     "alertCountTotal": 8,
-    "notificationCountTotal": 23,
+    "notificationCountTotal": 24,
     "alertCount": 0,
     "notificationCount": 0,
     "minGapHours": 1.2,
@@ -9291,7 +9291,7 @@
     "areaname": "Gaza Envelope",
     "orefId": "3248",
     "alertCountTotal": 8,
-    "notificationCountTotal": 23,
+    "notificationCountTotal": 24,
     "alertCount": 0,
     "notificationCount": 0,
     "minGapHours": 1.2,
@@ -9317,7 +9317,7 @@
     "areaname": "Gaza Envelope",
     "orefId": "102",
     "alertCountTotal": 20,
-    "notificationCountTotal": 63,
+    "notificationCountTotal": 64,
     "alertCount": 0,
     "notificationCount": 0,
     "minGapHours": 0.11,
@@ -9343,7 +9343,7 @@
     "areaname": "Gaza Envelope",
     "orefId": "209",
     "alertCountTotal": 17,
-    "notificationCountTotal": 63,
+    "notificationCountTotal": 64,
     "alertCount": 0,
     "notificationCount": 0,
     "minGapHours": 0.23,
@@ -9368,12 +9368,12 @@
     ],
     "areaname": "Gaza Envelope",
     "orefId": "133",
-    "alertCountTotal": 20,
-    "notificationCountTotal": 63,
+    "alertCountTotal": 21,
+    "notificationCountTotal": 64,
     "alertCount": 0,
     "notificationCount": 0,
     "minGapHours": 0.12,
-    "alertCountNormalized": 0.147
+    "alertCountNormalized": 0.154
   },
   {
     "id": "oref-129",
@@ -9394,12 +9394,12 @@
     ],
     "areaname": "Gaza Envelope",
     "orefId": "129",
-    "alertCountTotal": 33,
-    "notificationCountTotal": 63,
+    "alertCountTotal": 34,
+    "notificationCountTotal": 64,
     "alertCount": 0,
     "notificationCount": 0,
     "minGapHours": 0.02,
-    "alertCountNormalized": 0.243
+    "alertCountNormalized": 0.25
   },
   {
     "id": "oref-113",
@@ -9420,12 +9420,12 @@
     ],
     "areaname": "Gaza Envelope",
     "orefId": "113",
-    "alertCountTotal": 24,
-    "notificationCountTotal": 63,
+    "alertCountTotal": 25,
+    "notificationCountTotal": 64,
     "alertCount": 0,
     "notificationCount": 0,
     "minGapHours": 0.1,
-    "alertCountNormalized": 0.176
+    "alertCountNormalized": 0.184
   },
   {
     "id": "oref-222",
@@ -9447,7 +9447,7 @@
     "areaname": "Gaza Envelope",
     "orefId": "222",
     "alertCountTotal": 15,
-    "notificationCountTotal": 63,
+    "notificationCountTotal": 64,
     "alertCount": 0,
     "notificationCount": 0,
     "minGapHours": 1.18,
@@ -9473,7 +9473,7 @@
     "areaname": "Gaza Envelope",
     "orefId": "281",
     "alertCountTotal": 12,
-    "notificationCountTotal": 64,
+    "notificationCountTotal": 65,
     "alertCount": 0,
     "notificationCount": 0,
     "minGapHours": 0.03,
@@ -9499,7 +9499,7 @@
     "areaname": "Gaza Envelope",
     "orefId": "240",
     "alertCountTotal": 12,
-    "notificationCountTotal": 63,
+    "notificationCountTotal": 64,
     "alertCount": 0,
     "notificationCount": 0,
     "minGapHours": 1.2,
@@ -9524,12 +9524,12 @@
     ],
     "areaname": "Gaza Envelope",
     "orefId": "112",
-    "alertCountTotal": 20,
-    "notificationCountTotal": 63,
+    "alertCountTotal": 21,
+    "notificationCountTotal": 64,
     "alertCount": 0,
     "notificationCount": 0,
     "minGapHours": 0.12,
-    "alertCountNormalized": 0.147
+    "alertCountNormalized": 0.154
   },
   {
     "id": "oref-105",
@@ -9550,12 +9550,12 @@
     ],
     "areaname": "Gaza Envelope",
     "orefId": "105",
-    "alertCountTotal": 19,
-    "notificationCountTotal": 63,
+    "alertCountTotal": 20,
+    "notificationCountTotal": 64,
     "alertCount": 0,
     "notificationCount": 0,
     "minGapHours": 0.11,
-    "alertCountNormalized": 0.14
+    "alertCountNormalized": 0.147
   },
   {
     "id": "oref-290",
@@ -9577,7 +9577,7 @@
     "areaname": "Gaza Envelope",
     "orefId": "290",
     "alertCountTotal": 15,
-    "notificationCountTotal": 65,
+    "notificationCountTotal": 66,
     "alertCount": 0,
     "notificationCount": 0,
     "minGapHours": 0.03,
@@ -9603,7 +9603,7 @@
     "areaname": "Gaza Envelope",
     "orefId": "2019",
     "alertCountTotal": 15,
-    "notificationCountTotal": 65,
+    "notificationCountTotal": 66,
     "alertCount": 0,
     "notificationCount": 0,
     "minGapHours": 0.03,
@@ -9629,7 +9629,7 @@
     "areaname": "Gaza Envelope",
     "orefId": "220",
     "alertCountTotal": 8,
-    "notificationCountTotal": 23,
+    "notificationCountTotal": 24,
     "alertCount": 0,
     "notificationCount": 0,
     "minGapHours": 1.18,
@@ -9655,7 +9655,7 @@
     "areaname": "Gaza Envelope",
     "orefId": "3220",
     "alertCountTotal": 8,
-    "notificationCountTotal": 23,
+    "notificationCountTotal": 24,
     "alertCount": 0,
     "notificationCount": 0,
     "minGapHours": 1.18,
@@ -9680,12 +9680,12 @@
     ],
     "areaname": "Gaza Envelope",
     "orefId": "136",
-    "alertCountTotal": 16,
-    "notificationCountTotal": 23,
+    "alertCountTotal": 17,
+    "notificationCountTotal": 24,
     "alertCount": 0,
     "notificationCount": 0,
     "minGapHours": 0.02,
-    "alertCountNormalized": 0.118
+    "alertCountNormalized": 0.125
   },
   {
     "id": "oref-3136",
@@ -9706,12 +9706,12 @@
     ],
     "areaname": "Gaza Envelope",
     "orefId": "3136",
-    "alertCountTotal": 16,
-    "notificationCountTotal": 23,
+    "alertCountTotal": 17,
+    "notificationCountTotal": 24,
     "alertCount": 0,
     "notificationCount": 0,
     "minGapHours": 0.02,
-    "alertCountNormalized": 0.118
+    "alertCountNormalized": 0.125
   },
   {
     "id": "oref-1314",
@@ -25396,7 +25396,7 @@
     "areaname": "South Negev",
     "orefId": "92",
     "alertCountTotal": 54,
-    "notificationCountTotal": 86,
+    "notificationCountTotal": 87,
     "alertCount": 0,
     "notificationCount": 0,
     "minGapHours": 0.03,
@@ -25421,12 +25421,12 @@
     ],
     "areaname": "South Negev",
     "orefId": "103",
-    "alertCountTotal": 73,
-    "notificationCountTotal": 86,
+    "alertCountTotal": 74,
+    "notificationCountTotal": 87,
     "alertCount": 0,
     "notificationCount": 0,
     "minGapHours": 0.03,
-    "alertCountNormalized": 0.537
+    "alertCountNormalized": 0.544
   },
   {
     "id": "oref-1921",
@@ -25447,12 +25447,12 @@
     ],
     "areaname": "South Negev",
     "orefId": "1921",
-    "alertCountTotal": 65,
-    "notificationCountTotal": 80,
+    "alertCountTotal": 66,
+    "notificationCountTotal": 81,
     "alertCount": 0,
     "notificationCount": 0,
     "minGapHours": 0.02,
-    "alertCountNormalized": 0.478
+    "alertCountNormalized": 0.485
   },
   {
     "id": "oref-143",
@@ -25474,7 +25474,7 @@
     "areaname": "South Negev",
     "orefId": "143",
     "alertCountTotal": 46,
-    "notificationCountTotal": 87,
+    "notificationCountTotal": 88,
     "alertCount": 0,
     "notificationCount": 0,
     "minGapHours": 0.03,
@@ -25500,7 +25500,7 @@
     "areaname": "South Negev",
     "orefId": "98",
     "alertCountTotal": 53,
-    "notificationCountTotal": 86,
+    "notificationCountTotal": 87,
     "alertCount": 0,
     "notificationCount": 0,
     "minGapHours": 0.03,
@@ -25656,7 +25656,7 @@
     "areaname": "South Negev",
     "orefId": "88",
     "alertCountTotal": 33,
-    "notificationCountTotal": 86,
+    "notificationCountTotal": 87,
     "alertCount": 0,
     "notificationCount": 0,
     "minGapHours": 0.03,
@@ -25682,7 +25682,7 @@
     "areaname": "South Negev",
     "orefId": "87",
     "alertCountTotal": 32,
-    "notificationCountTotal": 86,
+    "notificationCountTotal": 87,
     "alertCount": 0,
     "notificationCount": 0,
     "minGapHours": 0.03,
@@ -25708,7 +25708,7 @@
     "areaname": "South Negev",
     "orefId": "115",
     "alertCountTotal": 62,
-    "notificationCountTotal": 86,
+    "notificationCountTotal": 87,
     "alertCount": 0,
     "notificationCount": 0,
     "minGapHours": 0.03,
@@ -25733,12 +25733,12 @@
     ],
     "areaname": "South Negev",
     "orefId": "156",
-    "alertCountTotal": 64,
-    "notificationCountTotal": 80,
+    "alertCountTotal": 65,
+    "notificationCountTotal": 81,
     "alertCount": 0,
     "notificationCount": 0,
     "minGapHours": 0.02,
-    "alertCountNormalized": 0.471
+    "alertCountNormalized": 0.478
   },
   {
     "id": "oref-59",
@@ -25786,7 +25786,7 @@
     "areaname": "South Negev",
     "orefId": "2204",
     "alertCountTotal": 41,
-    "notificationCountTotal": 87,
+    "notificationCountTotal": 88,
     "alertCount": 0,
     "notificationCount": 0,
     "minGapHours": 0.13,
@@ -25837,12 +25837,12 @@
     ],
     "areaname": "South Negev",
     "orefId": "126",
-    "alertCountTotal": 61,
-    "notificationCountTotal": 87,
+    "alertCountTotal": 62,
+    "notificationCountTotal": 88,
     "alertCount": 0,
     "notificationCount": 0,
     "minGapHours": 0.03,
-    "alertCountNormalized": 0.449
+    "alertCountNormalized": 0.456
   },
   {
     "id": "oref-150",
@@ -25863,12 +25863,12 @@
     ],
     "areaname": "South Negev",
     "orefId": "150",
-    "alertCountTotal": 63,
-    "notificationCountTotal": 87,
+    "alertCountTotal": 64,
+    "notificationCountTotal": 88,
     "alertCount": 0,
     "notificationCount": 0,
     "minGapHours": 0.02,
-    "alertCountNormalized": 0.463
+    "alertCountNormalized": 0.471
   },
   {
     "id": "oref-77",
@@ -25915,12 +25915,12 @@
     ],
     "areaname": "South Negev",
     "orefId": "169",
-    "alertCountTotal": 54,
-    "notificationCountTotal": 80,
+    "alertCountTotal": 55,
+    "notificationCountTotal": 81,
     "alertCount": 0,
     "notificationCount": 0,
     "minGapHours": 0.02,
-    "alertCountNormalized": 0.397
+    "alertCountNormalized": 0.404
   },
   {
     "id": "oref-58",
@@ -26020,7 +26020,7 @@
     "areaname": "South Negev",
     "orefId": "90",
     "alertCountTotal": 36,
-    "notificationCountTotal": 86,
+    "notificationCountTotal": 87,
     "alertCount": 0,
     "notificationCount": 0,
     "minGapHours": 0.03,
@@ -26097,12 +26097,12 @@
     ],
     "areaname": "South Negev",
     "orefId": "137",
-    "alertCountTotal": 70,
-    "notificationCountTotal": 87,
+    "alertCountTotal": 71,
+    "notificationCountTotal": 88,
     "alertCount": 0,
     "notificationCount": 0,
     "minGapHours": 0.02,
-    "alertCountNormalized": 0.515
+    "alertCountNormalized": 0.522
   },
   {
     "id": "oref-54",
@@ -26149,12 +26149,12 @@
     ],
     "areaname": "South Negev",
     "orefId": "106",
-    "alertCountTotal": 69,
-    "notificationCountTotal": 80,
+    "alertCountTotal": 70,
+    "notificationCountTotal": 81,
     "alertCount": 0,
     "notificationCount": 0,
     "minGapHours": 0.02,
-    "alertCountNormalized": 0.507
+    "alertCountNormalized": 0.515
   },
   {
     "id": "oref-52",
@@ -26201,12 +26201,12 @@
     ],
     "areaname": "South Negev",
     "orefId": "1925",
-    "alertCountTotal": 62,
-    "notificationCountTotal": 87,
+    "alertCountTotal": 63,
+    "notificationCountTotal": 88,
     "alertCount": 0,
     "notificationCount": 0,
     "minGapHours": 0.02,
-    "alertCountNormalized": 0.456
+    "alertCountNormalized": 0.463
   },
   {
     "id": "oref-5925",
@@ -26227,12 +26227,12 @@
     ],
     "areaname": "South Negev",
     "orefId": "5925",
-    "alertCountTotal": 62,
-    "notificationCountTotal": 87,
+    "alertCountTotal": 63,
+    "notificationCountTotal": 88,
     "alertCount": 0,
     "notificationCount": 0,
     "minGapHours": 0.02,
-    "alertCountNormalized": 0.456
+    "alertCountNormalized": 0.463
   },
   {
     "id": "oref-131",
@@ -26253,12 +26253,12 @@
     ],
     "areaname": "South Negev",
     "orefId": "131",
-    "alertCountTotal": 69,
-    "notificationCountTotal": 80,
+    "alertCountTotal": 70,
+    "notificationCountTotal": 81,
     "alertCount": 0,
     "notificationCount": 0,
     "minGapHours": 0.02,
-    "alertCountNormalized": 0.507
+    "alertCountNormalized": 0.515
   },
   {
     "id": "oref-75",
@@ -26305,12 +26305,12 @@
     ],
     "areaname": "South Negev",
     "orefId": "144",
-    "alertCountTotal": 65,
-    "notificationCountTotal": 80,
+    "alertCountTotal": 66,
+    "notificationCountTotal": 81,
     "alertCount": 0,
     "notificationCount": 0,
     "minGapHours": 0.02,
-    "alertCountNormalized": 0.478
+    "alertCountNormalized": 0.485
   },
   {
     "id": "oref-73",
@@ -31636,7 +31636,7 @@
     "areaname": "West Negev",
     "orefId": "1760",
     "alertCountTotal": 19,
-    "notificationCountTotal": 80,
+    "notificationCountTotal": 81,
     "alertCount": 0,
     "notificationCount": 0,
     "minGapHours": 0.25,
@@ -31661,12 +31661,12 @@
     ],
     "areaname": "West Negev",
     "orefId": "173",
-    "alertCountTotal": 36,
-    "notificationCountTotal": 80,
+    "alertCountTotal": 37,
+    "notificationCountTotal": 81,
     "alertCount": 0,
     "notificationCount": 0,
     "minGapHours": 0.02,
-    "alertCountNormalized": 0.265
+    "alertCountNormalized": 0.272
   },
   {
     "id": "oref-267",
@@ -31688,7 +31688,7 @@
     "areaname": "West Negev",
     "orefId": "267",
     "alertCountTotal": 20,
-    "notificationCountTotal": 82,
+    "notificationCountTotal": 83,
     "alertCount": 0,
     "notificationCount": 0,
     "minGapHours": 1.2,
@@ -31713,12 +31713,12 @@
     ],
     "areaname": "West Negev",
     "orefId": "189",
-    "alertCountTotal": 35,
-    "notificationCountTotal": 80,
+    "alertCountTotal": 36,
+    "notificationCountTotal": 81,
     "alertCount": 0,
     "notificationCount": 0,
     "minGapHours": 0.02,
-    "alertCountNormalized": 0.257
+    "alertCountNormalized": 0.265
   },
   {
     "id": "oref-249",
@@ -31740,7 +31740,7 @@
     "areaname": "West Negev",
     "orefId": "249",
     "alertCountTotal": 15,
-    "notificationCountTotal": 81,
+    "notificationCountTotal": 82,
     "alertCount": 0,
     "notificationCount": 0,
     "minGapHours": 1.18,
@@ -31766,7 +31766,7 @@
     "areaname": "West Negev",
     "orefId": "225",
     "alertCountTotal": 16,
-    "notificationCountTotal": 80,
+    "notificationCountTotal": 81,
     "alertCount": 0,
     "notificationCount": 0,
     "minGapHours": 0.25,
@@ -31791,12 +31791,12 @@
     ],
     "areaname": "West Negev",
     "orefId": "168",
-    "alertCountTotal": 46,
-    "notificationCountTotal": 80,
+    "alertCountTotal": 47,
+    "notificationCountTotal": 81,
     "alertCount": 0,
     "notificationCount": 0,
     "minGapHours": 0.02,
-    "alertCountNormalized": 0.338
+    "alertCountNormalized": 0.346
   },
   {
     "id": "oref-164",
@@ -31817,12 +31817,12 @@
     ],
     "areaname": "West Negev",
     "orefId": "164",
-    "alertCountTotal": 43,
-    "notificationCountTotal": 80,
+    "alertCountTotal": 44,
+    "notificationCountTotal": 81,
     "alertCount": 0,
     "notificationCount": 0,
     "minGapHours": 0.02,
-    "alertCountNormalized": 0.316
+    "alertCountNormalized": 0.324
   },
   {
     "id": "oref-118",
@@ -31843,12 +31843,12 @@
     ],
     "areaname": "West Negev",
     "orefId": "118",
-    "alertCountTotal": 46,
-    "notificationCountTotal": 80,
+    "alertCountTotal": 47,
+    "notificationCountTotal": 81,
     "alertCount": 0,
     "notificationCount": 0,
     "minGapHours": 0.02,
-    "alertCountNormalized": 0.338
+    "alertCountNormalized": 0.346
   },
   {
     "id": "oref-226",
@@ -31870,7 +31870,7 @@
     "areaname": "West Negev",
     "orefId": "226",
     "alertCountTotal": 16,
-    "notificationCountTotal": 80,
+    "notificationCountTotal": 81,
     "alertCount": 0,
     "notificationCount": 0,
     "minGapHours": 0.25,
@@ -31896,7 +31896,7 @@
     "areaname": "West Negev",
     "orefId": "224",
     "alertCountTotal": 15,
-    "notificationCountTotal": 80,
+    "notificationCountTotal": 81,
     "alertCount": 0,
     "notificationCount": 0,
     "minGapHours": 0.25,
@@ -31922,7 +31922,7 @@
     "areaname": "West Negev",
     "orefId": "200",
     "alertCountTotal": 9,
-    "notificationCountTotal": 40,
+    "notificationCountTotal": 41,
     "alertCount": 0,
     "notificationCount": 0,
     "minGapHours": 2.24,
@@ -31948,7 +31948,7 @@
     "areaname": "West Negev",
     "orefId": "3200",
     "alertCountTotal": 9,
-    "notificationCountTotal": 40,
+    "notificationCountTotal": 41,
     "alertCount": 0,
     "notificationCount": 0,
     "minGapHours": 2.24,
@@ -31974,7 +31974,7 @@
     "areaname": "West Negev",
     "orefId": "4200",
     "alertCountTotal": 9,
-    "notificationCountTotal": 40,
+    "notificationCountTotal": 41,
     "alertCount": 0,
     "notificationCount": 0,
     "minGapHours": 2.24,
@@ -31999,12 +31999,12 @@
     ],
     "areaname": "West Negev",
     "orefId": "162",
-    "alertCountTotal": 37,
-    "notificationCountTotal": 80,
+    "alertCountTotal": 38,
+    "notificationCountTotal": 81,
     "alertCount": 0,
     "notificationCount": 0,
     "minGapHours": 0.02,
-    "alertCountNormalized": 0.272
+    "alertCountNormalized": 0.279
   },
   {
     "id": "oref-206",
@@ -32026,7 +32026,7 @@
     "areaname": "West Negev",
     "orefId": "206",
     "alertCountTotal": 19,
-    "notificationCountTotal": 80,
+    "notificationCountTotal": 81,
     "alertCount": 0,
     "notificationCount": 0,
     "minGapHours": 1.18,
@@ -32052,7 +32052,7 @@
     "areaname": "West Negev",
     "orefId": "236",
     "alertCountTotal": 16,
-    "notificationCountTotal": 80,
+    "notificationCountTotal": 81,
     "alertCount": 0,
     "notificationCount": 0,
     "minGapHours": 0.34,
@@ -32078,7 +32078,7 @@
     "areaname": "West Negev",
     "orefId": "241",
     "alertCountTotal": 16,
-    "notificationCountTotal": 80,
+    "notificationCountTotal": 81,
     "alertCount": 0,
     "notificationCount": 0,
     "minGapHours": 0.34,
@@ -32103,12 +32103,12 @@
     ],
     "areaname": "West Negev",
     "orefId": "155",
-    "alertCountTotal": 54,
-    "notificationCountTotal": 80,
+    "alertCountTotal": 55,
+    "notificationCountTotal": 81,
     "alertCount": 0,
     "notificationCount": 0,
     "minGapHours": 0.02,
-    "alertCountNormalized": 0.397
+    "alertCountNormalized": 0.404
   },
   {
     "id": "oref-215",
@@ -32130,7 +32130,7 @@
     "areaname": "West Negev",
     "orefId": "215",
     "alertCountTotal": 18,
-    "notificationCountTotal": 80,
+    "notificationCountTotal": 81,
     "alertCount": 0,
     "notificationCount": 0,
     "minGapHours": 0.25,
@@ -32155,12 +32155,12 @@
     ],
     "areaname": "West Negev",
     "orefId": "161",
-    "alertCountTotal": 33,
-    "notificationCountTotal": 80,
+    "alertCountTotal": 34,
+    "notificationCountTotal": 81,
     "alertCount": 0,
     "notificationCount": 0,
     "minGapHours": 0.02,
-    "alertCountNormalized": 0.243
+    "alertCountNormalized": 0.25
   },
   {
     "id": "oref-166",
@@ -32181,12 +32181,12 @@
     ],
     "areaname": "West Negev",
     "orefId": "166",
-    "alertCountTotal": 38,
-    "notificationCountTotal": 80,
+    "alertCountTotal": 39,
+    "notificationCountTotal": 81,
     "alertCount": 0,
     "notificationCount": 0,
     "minGapHours": 0.02,
-    "alertCountNormalized": 0.279
+    "alertCountNormalized": 0.287
   },
   {
     "id": "oref-172",
@@ -32207,12 +32207,12 @@
     ],
     "areaname": "West Negev",
     "orefId": "172",
-    "alertCountTotal": 34,
-    "notificationCountTotal": 80,
+    "alertCountTotal": 35,
+    "notificationCountTotal": 81,
     "alertCount": 0,
     "notificationCount": 0,
     "minGapHours": 0.02,
-    "alertCountNormalized": 0.25
+    "alertCountNormalized": 0.257
   },
   {
     "id": "oref-245",
@@ -32234,7 +32234,7 @@
     "areaname": "West Negev",
     "orefId": "245",
     "alertCountTotal": 14,
-    "notificationCountTotal": 80,
+    "notificationCountTotal": 81,
     "alertCount": 0,
     "notificationCount": 0,
     "minGapHours": 0.76,
@@ -32260,7 +32260,7 @@
     "areaname": "West Negev",
     "orefId": "231",
     "alertCountTotal": 17,
-    "notificationCountTotal": 80,
+    "notificationCountTotal": 81,
     "alertCount": 0,
     "notificationCount": 0,
     "minGapHours": 0.25,
@@ -32286,7 +32286,7 @@
     "areaname": "West Negev",
     "orefId": "202",
     "alertCountTotal": 22,
-    "notificationCountTotal": 80,
+    "notificationCountTotal": 81,
     "alertCount": 0,
     "notificationCount": 0,
     "minGapHours": 0.11,
@@ -32312,7 +32312,7 @@
     "areaname": "West Negev",
     "orefId": "237",
     "alertCountTotal": 16,
-    "notificationCountTotal": 80,
+    "notificationCountTotal": 81,
     "alertCount": 0,
     "notificationCount": 0,
     "minGapHours": 0.34,
@@ -32338,7 +32338,7 @@
     "areaname": "West Negev",
     "orefId": "201",
     "alertCountTotal": 22,
-    "notificationCountTotal": 80,
+    "notificationCountTotal": 81,
     "alertCount": 0,
     "notificationCount": 0,
     "minGapHours": 0.11,
@@ -32363,12 +32363,12 @@
     ],
     "areaname": "West Negev",
     "orefId": "190",
-    "alertCountTotal": 35,
-    "notificationCountTotal": 80,
+    "alertCountTotal": 36,
+    "notificationCountTotal": 81,
     "alertCount": 0,
     "notificationCount": 0,
     "minGapHours": 0.02,
-    "alertCountNormalized": 0.257
+    "alertCountNormalized": 0.265
   },
   {
     "id": "oref-214",
@@ -32390,7 +32390,7 @@
     "areaname": "West Negev",
     "orefId": "214",
     "alertCountTotal": 18,
-    "notificationCountTotal": 80,
+    "notificationCountTotal": 81,
     "alertCount": 0,
     "notificationCount": 0,
     "minGapHours": 0.25,
@@ -32415,12 +32415,12 @@
     ],
     "areaname": "West Negev",
     "orefId": "195",
-    "alertCountTotal": 30,
-    "notificationCountTotal": 80,
+    "alertCountTotal": 31,
+    "notificationCountTotal": 81,
     "alertCount": 0,
     "notificationCount": 0,
     "minGapHours": 0.13,
-    "alertCountNormalized": 0.221
+    "alertCountNormalized": 0.228
   },
   {
     "id": "oref-167",
@@ -32441,12 +32441,12 @@
     ],
     "areaname": "West Negev",
     "orefId": "167",
-    "alertCountTotal": 45,
-    "notificationCountTotal": 80,
+    "alertCountTotal": 46,
+    "notificationCountTotal": 81,
     "alertCount": 0,
     "notificationCount": 0,
     "minGapHours": 0.02,
-    "alertCountNormalized": 0.331
+    "alertCountNormalized": 0.338
   },
   {
     "id": "oref-158",
@@ -32467,12 +32467,12 @@
     ],
     "areaname": "West Negev",
     "orefId": "158",
-    "alertCountTotal": 36,
-    "notificationCountTotal": 80,
+    "alertCountTotal": 37,
+    "notificationCountTotal": 81,
     "alertCount": 0,
     "notificationCount": 0,
     "minGapHours": 0.02,
-    "alertCountNormalized": 0.265
+    "alertCountNormalized": 0.272
   },
   {
     "id": "oref-223",
@@ -32494,7 +32494,7 @@
     "areaname": "West Negev",
     "orefId": "223",
     "alertCountTotal": 16,
-    "notificationCountTotal": 80,
+    "notificationCountTotal": 81,
     "alertCount": 0,
     "notificationCount": 0,
     "minGapHours": 0.25,
@@ -32519,12 +32519,12 @@
     ],
     "areaname": "West Negev",
     "orefId": "114",
-    "alertCountTotal": 54,
-    "notificationCountTotal": 80,
+    "alertCountTotal": 55,
+    "notificationCountTotal": 81,
     "alertCount": 0,
     "notificationCount": 0,
     "minGapHours": 0.02,
-    "alertCountNormalized": 0.397
+    "alertCountNormalized": 0.404
   },
   {
     "id": "oref-232",
@@ -32546,7 +32546,7 @@
     "areaname": "West Negev",
     "orefId": "232",
     "alertCountTotal": 16,
-    "notificationCountTotal": 80,
+    "notificationCountTotal": 81,
     "alertCount": 0,
     "notificationCount": 0,
     "minGapHours": 0.34,
@@ -33376,12 +33376,12 @@
     ],
     "areaname": "Yehuda",
     "orefId": "1883",
-    "alertCountTotal": 22,
+    "alertCountTotal": 23,
     "notificationCountTotal": 160,
     "alertCount": 0,
     "notificationCount": 0,
     "minGapHours": 0.17,
-    "alertCountNormalized": 0.162
+    "alertCountNormalized": 0.169
   },
   {
     "id": "oref-2271",
@@ -33402,12 +33402,12 @@
     ],
     "areaname": "Yehuda",
     "orefId": "2271",
-    "alertCountTotal": 25,
+    "alertCountTotal": 26,
     "notificationCountTotal": 162,
     "alertCount": 0,
     "notificationCount": 0,
     "minGapHours": 0.12,
-    "alertCountNormalized": 0.184
+    "alertCountNormalized": 0.191
   },
   {
     "id": "oref-549",
@@ -33506,12 +33506,12 @@
     ],
     "areaname": "Yehuda",
     "orefId": "1880",
-    "alertCountTotal": 45,
-    "notificationCountTotal": 87,
+    "alertCountTotal": 46,
+    "notificationCountTotal": 88,
     "alertCount": 0,
     "notificationCount": 0,
     "minGapHours": 0.02,
-    "alertCountNormalized": 0.331
+    "alertCountNormalized": 0.338
   },
   {
     "id": "oref-2262",
@@ -33533,7 +33533,7 @@
     "areaname": "Yehuda",
     "orefId": "2262",
     "alertCountTotal": 38,
-    "notificationCountTotal": 87,
+    "notificationCountTotal": 88,
     "alertCount": 0,
     "notificationCount": 0,
     "minGapHours": 0.02,
@@ -33663,7 +33663,7 @@
     "areaname": "Yehuda",
     "orefId": "193",
     "alertCountTotal": 47,
-    "notificationCountTotal": 87,
+    "notificationCountTotal": 88,
     "alertCount": 0,
     "notificationCount": 0,
     "minGapHours": 0.02,
@@ -33767,7 +33767,7 @@
     "areaname": "Yehuda",
     "orefId": "217",
     "alertCountTotal": 26,
-    "notificationCountTotal": 87,
+    "notificationCountTotal": 88,
     "alertCount": 0,
     "notificationCount": 0,
     "minGapHours": 0.12,
@@ -33870,12 +33870,12 @@
     ],
     "areaname": "Yehuda",
     "orefId": "203",
-    "alertCountTotal": 39,
-    "notificationCountTotal": 80,
+    "alertCountTotal": 40,
+    "notificationCountTotal": 81,
     "alertCount": 0,
     "notificationCount": 0,
     "minGapHours": 0.02,
-    "alertCountNormalized": 0.287
+    "alertCountNormalized": 0.294
   },
   {
     "id": "oref-2270",
@@ -33896,12 +33896,12 @@
     ],
     "areaname": "Yehuda",
     "orefId": "2270",
-    "alertCountTotal": 39,
-    "notificationCountTotal": 87,
+    "alertCountTotal": 40,
+    "notificationCountTotal": 88,
     "alertCount": 0,
     "notificationCount": 0,
     "minGapHours": 0.02,
-    "alertCountNormalized": 0.287
+    "alertCountNormalized": 0.294
   },
   {
     "id": "oref-360",
@@ -33948,12 +33948,12 @@
     ],
     "areaname": "Yehuda",
     "orefId": "182",
-    "alertCountTotal": 49,
-    "notificationCountTotal": 87,
+    "alertCountTotal": 50,
+    "notificationCountTotal": 88,
     "alertCount": 0,
     "notificationCount": 0,
     "minGapHours": 0.02,
-    "alertCountNormalized": 0.36
+    "alertCountNormalized": 0.368
   },
   {
     "id": "oref-402",
@@ -34001,7 +34001,7 @@
     "areaname": "Yehuda",
     "orefId": "2266",
     "alertCountTotal": 40,
-    "notificationCountTotal": 87,
+    "notificationCountTotal": 88,
     "alertCount": 0,
     "notificationCount": 0,
     "minGapHours": 0.02,
@@ -34131,7 +34131,7 @@
     "areaname": "Yehuda",
     "orefId": "2267",
     "alertCountTotal": 47,
-    "notificationCountTotal": 87,
+    "notificationCountTotal": 88,
     "alertCount": 0,
     "notificationCount": 0,
     "minGapHours": 0.02,
@@ -34156,12 +34156,12 @@
     ],
     "areaname": "Yehuda",
     "orefId": "2268",
-    "alertCountTotal": 50,
-    "notificationCountTotal": 87,
+    "alertCountTotal": 51,
+    "notificationCountTotal": 88,
     "alertCount": 0,
     "notificationCount": 0,
     "minGapHours": 0.02,
-    "alertCountNormalized": 0.368
+    "alertCountNormalized": 0.375
   },
   {
     "id": "oref-2230",
@@ -34495,7 +34495,7 @@
     "areaname": "Yehuda",
     "orefId": "211",
     "alertCountTotal": 30,
-    "notificationCountTotal": 87,
+    "notificationCountTotal": 88,
     "alertCount": 0,
     "notificationCount": 0,
     "minGapHours": 0.02,
@@ -34599,7 +34599,7 @@
     "areaname": "Yehuda",
     "orefId": "2263",
     "alertCountTotal": 43,
-    "notificationCountTotal": 87,
+    "notificationCountTotal": 88,
     "alertCount": 0,
     "notificationCount": 0,
     "minGapHours": 0.02,
@@ -34806,12 +34806,12 @@
     ],
     "areaname": "Yehuda",
     "orefId": "229",
-    "alertCountTotal": 25,
+    "alertCountTotal": 26,
     "notificationCountTotal": 162,
     "alertCount": 0,
     "notificationCount": 0,
     "minGapHours": 0.12,
-    "alertCountNormalized": 0.184
+    "alertCountNormalized": 0.191
   },
   {
     "id": "oref-289",
@@ -34884,12 +34884,12 @@
     ],
     "areaname": "Yehuda",
     "orefId": "192",
-    "alertCountTotal": 47,
-    "notificationCountTotal": 80,
+    "alertCountTotal": 48,
+    "notificationCountTotal": 81,
     "alertCount": 0,
     "notificationCount": 0,
     "minGapHours": 0.02,
-    "alertCountNormalized": 0.346
+    "alertCountNormalized": 0.353
   },
   {
     "id": "oref-2236",
@@ -34988,12 +34988,12 @@
     ],
     "areaname": "Yehuda",
     "orefId": "186",
-    "alertCountTotal": 47,
-    "notificationCountTotal": 87,
+    "alertCountTotal": 48,
+    "notificationCountTotal": 88,
     "alertCount": 0,
     "notificationCount": 0,
     "minGapHours": 0.02,
-    "alertCountNormalized": 0.346
+    "alertCountNormalized": 0.353
   },
   {
     "id": "oref-204",
@@ -35014,12 +35014,12 @@
     ],
     "areaname": "Yehuda",
     "orefId": "204",
-    "alertCountTotal": 41,
-    "notificationCountTotal": 87,
+    "alertCountTotal": 42,
+    "notificationCountTotal": 88,
     "alertCount": 0,
     "notificationCount": 0,
     "minGapHours": 0.02,
-    "alertCountNormalized": 0.301
+    "alertCountNormalized": 0.309
   },
   {
     "id": "oref-205",
@@ -35041,7 +35041,7 @@
     "areaname": "Yehuda",
     "orefId": "205",
     "alertCountTotal": 41,
-    "notificationCountTotal": 87,
+    "notificationCountTotal": 88,
     "alertCount": 0,
     "notificationCount": 0,
     "minGapHours": 0.02,
@@ -35092,12 +35092,12 @@
     ],
     "areaname": "Yehuda",
     "orefId": "198",
-    "alertCountTotal": 43,
-    "notificationCountTotal": 87,
+    "alertCountTotal": 44,
+    "notificationCountTotal": 88,
     "alertCount": 0,
     "notificationCount": 0,
     "minGapHours": 0.02,
-    "alertCountNormalized": 0.316
+    "alertCountNormalized": 0.324
   },
   {
     "id": "oref-330",
